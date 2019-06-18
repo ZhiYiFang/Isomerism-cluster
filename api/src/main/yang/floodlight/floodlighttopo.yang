@@ -1,0 +1,85 @@
+// Contents of "floodlighttopo"
+module floodlighttopo {
+
+    namespace "urn:opendaylight:floodlighttopo";
+    prefix "floodlighttopo";
+    import ietf-inet-types { prefix "inet"; revision-date 2013-07-15; }
+    import guard { prefix guard; revision-date 2015-01-05; }
+    
+    revision 2019-05-15 {
+        description "Initial revision";
+    }
+    grouping ip-port{
+    	leaf ip{
+    		type inet:ipv4-address;
+    	}
+    	leaf port{
+    		type inet:port-number;
+    	}
+    }
+    rpc get-floodlight-switches{
+    	description "获取交换机列表";
+    	input{
+    		uses ip-port;
+    	}
+    	output{
+    		leaf result{
+    			type string;
+    		}
+    	}
+    }
+    
+    rpc get-floodlight-links{
+    	description "获取链路";
+    	input{
+    		uses ip-port;
+    	}
+    	output{
+    		leaf result{
+    			type string;
+    		}
+    	}
+    }
+    
+    rpc get-floodligt-switch-port{
+    	description "获取交换机端口";
+    	input{
+    		uses ip-port;
+    		leaf dpid{
+    			type guard:datapath-id;
+    		}
+    	}
+    	output{
+    		leaf result{
+    			type string;
+    		}
+    	}
+    }
+    
+    rpc get-floodligt-switch-port-desc{
+    	description "获取交换机端口的形容";
+    	input{
+    		uses ip-port;
+    		leaf dpid{
+    			type guard:datapath-id;
+    		}
+    	}
+    	output{
+    		leaf result{
+    			type string;
+    		}
+    	}
+    }
+    
+    rpc get-floodlight-health{
+    	description "判断floodlight控制器是否存活";
+    	input{
+    		uses ip-port;
+    	}
+    	output{
+    		leaf result{
+    			type boolean;
+    		}
+    	}
+    }
+}

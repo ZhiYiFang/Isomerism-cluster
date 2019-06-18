@@ -1,0 +1,33 @@
+// Contents of "zenictopo"
+module zenictopo {
+    namespace "urn:opendaylight:zenictopo";
+    prefix "zenictopo";
+    import ietf-inet-types { prefix "inet"; revision-date 2013-07-15; }
+    import guard { prefix ovsdb; revision-date 2015-01-05; }
+    
+    revision 2019-04-28 {
+        description "Initial revision";
+    }
+
+    rpc get-zenic-link {
+        description "获取链路信息";
+        input {
+            leaf ip {
+                type inet:ipv4-address;
+                description "异构控制器的ip";
+            }
+            leaf port {
+                type inet:port-number;
+                description "异构控制器的通信端口号";
+            }
+            leaf dpid {
+                type ovsdb:datapath-id;
+            }
+        }
+        output {
+            leaf result {
+                type string;
+            }
+        }
+    }
+}

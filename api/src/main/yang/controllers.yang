@@ -1,0 +1,221 @@
+// Contents of "controllers"
+module controllers {
+    namespace "urn:opendaylight:controllers";
+    prefix "controllers";
+
+    import guard { prefix guard; revision-date 2015-01-05; }
+    import ietf-inet-types { prefix "inet"; revision-date 2013-07-15; }
+    revision 2018-11-25 {
+        description "Initial revision";
+    }
+
+    grouping user-info {
+        description "控制器对应的登录名";
+        leaf name {
+            type string;
+        }
+        leaf password {
+            type string;
+        }
+        leaf domain {
+            type string;
+        }
+        leaf token {
+            type string;
+        }
+    }
+    grouping controller-types {
+        leaf type-name {
+            type enumeration {
+                enum "vcf" {
+                    value 0;
+                    description "vcf 控制器";
+                }
+                enum "agile" {
+                    value 1;
+                    description "agile 控制器";
+                }
+                enum "apic" {
+                    value 2;
+                    description "apic 控制器";
+                }
+                enum "floodlight" {
+                    value 3;
+                    description "floodlight controller";
+                }
+                enum "ryu" {
+                    value 4;
+                    description "ryu controller";
+                }
+            }
+        }
+    }
+    container isomerism {
+        list isomerism-controllers {
+            key ip;
+            leaf midlle-ware {
+                type inet:ipv4-address;
+                description "所属中间件的ip地址";
+            }
+            uses controller-types;
+            leaf ip {
+                type inet:ipv4-address;
+            }
+            leaf port {
+                type inet:port-number;
+            }
+            container user {
+                uses user-info;
+            }
+            leaf controller-status {
+                default "up";
+                type enumeration {
+                    enum "up" {
+                        value 0;
+                        description "控制器正常";
+                    }
+                    enum "down" {
+                        value 1;
+                        description "控制器宕机";
+                    }
+                }
+            }
+        }
+    }
+
+    grouping alert-common {
+        leaf component {
+        	description "组件类型";
+            type enumeration {
+                enum "isomerism" {
+                    value 0;
+                }
+                enum "virtualization" {
+                    value 1;
+                }
+                enum "transformer" {
+                    value 2;
+                }
+            }
+        }
+        leaf alert-type{
+        	type string;
+        }
+        leaf code{
+        	type int32;
+        }
+        leaf time{
+        	type string;
+        }
+        leaf alert-level{
+        	description "警报等级";
+        	type enumeration{
+        		enum "low"{
+        			value 0;
+        		}
+        		enum "medium"{
+        			value 1;
+        		}
+        		enum "high"{
+        			value 2;
+        		}
+        	}
+        }
+        leaf component-ip{
+        	type inet:ipv4-address;
+        }
+        leaf virtual-machine-ip{
+        	type inet:ipv4-address;
+        }
+        leaf alert-msg{
+        	type string;
+        }
+    }
+
+    // 三大中间件发出的警告消息
+    container alert-message {
+        list alert-messages {
+            uses alert-common;
+        }
+    }
+
+    // 数据平面的公有数据
+    container data-plane-link {
+        list data-plane-links {
+            leaf src-switch {
+                type string;
+            }
+            leaf src-port {
+                type string;
+            }
+            leaf dst-switch {
+                type string;
+            }
+            leaf dst-port {
+                type string;
+            }
+            leaf is-bidirectional {
+                type boolean;
+            }
+        }
+    }
+
+    rpc get-all-switches {
+        output {
+            list switches {
+                // 后边会根据情况添加端口、版本号等其他各种信息
+                leaf dpid {
+                    type guard:datapath-id;
+                }
+
+                // 暂时直接吧json返回回来
+                leaf port {
+                    type string;
+                }
+                leaf port-desc {
+                    type string;
+                }
+            }
+        }
+    }
+
+    rpc get-switch-flow-table {
+        input {
+            leaf dpid {
+                type guard:datapath-id;
+            }
+        }
+        output {
+            leaf result {
+                type string;
+            }
+        }
+    }
+
+    rpc send-alert {
+        input {
+            uses alert-common;
+        }
+        output {
+            leaf result {
+                type boolean;
+            }
+        }
+    }
+
+    notification controller-down {
+        description "有异构控制器宕机";
+        container down-controller {
+            leaf ip {
+                type inet:ipv4-address;
+            }
+            uses controller-types;
+        }
+        container new-controller {
+            leaf ip {
+                type inet:ipv4-address;
+            }
+            uses controller-types;
+        }
+    }
+}

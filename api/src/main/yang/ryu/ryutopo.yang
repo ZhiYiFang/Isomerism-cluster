@@ -1,0 +1,98 @@
+// Contents of "ryutopo"
+module ryutopo {
+    namespace "urn:opendaylight:ryutopo";
+    prefix "ryutopo";
+    import ietf-inet-types { prefix "inet"; revision-date 2013-07-15; }
+    import guard { prefix guard; revision-date 2015-01-05; }
+    revision 2019-05-15 {
+        description "Initial revision";
+    }
+    
+    
+    rpc get-ryu-switches{
+    	description "获取ryu控制器的交换机列表";
+    	input{
+    		uses guard:ip-port;
+    		leaf dpid{
+    			description "optional";
+    			type string;
+    		}
+    	}
+    	output{
+    		leaf result{
+    			type string;
+    		}
+    	}
+    }
+    
+    rpc get-ryu-switches-list{
+    	description "ryu控制器的交换机的dpid的列表";
+    	input{
+    		uses guard:ip-port;
+    	}
+    	output{
+    		leaf result{
+    			type string;
+    		}
+    	}
+    }
+    
+    rpc get-ryu-links{
+    	description "获取ryu控制器的链路";
+    	input{
+    		uses guard:ip-port;
+    		leaf dpid{
+    			description "optional";
+    			type string;
+    		}
+    	}
+    	output{
+    	    leaf result{
+    		    type string;
+    	    }
+    	}
+    }
+    
+    
+    rpc get-ryu-switch-port{
+    	description "ryu控制器的交换机的端口信息";
+    	input{
+    		uses guard:ip-port;
+    		leaf dpid{
+    			type guard:datapath-id;
+    		}
+    	}
+    	output{
+    		leaf result{
+    			type string;
+    		}
+    	}
+    }
+    
+    rpc get-ryu-switch-port-desc{
+    	description "ryu控制器的交换机的端口信息的形容";
+    	input{
+    		uses guard:ip-port;
+    		leaf dpid{
+    			type guard:datapath-id;
+    		}
+    	}
+    	output{
+    		leaf result{
+    			type string;
+    		}
+    	}
+    }
+    
+    rpc get-ryu-health{
+    	description "判断ryu控制器存活";
+    	input{
+    		uses guard:ip-port;
+    	}
+    	output{
+    		leaf result{
+    			type boolean;
+    		}
+    	}
+    }
+}

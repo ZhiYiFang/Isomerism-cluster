@@ -1,0 +1,38 @@
+// Contents of "vcfrest"
+module vcfauth {
+    namespace "urn:opendaylight:vcfauth";
+    prefix "vcfauth";
+    import ietf-inet-types { prefix "inet"; revision-date 2013-07-15; }
+    import controllers { prefix controllers; revision-date 2018-11-25; }
+    import guard { prefix guard; revision-date 2015-01-05; }
+    revision 2018-11-25 {
+        description "Initial revision";
+    }
+
+    rpc login{
+    	description "/sdn/v2.0/auth 这个方法由异构控制器主动向中间件链接后调用，如果不能对异构控制器进行任何改变，则主动调用";
+    	input{
+    		uses guard:ip-port;
+    		leaf middle-wire-ip{
+    			type  inet:ipv4-address;
+    		}
+    		leaf user{
+    			type string;
+    		}
+    		leaf password{
+    			type string;
+    		}
+    		leaf domain{
+    			type string;
+    		}
+    		
+    		uses controllers:controller-types;
+    	}
+    	output{
+    		leaf result{
+    			type string;
+    		}
+    	}
+    }
+
+}

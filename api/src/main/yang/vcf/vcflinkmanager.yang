@@ -1,0 +1,40 @@
+// Contents of "linkmanager"
+module linkmanager {
+    namespace "urn:opendaylight:linkmanager";
+    prefix "linkmanager";
+    import guard { prefix guard; revision-date 2015-01-05; }
+
+    revision 2018-11-26 {
+        description "Initial revision";
+    }
+
+    rpc get-vcf-tunnel-statics {
+        description "获取控制器上所有Tunnel或指定设备的Tunnel状态信息 /sdn/v2.0/net/links?{dpid=dpid}";
+        input {
+        	uses guard:ip-port;
+            leaf dpid {
+                type guard:datapath-id;
+            }
+        }
+        output {
+            leaf result {
+                type string;
+            }
+        }
+    }
+
+    rpc get-vcf-link {
+        description "获取指定dpid的链路信息或者全部的链路信息 /sdn/v2.0/net/links/Undelay?{dpid=dpid}";
+        input {
+            uses guard:ip-port;
+            leaf dpid {
+                type guard:datapath-id;
+            }
+        }
+        output {
+            leaf result {
+                type string;
+            }
+        }
+    }
+}

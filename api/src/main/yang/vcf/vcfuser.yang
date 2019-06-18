@@ -1,0 +1,84 @@
+// Contents of "vcfuser"
+module vcfuser {
+    namespace "urn:opendaylight:vcfuser";
+    prefix "vcfuser";
+    import guard { prefix guard; revision-date 2015-01-05; }
+    revision 2018-11-26 {
+        description "Initial revision";
+    }
+
+    rpc get-users {
+        description "/sdn/v2.0/userconfig GET";
+        input {
+
+        	uses guard:ip-port;
+        }
+        output {
+            leaf result {
+                type string;
+            }
+        }
+    }	
+    rpc add-user {
+        description "/sdn/v2.0/userconfig/adduser POST";
+        input {
+        	uses guard:ip-port;
+            leaf user {
+                type string;
+            }
+            leaf password {
+                type string;
+            }
+            leaf role {
+                type enumeration {
+                    enum "sdn-user" {
+                        value 0;
+                    }
+                    enum "sdn-admin"{
+                    	value 1;
+                    }
+                }
+            }
+        }
+    	output {
+    		leaf result{
+    			type string;
+    		}
+    	}
+    }
+    rpc change-password{
+    	description "/sdn/v2.0/userconfig/changepassword PUT";
+    	input{
+    		uses guard:ip-port;
+    		leaf user{
+    			type string;
+    		}
+    		leaf old-password{
+    			type string;
+    		}
+    		leaf new-password{
+    			type string;
+    		}
+    	}
+    	output {
+    		leaf result{
+    			type string;
+    		}
+    	}
+    }
+    rpc delete-user{
+    	description "/sdn/v2.0/userconfig/deleteuser/{username} DELETE";
+    	input{
+    		uses guard:ip-port;
+    		leaf user{
+    			type string;
+    		}
+    	}
+    	output {
+    		leaf result{
+    			type string;
+    		}
+    	}
+    }
+    
+}

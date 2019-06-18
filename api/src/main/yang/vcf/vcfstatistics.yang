@@ -1,0 +1,62 @@
+// Contents of "vcfstatistics"
+module vcfstatistics {
+    namespace "urn:opendaylight:vcfstatistics";
+    prefix "vcfstatistics";
+    import guard { prefix guard; revision-date 2015-01-05; }
+    revision 2018-11-26 {
+        description "Initial revision";
+    }
+
+    
+    rpc get-vcf-controllers-status{
+    	description "获取vcf控制器的相关状态信息 /sdn/v2.0/of/stats";
+    	input{
+
+    		uses guard:ip-port;
+    	}
+    	output{
+    		leaf result{
+    			type string;
+    		}
+    	}
+    }
+    
+    rpc get-vcf-port-status{
+    	description "获取vcf控制器下交换机的端口统计信息 /sdn/v2.0/of/stats/ports?{dpid=dpid}&{port_id=port_id} ";
+    	input{
+
+    		uses guard:ip-port;
+    		leaf dpid{
+    			type guard:datapath-id;
+    		}
+    		leaf port-id{
+    			type string;
+    		}
+    	}
+    	output{
+    		leaf result{
+    			type string;
+    		}
+    	}
+    }
+    
+    rpc get-vcf-meter{
+    	description "查询vcf控制器下交换机的meter /sdn/v2.0/of/stats/meters?{dpid=dpid}&{meterid=meterid}";
+    	input{
+    		uses guard:ip-port;
+    		leaf dpid{
+    			type guard:datapath-id;
+    		}
+    		leaf meter-id{
+    			type string;
+    		}
+    	}
+    	output{
+    		leaf result{
+    			type string;
+    		}
+    	}
+    }
+    
+    
+}

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- vi: set et smarttab sw=4 tabstop=4: -->
+<!-- Copyright © 2017 zhiyifang and others. All rights reserved. This program 
+	and the accompanying materials are made available under the terms of the 
+	Eclipse Public License v1.0 which accompanies this distribution, and is available 
+	at http://www.eclipse.org/legal/epl-v10.html -->
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+	xmlns:odl="http://opendaylight.org/xmlns/blueprint/v1.0.0"
+	odl:use-default-for-reference-types="true">
+
+	<reference id="dataBroker"
+		interface="org.opendaylight.controller.md.sal.binding.api.DataBroker"
+		odl:type="default" />
+	<reference id="notificationPublishService"
+		interface="org.opendaylight.controller.md.sal.binding.api.NotificationPublishService" />
+
+	<odl:rpc-service id="devicemanagementService"
+		interface="org.opendaylight.yang.gen.v1.urn.opendaylight.devicemanagement.rev181126.DevicemanagementService" />
+	<odl:rpc-service id="linkmanagerService"
+		interface="org.opendaylight.yang.gen.v1.urn.opendaylight.linkmanager.rev181126.LinkmanagerService" />
+	<odl:rpc-service id="vcfstatisticsService"
+		interface="org.opendaylight.yang.gen.v1.urn.opendaylight.vcfstatistics.rev181126.VcfstatisticsService" />
+
+	<odl:rpc-service id="floodlighttopoService"
+		interface="org.opendaylight.yang.gen.v1.urn.opendaylight.floodlighttopo.rev190515.FloodlighttopoService" />
+
+	<odl:rpc-service id="ryutopoService"
+		interface="org.opendaylight.yang.gen.v1.urn.opendaylight.ryutopo.rev190515.RyutopoService" />
+
+	<odl:rpc-service id="salRoleService"
+		interface="org.opendaylight.yang.gen.v1.urn.opendaylight.role.service.rev150727.SalRoleService" />
+
+	<bean id="synchronizer"
+		class="xidian.synchronizer.syn.SynchronizeMessage" init-method="init">
+		<argument ref="dataBroker" />
+		<argument ref="devicemanagementService" />
+		<argument ref="linkmanagerService" />
+		<argument ref="vcfstatisticsService" />
+		<argument ref="floodlighttopoService" />
+		<argument ref="ryutopoService" />
+		<argument ref="notificationPublishService" />
+	</bean>
+
+	<bean id="topologyChangeListener"
+		class="xidian.synchronizer.syn.TopologyChangeListener"
+		init-method="init">
+		<argument ref="dataBroker" />
+		<argument ref="floodlighttopoService" />
+		<argument ref="ryutopoService" />
+		<argument ref="salRoleService" />
+	</bean>
+
+	<bean id="controllerDownListener"
+		class="xidian.synchronizer.syn.ControllerDownListener">
+		<argument ref="dataBroker" />
+		<argument ref="floodlighttopoService" />
+		<argument ref="ryutopoService" />
+		<argument ref="salRoleService" />
+	</bean>
+	
+	<odl:notification-listener
+		ref="controllerDownListener" />
+</blueprint>

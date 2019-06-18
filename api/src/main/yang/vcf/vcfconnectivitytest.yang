@@ -1,0 +1,34 @@
+// Contents of "connectivitytest"
+module connectivitytest {
+    namespace "urn:opendaylight:connectivitytest";
+    prefix "connectivitytest";
+    import ietf-inet-types { prefix "inet"; revision-date 2013-07-15; }
+    import guard { prefix guard; revision-date 2015-01-05; }
+    revision 2018-11-26 {
+        description "Initial revision";
+    }
+
+    rpc is-connected{
+    	description "检测控制器上网关设备与虚拟交换机之间，网关设备和网关设备之间是否正常连接。 /sdn/v2.0/net/interconnect/{src_dpid}/{src_ip}/{dst_dpid}/{dst_ip}";
+    	input{
+    		uses guard:ip-port;
+    		leaf src-dpid{
+    			type guard:datapath-id;
+    		}
+    		leaf src-ip{
+    			type inet:ipv4-address;
+    		}
+    		leaf dst-dpid{
+    			type guard:datapath-id;
+    		}
+    		leaf dst-ip{
+    			type inet:ipv4-address;
+    		}
+    	}
+    	output {
+    		leaf result{
+    			type string;
+    		}
+    	}
+    }
+}

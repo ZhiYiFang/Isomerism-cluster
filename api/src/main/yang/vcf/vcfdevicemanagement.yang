@@ -1,0 +1,288 @@
+// Contents of "devicemanagement"
+module devicemanagement {
+    namespace "urn:opendaylight:devicemanagement";
+    prefix "devicemanagement";
+    import guard { prefix guard; revision-date 2015-01-05; }
+    import ietf-inet-types { prefix "inet"; revision-date 2013-07-15; }
+    import ietf-yang-types { prefix "yang"; revision-date 2013-07-15; }
+    revision 2018-11-26 {
+        description "Initial revision";
+    }
+
+    rpc get-devices {
+        description "查询所有openflow设备 /sdn/v2.0/of/datapaths/device GET";
+        input {
+        	uses guard:ip-port;
+            leaf dpid {
+                type guard:datapath-id;
+            }
+        }
+        output {
+            leaf result {
+                type string;
+            }
+        }
+    }
+
+    rpc get-gateways {
+        description "获取所有的网关信息  /sdn/v2.0/of/datapaths GET";
+        input {
+        	uses guard:ip-port;
+            leaf dpid {
+                type guard:datapath-id;
+            }
+        }
+        output {
+            leaf result {
+                type string;
+            }
+        }
+    }
+
+    rpc get-ports {
+        description "查看指定设备的指定端口或者全部端口 /sdn/v2.0/of/datapaths/{dpid}/ports/{port_id}
+                GET";
+        input {
+        	uses guard:ip-port;
+            leaf dpid {
+                type guard:datapath-id;
+            }
+            leaf port-id {
+                type int64;
+            }
+        }
+        output {
+            leaf result {
+                type string;
+            }
+        }
+    }
+
+    rpc config-port-status {
+        description "改变指定端口的状态 /sdn/v2.0/of/datapaths/{dpid}/ports/{port_id}/action
+                POST";
+        input {
+        	uses guard:ip-port;
+            leaf dpid {
+                type guard:datapath-id;
+            }
+            leaf port-id {
+                type int64;
+            }
+            leaf port-action {
+                type enumeration {
+                    enum "disable" {
+                        value 0;
+                        description "关闭端口";
+                    }
+                    enum "enable" {
+                        value 1;
+                        description "使能端口";
+                    }
+                }
+            }
+        }
+        output {
+            leaf result {
+                type string;
+            }
+        }
+    }
+
+    rpc get-device-role {
+        description "获取指定设备的控制器的角色信息 /sdn/v2.0/of/datapaths/{dpid}/controllers GET";
+        input {
+        	uses guard:ip-port;
+            leaf dpid {
+                type guard:datapath-id;
+            }
+        }
+        output {
+            leaf result {
+                type string;
+            }
+        }
+    }
+
+    rpc get-device-match-ability {
+        description "获取指定设备的match项的能力集 /sdn/v2.0/of/datapaths/{dpid}/features/match";
+        input {
+        	uses guard:ip-port;
+            leaf dpid {
+                type guard:datapath-id;
+            }
+        }
+        output {
+            leaf result {
+                type string;
+            }
+        }
+    }
+
+    rpc get-device-flow-table {
+        description "查询指定设备的流表 /sdn/v2.0/of/datapaths/flows?{dpid=dpid}&{switch_ip=switch_ip}&{table_id=table_id}&{port=port}&{src_mac=src_mac}&{dst_mac=dst_mac}&{vlan=vlan}&{eth_type=eth_type}&{src_ip=src_ip}&{dst_ip=dst_ip}&{src_ipmask=src_ipmask}&{dst_ipmask=dst_ipmask}";
+        input {
+        	uses guard:ip-port;
+            leaf dpid {
+                description "网关设备的Datapath ID。String类型，可选，但dpid和switch_ip两参数至少选其一。";
+                type guard:datapath-id;
+            }
+            leaf switch-ip {
+                type inet:ipv4-address;
+            }
+            leaf table-id {
+                type int32;
+                description "流表表号 可选";
+            }
+            leaf port-id {
+                type int64;
+                description "入端口号 可选";
+            }
+            leaf src-mac {
+                type yang:mac-address;
+                description "源mac 可选";
+            }
+            leaf dst-mac {
+                type yang:mac-address;
+                description "目的mac 可选";
+            }
+            leaf vlan {
+                type int32;
+                description "vlan id 可选";
+            }
+            leaf eth-type {
+                type string;
+                description "以太网协议类型 可选";
+            }
+            leaf src-ip {
+                type inet:ipv4-address;
+                description "源ip 可选";
+            }
+            leaf dst-ip {
+                type inet:ipv4-address;
+                description "目的ip 可选";
+            }
+            leaf src-ipmask {
+                type string;
+                description "源ip掩码 可选";
+            }
+            leaf dst-ipmask {
+                type string;
+                description "目的ip掩码 可选";
+            }
+        }
+        output {
+            leaf result {
+                type string;
+            }
+        }
+    }
+    grouping match-items {
+        leaf eth-type {
+            type string;
+        }
+        leaf eth-src {
+            type yang:mac-address;
+        }
+        leaf eth-dst {
+            type yang:mac-address;
+        }
+        leaf ipv4-src {
+            type inet:ipv4-address;
+        }
+        leaf ipv4-dst {
+            type inet:ipv4-address;
+        }
+        leaf src-port {
+            type inet:port-number;
+        }
+        leaf dst-port {
+            type inet:port-number;
+        }
+        leaf ip-proto {
+            type enumeration {
+                enum "tcp" {
+                    value 0;
+                }
+            }
+        }
+    }
+    grouping instruction {
+        choice instruction {
+            case write-actions {
+                leaf out-put {
+                    type string;
+                }
+            }
+        }
+    }
+    grouping flow-basic {
+
+        leaf table-id {
+            type int32;
+        }
+        leaf priority {
+            type int32;
+        }
+        leaf idle-timeout {
+            type int32;
+        }
+        leaf hard-timeout {
+            type int32;
+        }
+        leaf flow-mod-cmd {
+            type enumeration {
+                enum "add" {
+                    value 0;
+                }
+                enum "modify" {
+                    value 1;
+                }
+                enum "delete" {
+                    value 2;
+                }
+            }
+        }
+        list flow_mod_flags {
+            leaf flow_mode_flags {
+                type string;
+            }
+        }
+    }
+    rpc vcf-flow-mod {
+        description "向指定dpid设备下发流表";
+        input {
+        	uses guard:ip-port;
+            leaf dpid {
+                type guard:datapath-id;
+            }
+            container flow-input {
+                uses flow-basic;
+                container matches {
+                    uses match-items;
+                }
+                list instructions {
+                    choice action {
+                        case apply {
+                            list apply-actions {
+                                leaf output {
+                                    type string;
+                                }
+                            }
+                        }
+                        case other {
+                            leaf test {
+                                type string;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        output {
+            leaf result {
+                type string;
+            }
+        }
+    }
+}
