@@ -5,15 +5,16 @@
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
+package xidian.impl.controller.ryu;
 
-package xidian.synchronizer.syn.utils.rediskey;
+public class RyuAction {
 
-public class OdlLinksKey extends BasePrefix{
-
-	private OdlLinksKey(int expireSeconds, String prefix) {
-		super(expireSeconds, prefix);
-		// TODO Auto-generated constructor stub
+	String type;
+	String port;
+	public RyuAction( String port) {
+		super();
+		type="OUTPUT";
+		this.port = port;
 	}
-
-	public static OdlLinksKey getOdlLinks = new OdlLinksKey(0, "odlLinks");
+	
 }

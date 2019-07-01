@@ -24,7 +24,6 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.ControllerDownBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.ControllerTypes.TypeName;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.Isomerism;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.controller.down.DownController;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.controller.down.DownControllerBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.controller.down.NewControllerBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.isomerism.IsomerismControllers;
@@ -41,14 +40,14 @@ import org.opendaylight.yangtools.yang.binding.KeyedInstanceIdentifier;
 import com.google.common.base.Optional;
 import com.google.gson.JsonParser;
 
+import xidian.impl.util.InstructionUtils;
+import xidian.impl.util.MoveOrder;
+import xidian.impl.util.RedisService;
+import xidian.impl.util.rediskey.CSKey;
+import xidian.impl.util.rediskey.OdlLinksKey;
+import xidian.impl.util.rediskey.RedisController;
+import xidian.impl.util.rediskey.SCKey;
 import xidian.synchronizer.syn.topoEle.Link;
-import xidian.synchronizer.syn.utils.InstructionUtils;
-import xidian.synchronizer.syn.utils.MoveOrder;
-import xidian.synchronizer.syn.utils.RedisService;
-import xidian.synchronizer.syn.utils.rediskey.CSKey;
-import xidian.synchronizer.syn.utils.rediskey.OdlLinksKey;
-import xidian.synchronizer.syn.utils.rediskey.RedisController;
-import xidian.synchronizer.syn.utils.rediskey.SCKey;
 
 public class AliveTestTask extends TimerTask {
 

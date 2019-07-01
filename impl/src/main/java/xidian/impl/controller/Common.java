@@ -18,7 +18,6 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
-import org.omg.CORBA.DATA_CONVERSION;
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
 import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
@@ -29,6 +28,9 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.Alert
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.AlertMessage;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.ControllerTypes.TypeName;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.ControllersService;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.FlowBasic.FlowModCmd;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.FlowModInput;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.FlowModOutput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.GetAllSwitchesOutput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.GetAllSwitchesOutputBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.GetSwitchFlowTableInput;
@@ -40,6 +42,8 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.SendA
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.SendAlertOutputBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.alert.message.AlertMessages;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.alert.message.AlertMessagesBuilder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.flow.mod.input.FlowInput;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.flow.mod.input.flow.input.Matches;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.get.all.switches.output.Switches;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.get.all.switches.output.SwitchesBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.isomerism.IsomerismControllers;
@@ -68,6 +72,9 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
+import xidian.impl.controller.ryu.RyuAction;
+import xidian.impl.controller.ryu.RyuFlow;
+import xidian.impl.controller.ryu.RyuMatch;
 import xidian.impl.util.DpidUtils;
 import xidian.impl.util.HttpUtils;
 import xidian.impl.util.RedisService;
@@ -82,7 +89,7 @@ public class Common implements ControllersService {
 	private final RyutopoService ryutopoService;
 	private final RyuflowtableService ryuflowtableService;
 	private RedisService redisService = RedisService.getInstance();
-	
+
 	public Common(DataBroker dataBroker, FloodlighttopoService floodlightTopoService,
 			FloodlightflowtableService floodlightflowtableService, RyutopoService ryutopoService,
 			RyuflowtableService ryuflowtableService) {
@@ -277,24 +284,25 @@ public class Common implements ControllersService {
 		Integer code = input.getCode();
 		Component component = input.getComponent();
 		Date time = new Date();
-		
+
 		// 警告消息写入到datastore
 		WriteTransaction write = dataBroker.newWriteOnlyTransaction();
-		InstanceIdentifier<AlertMessages> path = InstanceIdentifier.create(AlertMessage.class).child(AlertMessages.class);
+		InstanceIdentifier<AlertMessages> path = InstanceIdentifier.create(AlertMessage.class)
+				.child(AlertMessages.class);
 		AlertMessagesBuilder alertMessagesBuilder = new AlertMessagesBuilder();
-		
+
 		alertMessagesBuilder.setAlertMsg(alertMsg);
 		alertMessagesBuilder.setAlertType(alertType);
 		alertMessagesBuilder.setCode(code);
 		alertMessagesBuilder.setComponent(component);
 		DateFormat bf = new SimpleDateFormat("yyyy-MM-dd E a HH:mm:ss");
 		alertMessagesBuilder.setTime(bf.format(time));
-		
+
 		write.merge(LogicalDatastoreType.OPERATIONAL, path, alertMessagesBuilder.build());
 		write.submit();
-		
+
 		Map<String, String> map = new HashMap<>();
-		map.put("alertMsg",alertMsg);
+		map.put("alertMsg", alertMsg);
 		map.put("alertType", alertType);
 		map.put("code", code.toString());
 		map.put("component", component.getName());
@@ -304,23 +312,67 @@ public class Common implements ControllersService {
 		String response = HttpUtils.sendHttpPostJson("", gson.toJson(map));
 		return RpcResultBuilder.success(new SendAlertOutputBuilder().setResult(true).build()).buildFuture();
 	}
-	
-//	public static void main(String[] args) {
-//		Date time = new Date();
-//		Component component = Component.Isomerism;
-//		Integer code = 11;
-//		String alertMsg = "test";
-//		String alertType = "testType";
-//		DateFormat bf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//		Map<String, String> map = new HashMap<>();
-//		map.put("alertMsg",alertMsg);
-//		map.put("alertType", alertType);
-//		map.put("code", code.toString());
-//		map.put("component", component.getName());
-//		map.put("time", bf.format(time));
-//		Gson gson = new Gson();
-//		System.out.println(gson.toJson(map));
-//	}
-	
-}
 
+	@Override
+	public Future<RpcResult<FlowModOutput>> flowMod(FlowModInput input) {
+		DatapathId dpid = input.getDpid();
+		RedisService redis = RedisService.getInstance();
+		RedisController redisController = redis.get(SCKey.getController, dpid.getValue(), RedisController.class);
+		TypeName type = redisController.getType();
+		switch(type) {
+		case Agile:
+			break;
+		case Apic:
+			break;
+		case Floodlight:
+			
+			break;
+		case Ryu:
+			String ret = ryuFlowMod(input);
+			break;
+		case Vcf:
+			break;
+		}
+		return null;
+	}
+
+	private String ryuFlowMod(FlowModInput input) {
+		FlowInput flowInput = input.getFlowInput();
+		String dpid = DpidUtils.getIntStringValueFromDpid(input.getDpid());
+		RyuFlow flow = new RyuFlow();
+		flow.setDpid(dpid);
+		flow.setHard_timeout(flowInput.getHardTimeout().toString());
+		flow.setIdle_timeout(flowInput.getIdleTimeout().toString());
+		flow.setPriority(flowInput.getPriority().toString());
+		flow.setTable_id(flowInput.getTableId().toString());
+		RyuMatch match = new RyuMatch();
+		Matches matchInput = flowInput.getMatches();
+		match.setDl_dst(matchInput.getEthDst().getValue());
+		match.setDl_src(matchInput.getEthSrc().getValue());
+		match.setNw_dst(matchInput.getIpv4Dst().getValue());
+		match.setNw_src(matchInput.getIpv4Src().getValue());
+		match.setTp_dst(matchInput.getDstPort().getValue().toString());
+		match.setTp_src(matchInput.getSrcPort().getValue().toString());
+		flow.setMatch(match);
+		List<RyuAction> actions = new ArrayList<RyuAction>();
+		actions.add(new RyuAction(flowInput.getOutPutPort()));
+		flow.setActions(actions);
+		Gson gson = new Gson();
+		
+		String postJson = gson.toJson(flow);
+		FlowModCmd cmd = flowInput.getFlowModCmd();
+		switch (cmd) {
+		case Add:
+			
+			break;
+		case Delete:
+			break;
+		case Modify:
+			break;
+		default:
+			break;
+		}
+		return null;
+	}
+
+}

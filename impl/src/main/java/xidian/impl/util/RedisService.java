@@ -19,10 +19,9 @@ public class RedisService {
 
 	private JedisPool jedisPool;
 	private Gson gson;
-
+	public static String host;
+	public static String port;
 	public static RedisService getInstance() {
-		String host = "172.17.0.4";
-		String port = "6379";
 		String timeout = "10";
 		String poolMaxTotal = "1000";
 		String poolMaxIdle = "500";

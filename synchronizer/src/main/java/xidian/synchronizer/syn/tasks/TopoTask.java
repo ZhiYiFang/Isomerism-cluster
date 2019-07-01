@@ -23,6 +23,7 @@ import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
 import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.Uri;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.BasicSetting;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.ControllerTypes.TypeName;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.DataPlaneLink;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.DataPlaneLinkBuilder;
@@ -62,18 +63,18 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import xidian.impl.util.DpidUtils;
+import xidian.impl.util.InstructionUtils;
+import xidian.impl.util.MoveOrder;
+import xidian.impl.util.RedisService;
+import xidian.impl.util.rediskey.CSKey;
+import xidian.impl.util.rediskey.OdlLinksKey;
+import xidian.impl.util.rediskey.RedisController;
+import xidian.impl.util.rediskey.SCKey;
 import xidian.synchronizer.syn.topoEle.Link;
 import xidian.synchronizer.syn.topoEle.LinksFrame;
 import xidian.synchronizer.syn.topoEle.SwitchWithPortFrame;
 import xidian.synchronizer.syn.topoEle.SwitchWithPorts;
-import xidian.synchronizer.syn.utils.DpidUtils;
-import xidian.synchronizer.syn.utils.InstructionUtils;
-import xidian.synchronizer.syn.utils.MoveOrder;
-import xidian.synchronizer.syn.utils.RedisService;
-import xidian.synchronizer.syn.utils.rediskey.CSKey;
-import xidian.synchronizer.syn.utils.rediskey.OdlLinksKey;
-import xidian.synchronizer.syn.utils.rediskey.RedisController;
-import xidian.synchronizer.syn.utils.rediskey.SCKey;
 
 public class TopoTask extends Thread {
 
@@ -184,10 +185,21 @@ public class TopoTask extends Thread {
 				// for(SwitchWithPorts sw : allSwitchPorts) {
 				// edgeSwitches.add(sw.getDpid());
 				// }
-
+				
+				ReadOnlyTransaction readMiddleIp = dataBroker.newReadOnlyTransaction();
+				InstanceIdentifier<BasicSetting> readMiddleIpPath = InstanceIdentifier.create(BasicSetting.class);
+				
+				Optional<BasicSetting> op = readMiddleIp.read(LogicalDatastoreType.CONFIGURATION, readMiddleIpPath).get();
+				String middleIp = "127.0.0.1";
+				
+				if(op.isPresent()) {
+					middleIp = op.get().getMiddleIp().getValue();
+				}
+				readMiddleIp.close();
+				
 				// 让中间件与所有的边界交换机建立连接来确定这些边界交换机的连接关系
 				for (String dpid : edgeSwitches) {
-					MoveOrder order = new MoveOrder("127.0.0.1", dpid);
+					MoveOrder order = new MoveOrder(middleIp, dpid);
 					InstructionUtils.moveSwitch(order);
 				}
 				Thread.sleep(1000);
@@ -288,8 +300,7 @@ public class TopoTask extends Thread {
 	}
 
 	private void restoreSwitchConnection(Set<String> edgeSwitches, Map<String, String> switchToController) {
-		setAllSlave();
-		SalFlowService salFlowService;
+//		setAllSlave();
 		RemoveFlowInputBuilder input = new RemoveFlowInputBuilder();
 		for (String sw : edgeSwitches) {
 			String controllerIp = switchToController.get(sw);
@@ -325,8 +336,8 @@ public class TopoTask extends Thread {
 		// 所有节点信息
 		Nodes nodes = null;
 		// 创建读事务
-		try (ReadOnlyTransaction readOnlyTransaction = dataBroker.newReadOnlyTransaction()) {
-
+		ReadOnlyTransaction readOnlyTransaction = dataBroker.newReadOnlyTransaction();
+		try {
 			Optional<Nodes> dataObjectOptional = readOnlyTransaction
 					.read(LogicalDatastoreType.OPERATIONAL, nodesInsIdBuilder.build()).get();
 			// 如果数据不为空，获取到nodes
@@ -335,6 +346,8 @@ public class TopoTask extends Thread {
 			}
 		} catch (InterruptedException e) {
 		} catch (ExecutionException e) {
+		} finally {
+			readOnlyTransaction.close();
 		}
 		return nodes.getNode();
 	}

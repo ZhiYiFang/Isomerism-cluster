@@ -5,7 +5,7 @@
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
-package xidian.synchronizer.syn.utils;
+package xidian.impl.util;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,9 +15,8 @@ import java.io.PrintWriter;
 
 public class InstructionUtils {
 
-	public static String OpenFlowPort = "6653";
-	public static String mininetIp = "127.0.0.1";
-	public static String passwd = "123qwe";
+	public static String mininetIp;
+	public static String passwd;
 	
 	public static void moveSwitch(String mininetIp, MoveOrder order) {
 		String ip = order.getDestinationIP();

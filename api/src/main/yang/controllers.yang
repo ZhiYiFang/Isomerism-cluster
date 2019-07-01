@@ -2,7 +2,7 @@
 module controllers {
     namespace "urn:opendaylight:controllers";
     prefix "controllers";
-
+    import ietf-yang-types { prefix "yang"; revision-date 2013-07-15; }
     import guard { prefix guard; revision-date 2015-01-05; }
     import ietf-inet-types { prefix "inet"; revision-date 2013-07-15; }
     revision 2018-11-25 {
@@ -50,6 +50,33 @@ module controllers {
             }
         }
     }
+
+    container basic-setting {
+        leaf middle-ip {
+            type inet:ipv4-address;
+        }
+        container redis-setting {
+
+            leaf ip {
+                type inet:ipv4-address;
+            }
+
+            leaf port {
+                type inet:port-number;
+            }
+        }
+        container mininet-setting {
+
+            leaf ip {
+                type inet:ipv4-address;
+            }
+
+            leaf password {
+                type string;
+            }
+        }
+    }
+
     container isomerism {
         list isomerism-controllers {
             key ip;
@@ -85,7 +112,7 @@ module controllers {
 
     grouping alert-common {
         leaf component {
-        	description "组件类型";
+            description "组件类型";
             type enumeration {
                 enum "isomerism" {
                     value 0;
@@ -98,37 +125,37 @@ module controllers {
                 }
             }
         }
-        leaf alert-type{
-        	type string;
+        leaf alert-type {
+            type string;
         }
-        leaf code{
-        	type int32;
+        leaf code {
+            type int32;
         }
-        leaf time{
-        	type string;
+        leaf time {
+            type string;
         }
-        leaf alert-level{
-        	description "警报等级";
-        	type enumeration{
-        		enum "low"{
-        			value 0;
-        		}
-        		enum "medium"{
-        			value 1;
-        		}
-        		enum "high"{
-        			value 2;
-        		}
-        	}
+        leaf alert-level {
+            description "警报等级";
+            type enumeration {
+                enum "low" {
+                    value 0;
+                }
+                enum "medium" {
+                    value 1;
+                }
+                enum "high" {
+                    value 2;
+                }
+            }
         }
-        leaf component-ip{
-        	type inet:ipv4-address;
+        leaf component-ip {
+            type inet:ipv4-address;
         }
-        leaf virtual-machine-ip{
-        	type inet:ipv4-address;
+        leaf virtual-machine-ip {
+            type inet:ipv4-address;
         }
-        leaf alert-msg{
-        	type string;
+        leaf alert-msg {
+            type string;
         }
     }
 
@@ -202,7 +229,96 @@ module controllers {
             }
         }
     }
+    grouping flow-basic {
 
+        leaf table-id {
+            type int32;
+        }
+
+        leaf priority {
+            type int32;
+        }
+
+        leaf idle-timeout {
+            type int32;
+        }
+
+        leaf hard-timeout {
+            type int32;
+        }
+
+        leaf flow-mod-cmd {
+            type enumeration {
+                enum "add" {
+                    description "增加流表";
+                    value 0;
+                }
+                enum "modify" {
+                    description "修改流表";
+                    value 1;
+                }
+                enum "delete" {
+                    description "删除流表";
+                    value 2;
+                }
+            }
+        }
+    }
+
+    grouping match-items {
+
+        leaf eth-src {
+            type yang:mac-address;
+        }
+        leaf eth-dst {
+            type yang:mac-address;
+        }
+        leaf ipv4-src {
+            type inet:ipv4-address;
+        }
+        leaf ipv4-dst {
+            type inet:ipv4-address;
+        }
+        leaf src-port {
+            type inet:port-number;
+        }
+        leaf dst-port {
+            type inet:port-number;
+        }
+    }
+    grouping instruction {
+        //        choice instruction {
+        //            case write-actions {
+        //                leaf out-put {
+        //                    type string;
+        //                }
+        //            }
+        //        }
+        leaf out-put-port {
+            type string;
+        }
+    }
+    rpc flow-mod {
+        input {
+            leaf dpid {
+                type guard:datapath-id;
+            }
+            container flow-input {
+                uses flow-basic;
+                container matches {
+                    uses match-items;
+                }
+                leaf out-put-port {
+                    type string;
+                }
+            }
+        }
+        output {
+            leaf result {
+                type string;
+            }
+        }
+    }
     notification controller-down {
         description "有异构控制器宕机";
         container down-controller {

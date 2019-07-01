@@ -134,6 +134,7 @@ public class DeviceManagementImpl implements DevicemanagementService {
 		String reuslt = HttpUtils.sendHttpGet(url);
 		return RpcResultBuilder.success(new GetDeviceMatchAbilityOutputBuilder().setResult(reuslt).build())
 				.buildFuture();
+		
 	}
 
 	@Override
