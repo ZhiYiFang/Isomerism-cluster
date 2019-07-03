@@ -360,6 +360,7 @@ public class Common implements ControllersService {
 		flow.put("tcp_dst", matchInput.getDstPort().getValue().toString());
 
 		flow.put("active", "true");
+		flow.put("ip_proto", "0x06");
 		flow.put("actions", "output=" + flowInput.getOutPutPort());
 
 		FlowModCmd cmd = flowInput.getFlowModCmd();
@@ -401,6 +402,8 @@ public class Common implements ControllersService {
 		match.setNw_src(matchInput.getIpv4Src().getValue());
 		match.setTp_dst(matchInput.getDstPort().getValue().toString());
 		match.setTp_src(matchInput.getSrcPort().getValue().toString());
+		match.setDl_type("2048");
+		match.setNw_type("6");
 		flow.setMatch(match);
 		List<RyuAction> actions = new ArrayList<RyuAction>();
 		actions.add(new RyuAction(flowInput.getOutPutPort()));

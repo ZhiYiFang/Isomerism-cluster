@@ -15,6 +15,21 @@ public class RyuMatch {
 	String nw_dst;
 	String tp_src;
 	String tp_dst;
+	String dl_type;
+	String nw_type;
+	
+	public String getDl_type() {
+		return dl_type;
+	}
+	public void setDl_type(String dl_type) {
+		this.dl_type = dl_type;
+	}
+	public String getNw_type() {
+		return nw_type;
+	}
+	public void setNw_type(String nw_type) {
+		this.nw_type = nw_type;
+	}
 	public String getDl_src() {
 		return dl_src;
 	}
