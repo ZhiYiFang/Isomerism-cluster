@@ -31,6 +31,7 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.Contr
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.FlowBasic.FlowModCmd;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.FlowModInput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.FlowModOutput;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.FlowModOutputBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.GetAllSwitchesOutput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.GetAllSwitchesOutputBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.GetSwitchFlowTableInput;
@@ -72,9 +73,11 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
+import xidian.impl.controller.floodlight.FloodlightUrls;
 import xidian.impl.controller.ryu.RyuAction;
 import xidian.impl.controller.ryu.RyuFlow;
 import xidian.impl.controller.ryu.RyuMatch;
+import xidian.impl.controller.ryu.RyuUrls;
 import xidian.impl.util.DpidUtils;
 import xidian.impl.util.HttpUtils;
 import xidian.impl.util.RedisService;
@@ -319,24 +322,69 @@ public class Common implements ControllersService {
 		RedisService redis = RedisService.getInstance();
 		RedisController redisController = redis.get(SCKey.getController, dpid.getValue(), RedisController.class);
 		TypeName type = redisController.getType();
-		switch(type) {
+		String ret = null;
+		switch (type) {
 		case Agile:
 			break;
 		case Apic:
 			break;
 		case Floodlight:
-			
+			ret = floodlightFlowMod(redisController, input);
 			break;
 		case Ryu:
-			String ret = ryuFlowMod(input);
+			ret = ryuFlowMod(redisController, input);
 			break;
 		case Vcf:
 			break;
 		}
-		return null;
+		return RpcResultBuilder.success(new FlowModOutputBuilder().setResult(ret).build()).buildFuture();
 	}
 
-	private String ryuFlowMod(FlowModInput input) {
+	private String floodlightFlowMod(RedisController redisController, FlowModInput input) {
+		FlowInput flowInput = input.getFlowInput();
+		String dpid = DpidUtils.getIntStringValueFromDpid(input.getDpid());
+		Map<String, String> flow = new HashMap<String, String>();
+		flow.put("switch", dpid);
+		flow.put("priority", flowInput.getPriority().toString());
+		flow.put("idle_timeout", flowInput.getIdleTimeout().toString());
+		flow.put("hard_timeout", flowInput.getHardTimeout().toString());
+		flow.put("table", flowInput.getTableId().toString());
+		flow.put("eth_type", "0x0800");
+
+		Matches matchInput = flowInput.getMatches();
+		flow.put("eth_src", matchInput.getEthSrc().getValue());
+		flow.put("eth_dst", matchInput.getEthDst().getValue());
+		flow.put("ipv4_src", matchInput.getIpv4Src().getValue());
+		flow.put("ipv4_dst", matchInput.getIpv4Dst().getValue());
+		flow.put("tcp_src", matchInput.getSrcPort().getValue().toString());
+		flow.put("tcp_dst", matchInput.getDstPort().getValue().toString());
+
+		flow.put("active", "true");
+		flow.put("actions", "output=" + flowInput.getOutPutPort());
+
+		FlowModCmd cmd = flowInput.getFlowModCmd();
+		String postJson = new Gson().toJson(flow);
+		String url = null;
+		String ret = null;
+		switch (cmd) {
+		case Add:
+		case Modify:
+			url = HttpUtils.getBasicURL(redisController.getIp().getValue(), redisController.getPort().getValue(),
+					FloodlightUrls.ADD_MODIFY_FLOW);
+			ret = HttpUtils.sendHttpPostJson(url, postJson);
+			break;
+		case Delete:
+			
+			// 暂时先全部删除
+			url = HttpUtils.getBasicURL(redisController.getIp().getValue(), redisController.getPort().getValue(),
+					FloodlightUrls.DELETE_ALL_FLOW.replace("{switch-id}", dpid));
+			ret = HttpUtils.sendHttpPostJson(url, postJson);
+			break;
+		}
+		return ret;
+	}
+
+	private String ryuFlowMod(RedisController redisController, FlowModInput input) {
 		FlowInput flowInput = input.getFlowInput();
 		String dpid = DpidUtils.getIntStringValueFromDpid(input.getDpid());
 		RyuFlow flow = new RyuFlow();
@@ -358,21 +406,31 @@ public class Common implements ControllersService {
 		actions.add(new RyuAction(flowInput.getOutPutPort()));
 		flow.setActions(actions);
 		Gson gson = new Gson();
-		
+
 		String postJson = gson.toJson(flow);
 		FlowModCmd cmd = flowInput.getFlowModCmd();
+		String ret = null;
+		String url = null;
 		switch (cmd) {
 		case Add:
-			
+			url = HttpUtils.getBasicURL(redisController.getIp().getValue(), redisController.getPort().getValue(),
+					RyuUrls.ADD_FLOW_ENTRY);
+			ret = HttpUtils.sendHttpPostJson(url, postJson);
 			break;
 		case Delete:
+			url = HttpUtils.getBasicURL(redisController.getIp().getValue(), redisController.getPort().getValue(),
+					RyuUrls.DELETE_ALL_FLOW_ENTRY);
+			ret = HttpUtils.sendHttpPostJson(url, postJson);
 			break;
 		case Modify:
+			url = HttpUtils.getBasicURL(redisController.getIp().getValue(), redisController.getPort().getValue(),
+					RyuUrls.MODIFY_ALL_FLOW_ENTRY);
+			ret = HttpUtils.sendHttpPostJson(url, postJson);
 			break;
 		default:
 			break;
 		}
-		return null;
+		return ret;
 	}
 
 }

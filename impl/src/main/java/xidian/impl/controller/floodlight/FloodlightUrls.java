@@ -16,4 +16,6 @@ public interface FloodlightUrls {
 	String GET_PORT_DESC = "/wm/core/switch/{switch-id}/port-desc/json";
 	String GET_HEALTH = "/wm/core/health/json";
 	String GET_FLOW_TABLE = "/wm/core/switch/{switch-id}/flow/json";
+	String ADD_MODIFY_FLOW ="/wm/staticflowpusher/json";
+	String DELETE_ALL_FLOW = "/wm/staticflowpusher/clear/{switch-id}/json";
 }

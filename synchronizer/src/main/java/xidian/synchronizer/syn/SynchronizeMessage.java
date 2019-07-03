@@ -21,17 +21,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import xidian.synchronizer.syn.tasks.AliveTestTask;
-import xidian.synchronizer.syn.tasks.SynTask;
-import xidian.synchronizer.syn.tasks.TopoTask;
 
 public class SynchronizeMessage {
 
 	private Logger LOG = LoggerFactory.getLogger(SynchronizeMessage.class);
 	private DataBroker dataBroker;
 	private Timer timer = new Timer();
-	private DevicemanagementService devicemanagementService;
-	private LinkmanagerService linkmanagerService;
-	private VcfstatisticsService vcfstatisticsService;
 	private FloodlighttopoService floodlighttopoService;
 	private RyutopoService ryutopoService;
 	private NotificationPublishService notificationPublishService;
@@ -42,9 +37,6 @@ public class SynchronizeMessage {
 			NotificationPublishService notificationPublishService) {
 		super();
 		this.dataBroker = dataBroker;
-		this.devicemanagementService = devicemanagementService;
-		this.linkmanagerService = linkmanagerService;
-		this.vcfstatisticsService = vcfstatisticsService;
 		this.floodlighttopoService = floodlighttopoService;
 		this.ryutopoService = ryutopoService;
 		this.notificationPublishService = notificationPublishService;

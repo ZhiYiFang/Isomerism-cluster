@@ -19,4 +19,8 @@ public interface RyuUrls {
 	String GET_PORT_DESC = "/stats/portdesc/{dpidInt}";
 	
 	String GET_FLOW_TABLE= "/stats/flow/{dpidInt}";
+	
+	String ADD_FLOW_ENTRY = "/stats/flowentry/add";// Add a flow entry to the switch.
+	String MODIFY_ALL_FLOW_ENTRY = "/stats/flowentry/modify"; // Modify all matching flow entries of the switch.
+	String DELETE_ALL_FLOW_ENTRY = "/stats/flowentry/delete"; // Delete all matching flow entries of the switch.
 }
