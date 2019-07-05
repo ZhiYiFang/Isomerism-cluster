@@ -24,7 +24,8 @@ public class InstructionUtils {
 		String switchDpid = order.getSwitchDpid();
 		int index = Integer.valueOf(switchDpid.replace(":", ""), 16);
 		String switchName = "s"+index;
-		String cmd = "sshpass "+"-p "+passwd+" ssh root@"+mininetIp+" ovs-vsctl"+" set-controller "+switchName+" tcp:"+ip+":"+port;
+//		String cmd = "sshpass "+"-p "+passwd+" ssh root@"+mininetIp+" ovs-vsctl"+" set-controller "+switchName+" tcp:"+ip+":"+port;
+		String cmd = "ssh root@"+mininetIp+" ovs-vsctl"+" set-controller "+switchName+" tcp:"+ip+":"+port;
 		exec(cmd);
 	}
 	
@@ -34,7 +35,8 @@ public class InstructionUtils {
 		String switchDpid = order.getSwitchDpid();
 		int index = Integer.valueOf(switchDpid.replace(":", ""), 16);
 		String switchName = "s"+index;
-		String cmd = "sshpass "+"-p "+passwd+" ssh root@"+mininetIp+" ovs-vsctl"+" set-controller "+switchName+" tcp:"+ip+":"+port;
+//		String cmd = "sshpass "+"-p "+passwd+" ssh root@"+mininetIp+" ovs-vsctl"+" set-controller "+switchName+" tcp:"+ip+":"+port;
+		String cmd = "ssh root@"+mininetIp+" ovs-vsctl"+" set-controller "+switchName+" tcp:"+ip+":"+port;
 		exec(cmd);
 	}
 	
