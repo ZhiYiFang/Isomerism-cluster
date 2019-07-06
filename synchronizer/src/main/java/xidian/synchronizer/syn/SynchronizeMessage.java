@@ -51,7 +51,7 @@ public class SynchronizeMessage {
 		// timer.schedule(new SynTask(dataBroker, devicemanagementService,
 		// linkmanagerService, vcfstatisticsService), 10000,
 		// 20000);
-		timer.schedule(new AliveTestTask(dataBroker, floodlighttopoService, ryutopoService, notificationPublishService), 10000, 20000);
+		timer.schedule(new AliveTestTask(dataBroker, floodlighttopoService, ryutopoService, notificationPublishService), 5000, 10000);
 	}
 
 }

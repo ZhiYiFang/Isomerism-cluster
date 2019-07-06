@@ -334,4 +334,5 @@ module controllers {
             uses controller-types;
         }
     }
+
 }

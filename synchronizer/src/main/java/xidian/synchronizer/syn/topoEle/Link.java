@@ -22,6 +22,10 @@ public class Link {
 				+ ", dstSwitch=" + dstSwitch + ", dstPort=" + dstPort + "]";
 	}
 	
+	public Link reverseLink() {
+		return new Link(isBidirectional, dstSwitch, dstPort, srcSwitch, srcPort);
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -33,6 +37,9 @@ public class Link {
 		result = prime * result + ((srcSwitch == null) ? 0 : srcSwitch.hashCode());
 		return result;
 	}
+
+
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -60,7 +67,9 @@ public class Link {
 			return false;
 		return true;
 	}
-	
+
+
+
 	public Link(boolean isBidirectional, String srcSwitch, int srcPort, String dstSwitch, int dstPort) {
 		super();
 		this.isBidirectional = isBidirectional;

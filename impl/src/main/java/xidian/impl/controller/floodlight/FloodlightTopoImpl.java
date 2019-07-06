@@ -82,11 +82,15 @@ public class FloodlightTopoImpl implements FloodlighttopoService {
 	public Future<RpcResult<GetFloodlightHealthOutput>> getFloodlightHealth(GetFloodlightHealthInput input) {
 		String url = HttpUtils.getBasicURL(input.getIp().getValue(), input.getPort().getValue(),
 				FloodlightUrls.GET_HEALTH);
-		String response = HttpUtils.sendHttpGet(url);
-		GetFloodlightHealthOutputBuilder builder = new GetFloodlightHealthOutputBuilder();
-		JsonParser parser = new JsonParser();
-		builder.setResult(parser.parse(response).getAsJsonObject().get("healthy").getAsBoolean());
-		return RpcResultBuilder.success(builder.build()).buildFuture();
+		try {
+			String response = HttpUtils.sendHttpGet(url);
+			GetFloodlightHealthOutputBuilder builder = new GetFloodlightHealthOutputBuilder();
+			JsonParser parser = new JsonParser();
+			builder.setResult(parser.parse(response).getAsJsonObject().get("healthy").getAsBoolean());
+			return RpcResultBuilder.success(builder.build()).buildFuture();
+		}catch (Exception e) {
+			return RpcResultBuilder.success(new GetFloodlightHealthOutputBuilder().setResult(false)).buildFuture();
+		}
 	}
 
 }

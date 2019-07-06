@@ -54,8 +54,11 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.ryutopo.rev190515.RyutopoSe
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.NetworkTopology;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.link.attributes.Destination;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.link.attributes.Source;
+import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.Topology;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.common.RpcResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Optional;
 import com.google.gson.JsonArray;
@@ -85,20 +88,19 @@ public class TopoTask extends Thread {
 	private RedisService redisService;
 	private Set<String> edgeSwitches;
 	Map<String, String> switchToController;
-	private SalRoleService salRoleService;
+	private Logger LOG = LoggerFactory.getLogger(TopoTask.class);
 
-	public TopoTask(DataBroker dataBroker, FloodlighttopoService floodlighttopoService, RyutopoService ryutopoService,
-			SalRoleService salRoleService) {
+	public TopoTask(DataBroker dataBroker, FloodlighttopoService floodlighttopoService, RyutopoService ryutopoService) {
 		this.dataBroker = dataBroker;
 		this.floodlighttopoService = floodlighttopoService;
 		this.ryutopoService = ryutopoService;
 		this.jsonParser = new JsonParser();
 		this.redisService = RedisService.getInstance();
-		this.salRoleService = salRoleService;
 	}
 
 	@Override
 	public void run() {
+		LOG.info("Start TopoTask");
 		ReadOnlyTransaction read = dataBroker.newReadOnlyTransaction();
 		InstanceIdentifier<Isomerism> path = InstanceIdentifier.create(Isomerism.class);
 		Isomerism result = null;
@@ -210,19 +212,21 @@ public class TopoTask extends Thread {
 					String dstSwitch = DpidUtils.getDpidFromOdlSw(destinationString);
 					int srcPort = Integer.valueOf(sourceString.split(":")[2]);
 					int dstPort = Integer.valueOf(destinationString.split(":")[2]);
-					Link reverse = new Link(false, dstSwitch, dstPort, srcSwitch, srcPort);
+//					odlinks.add(new Link(true, srcSwitch, srcPort, dstSwitch, dstPort));
+					Link reverse = new Link(true, dstSwitch, dstPort, srcSwitch, srcPort);
 					if (odlinks.contains(reverse)) {
-						odlinks.remove(reverse);
-						reverse.setBidirectional(true);
-						odlinks.add(reverse);
+
 					} else {
-						odlinks.add(new Link(false, srcSwitch, srcPort, dstSwitch, dstPort));
+						odlinks.add(new Link(true, srcSwitch, srcPort, dstSwitch, dstPort));
 					}
 				}
 
 				writeToRedis(switchWithPortFrames, switchToController, edgeSwitches, odlinks, controllerIpToRedis);
 				// 把ODL检测到的边界交换机的连接关系加入进去
-				allLinks.addAll(odlinks);
+				for(Link l : odlinks) {
+					if(allLinks.contains(l.reverseLink())) continue;
+					allLinks.add(l);
+				}
 				// allLinks写入到dataStore中
 				storeLink(dataBroker, allLinks);
 
@@ -238,7 +242,10 @@ public class TopoTask extends Thread {
 	private void writeToRedis(Map<String, SwitchWithPortFrame> switchWithPortFrames,
 			Map<String, String> switchToController, Set<String> edgeSwitches, HashSet<Link> odllinks,
 			Map<String, RedisController> controllerIpToRedis) {
-
+		
+		// flush all expired values
+		redisService.flushAll();
+		
 		// odllinks写入到redis
 		redisService.set(OdlLinksKey.getOdlLinks, "", odllinks);
 
@@ -277,8 +284,8 @@ public class TopoTask extends Thread {
 		List<DataPlaneLinks> list = new ArrayList<>();
 		for (Link s : allLinks) {
 			DataPlaneLinksBuilder builder2 = new DataPlaneLinksBuilder();
-			builder2.setDstPort(s.getDstSwitch());
-			builder2.setDstSwitch(String.valueOf(s.getDstPort()));
+			builder2.setDstPort(String.valueOf(s.getDstPort()));
+			builder2.setDstSwitch(s.getDstSwitch());
 			builder2.setSrcSwitch(s.getSrcSwitch());
 			builder2.setSrcPort(String.valueOf(s.getSrcPort()));
 			builder2.setIsBidirectional(s.isBidirectional());
@@ -300,26 +307,7 @@ public class TopoTask extends Thread {
 		}
 	}
 
-	private void setAllSlave() {
-		// 获取全部的节点
-		List<Node> nodes = getAllNodes(dataBroker);
-		for (Node node : nodes) {
-			NodeKey nodeKey = node.getKey();// 看Yang文件NodeKey的变量是NodeId
-			// 寻找Nodes根节点下的子节点，由NodeKey来寻找Nodes下的子节点
-			InstanceIdentifier<Node> nodeId = InstanceIdentifier.builder(Nodes.class).child(Node.class, nodeKey)
-					.build();
-			// 对每个节点下发流表
-			setSlave(nodeId);
-		}
-	}
 
-	private void setSlave(InstanceIdentifier<Node> nodeId) {
-		SetRoleInputBuilder inputBuilder = new SetRoleInputBuilder();
-		inputBuilder.setControllerRole(OfpRole.BECOMESLAVE);
-		inputBuilder.setNode(new NodeRef(nodeId));
-		inputBuilder.setTransactionUri(new Uri(nodeId.toString()));
-	    salRoleService.setRole(inputBuilder.build());		
-	}
 
 	private List<Node> getAllNodes(DataBroker dataBroker) {
 		InstanceIdentifier.InstanceIdentifierBuilder<Nodes> nodesInsIdBuilder = InstanceIdentifier
@@ -361,6 +349,7 @@ public class TopoTask extends Thread {
 
 		List<org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.topology.Link> links = networkTopology
 				.getTopology().get(0).getLink();
+//		List<Topology> topo = networkTopology.getTopology();
 		return links;
 	}
 
@@ -521,13 +510,13 @@ public class TopoTask extends Thread {
 				String dstSwitch = DpidUtils.getDpidFromString(dstDpid);
 				int dstPort = dstObject.get("port_no").getAsInt();
 
-				Link reverse = new Link(false, dstSwitch, dstPort, srcSwitch, srcPort);
+				Link reverse = new Link(true, dstSwitch, dstPort, srcSwitch, srcPort);
 				if (links.contains(reverse)) {
-					links.remove(reverse);
-					reverse.setBidirectional(true);
-					links.add(reverse);
+//					links.remove(reverse);
+//					reverse.setBidirectional(true);
+//					links.add(reverse);
 				} else {
-					links.add(new Link(false, srcSwitch, srcPort, dstSwitch, dstPort));
+					links.add(new Link(true, srcSwitch, srcPort, dstSwitch, dstPort));
 				}
 			}
 			frame.setFrames(links);

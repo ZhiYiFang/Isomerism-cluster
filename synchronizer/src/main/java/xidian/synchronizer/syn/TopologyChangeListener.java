@@ -32,15 +32,13 @@ public class TopologyChangeListener implements DataTreeChangeListener<Isomerism>
 	private final DataBroker dataBroker;
 	private final FloodlighttopoService floodlighttopoService;
 	private final RyutopoService ryutopoService;
-	private final SalRoleService salRoleService;
 	ListenerRegistration<TopologyChangeListener> listenerReg;
 
 	public TopologyChangeListener(DataBroker dataBroker, FloodlighttopoService floodlighttopoService,
-			RyutopoService ryutopoService, SalRoleService salRoleService) {
+			RyutopoService ryutopoService) {
 		this.dataBroker = dataBroker;
 		this.floodlighttopoService = floodlighttopoService;
 		this.ryutopoService = ryutopoService;
-		this.salRoleService = salRoleService;
 	}
 
 	public void init() {
@@ -67,14 +65,14 @@ public class TopologyChangeListener implements DataTreeChangeListener<Isomerism>
 
 				// 多个异构控制器需要重新汇聚拓扑
 				if (beforeControllers.size() != afterControllers.size()) {
-					TopoTask topoTask = new TopoTask(dataBroker, floodlighttopoService, ryutopoService, salRoleService);
+					TopoTask topoTask = new TopoTask(dataBroker, floodlighttopoService, ryutopoService);
 					topoTask.start();
 				}
 
 				break;
 			case WRITE:
 				// 刚创建的时候需要汇聚一下拓扑
-				TopoTask topoTask = new TopoTask(dataBroker, floodlighttopoService, ryutopoService, salRoleService);
+				TopoTask topoTask = new TopoTask(dataBroker, floodlighttopoService, ryutopoService);
 				topoTask.start();
 				break;
 			case DELETE:

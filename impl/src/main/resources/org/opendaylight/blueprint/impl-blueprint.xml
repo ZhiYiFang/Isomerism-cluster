@@ -57,7 +57,7 @@
 	</bean>
 
 	<bean id="basicListener"
-		class="xidian.impl.controller.BasicSettingListener" init-method="init">
+		class="xidian.impl.controller.BasicSettingListener" init-method="init" destroy-method="close">
 		<argument ref="dataBroker" />
 	</bean>
 

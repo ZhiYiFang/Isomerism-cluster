@@ -9,6 +9,7 @@
 package xidian.synchronizer.syn.tasks;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.TimerTask;
@@ -36,8 +37,13 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.ryutopo.rev190515.GetRyuHea
 import org.opendaylight.yang.gen.v1.urn.opendaylight.ryutopo.rev190515.RyutopoService;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.binding.KeyedInstanceIdentifier;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Optional;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
 import xidian.synchronier.rediskey.CSKey;
@@ -54,16 +60,15 @@ public class AliveTestTask extends TimerTask {
 	private DataBroker dataBroker;
 	private FloodlighttopoService floodlighttopoService;
 	private RyutopoService ryutopoService;
-	private JsonParser jsonParser;
 	private RedisService redisService;
 	private NotificationPublishService notificationPublishService;
+	private Logger LOG = LoggerFactory.getLogger(AliveTestTask.class);
 
 	public AliveTestTask(DataBroker dataBroker, FloodlighttopoService floodlighttopoService,
 			RyutopoService ryutopoService, NotificationPublishService notificationPublishService) {
 		this.dataBroker = dataBroker;
 		this.floodlighttopoService = floodlighttopoService;
 		this.ryutopoService = ryutopoService;
-		this.jsonParser = new JsonParser();
 		redisService = RedisService.getInstance();
 		this.notificationPublishService = notificationPublishService;
 	}
@@ -102,42 +107,48 @@ public class AliveTestTask extends TimerTask {
 					default:
 						break;
 					}
-
+					ReadOnlyTransaction readStatus = dataBroker.newReadOnlyTransaction();
+					KeyedInstanceIdentifier<IsomerismControllers, IsomerismControllersKey> statusPath = InstanceIdentifier
+							.create(Isomerism.class).child(IsomerismControllers.class, new IsomerismControllersKey(ip));
+					ControllerStatus status = readStatus.read(LogicalDatastoreType.CONFIGURATION, statusPath).get()
+							.get().getControllerStatus();
 					// 宕机控制器控制的交换机迁移到临近的控制器上
-					if (!isAlive) {
-
+					if (!isAlive && status.equals(ControllerStatus.Up)) {
+						LOG.info("Controller: [" + ip.getValue() + " " + c.getTypeName() + "] is down!");
 						// 控制器状态标记成down
 						WriteTransaction writeStatus = dataBroker.newWriteOnlyTransaction();
-						KeyedInstanceIdentifier<IsomerismControllers, IsomerismControllersKey> statusPath = InstanceIdentifier
-								.create(Isomerism.class)
-								.child(IsomerismControllers.class, new IsomerismControllersKey(ip));
+//						IsomerismControllers con = writeStatus.read(LogicalDatastoreType.CONFIGURATION, statusPath).get().get();
 						IsomerismControllersBuilder builder = new IsomerismControllersBuilder();
+						builder.setIp(ip);
+						builder.setKey(new IsomerismControllersKey(ip));
 						builder.setControllerStatus(ControllerStatus.Down);
 						writeStatus.merge(LogicalDatastoreType.CONFIGURATION, statusPath, builder.build());
 						writeStatus.submit();
-
+// don't exec if is down already
 						// 获取所有临近的控制器
 						Set<RedisController> adjControllers = getAdjacentController(c);
 
 						// 根据策略选择迁移目的地控制器
 						RedisController adjController = chooseAController(adjControllers);
 
+						LOG.info("Move the switches to controller " + "[" + adjController.getIp().getValue() + " "
+								+ adjController.getType() + "]");
 						// 找到宕机控制器控制的交换机 并向临近控制器迁移
+						redisService = RedisService.getInstance();
 						List<String> switches = redisService.get(CSKey.getSwitches, c.getIp().getValue(), List.class);
 						for (String sw : switches) {
 							MoveOrder order = new MoveOrder(adjController.getIp().getValue(), sw);
 							InstructionUtils.moveSwitch(order);
 						}
-						
+
 						// 迁移完成以后 发送notification
 						sendNofitication(ip, type, adjController);
-						
+
 						// 然后写
 					}
 				}
 			}
 		} catch (InterruptedException | ExecutionException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -175,13 +186,23 @@ public class AliveTestTask extends TimerTask {
 
 	private Set<RedisController> getAdjacentController(IsomerismControllers controller) {
 		// 确定这个控制器的临近控制器
+		redisService = RedisService.getInstance();
 		List<String> ses = redisService.get(CSKey.getEdgeSwitches, controller.getIp().getValue(), List.class);
 		// 根据边界链路关系来确定边界交换机对端的交换机
-		HashSet<Link> odlLinks = redisService.get(OdlLinksKey.getOdlLinks, "", HashSet.class);
+		String odlLinks = redisService.get(OdlLinksKey.getOdlLinks, "", String.class);
+		JsonParser parser = new JsonParser();
+		JsonArray ja = parser.parse(odlLinks).getAsJsonArray();
+		Gson gson = new Gson();
 
 		Set<RedisController> adjacentControllers = new HashSet<>();
+
+		// iter edge switches
 		for (String sw : ses) {
-			for (Link link : odlLinks) {
+			Iterator<JsonElement> it = ja.iterator();
+			// odl links
+			while (it.hasNext()) {
+				JsonElement ele = it.next();
+				Link link = gson.fromJson(ele, Link.class);
 				String srcSw = link.getSrcSwitch();
 				String dstSw = link.getDstSwitch();
 				String adjacentSw = sw.equals(srcSw) ? dstSw : sw.equals(dstSw) ? srcSw : null;

@@ -1,0 +1,17 @@
+// Contents of "updatetopo"
+module updatetopo {
+    namespace "urn:opendaylight:updatetopo";
+    prefix "updatetopo";
+
+    revision 2019-07-05 {
+        description "Initial revision";
+    }
+    rpc update-get-links{
+    	description "update and get the newest topology";
+    	output{
+    		leaf reault{
+    			type string;
+    		}
+    	}
+    }
+}

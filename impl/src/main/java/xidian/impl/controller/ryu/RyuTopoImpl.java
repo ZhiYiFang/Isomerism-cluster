@@ -94,10 +94,15 @@ public class RyuTopoImpl implements RyutopoService {
 	@Override
 	public Future<RpcResult<GetRyuHealthOutput>> getRyuHealth(GetRyuHealthInput input) {
 		String url = HttpUtils.getBasicURL(input.getIp().getValue(), input.getPort().getValue(), RyuUrls.GET_SWITCHES);
-		String response = HttpUtils.sendHttpGet(url);
-		GetRyuHealthOutputBuilder builder = new GetRyuHealthOutputBuilder();
-		builder.setResult(response.contains("["));
-		return RpcResultBuilder.success(builder.build()).buildFuture();
+		try {
+			String response = HttpUtils.sendHttpGet(url);
+			GetRyuHealthOutputBuilder builder = new GetRyuHealthOutputBuilder();
+			builder.setResult(response.contains("["));
+			return RpcResultBuilder.success(builder.build()).buildFuture();
+			
+		} catch(Exception e) {
+			return RpcResultBuilder.success(new GetRyuHealthOutputBuilder().setResult(false)).buildFuture();
+		}
 	}
 
 }

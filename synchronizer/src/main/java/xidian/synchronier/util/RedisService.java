@@ -134,6 +134,17 @@ public class RedisService {
 			returnToPool(jedis);
 		}
 	}
+	
+	public boolean flushAll() {
+		Jedis jedis = null;
+		try {
+			jedis = jedisPool.getResource();
+			jedis.flushAll();
+			return true;
+		} finally {
+			returnToPool(jedis);
+		}
+	}
 
 	private <T> String beanToString(T value) {
 		if (value == null) {

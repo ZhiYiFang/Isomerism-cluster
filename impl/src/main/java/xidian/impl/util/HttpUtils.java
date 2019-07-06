@@ -79,11 +79,8 @@ public class HttpUtils {
 					.setSocketTimeout(socketTimeout).setConnectTimeout(connectTimeout).build();
 
 		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
 		} catch (KeyStoreException e) {
-			e.printStackTrace();
 		} catch (KeyManagementException e) {
-			e.printStackTrace();
 		}
 
 		// 设置请求超时时间
@@ -185,7 +182,6 @@ public class HttpUtils {
 
 
 		} catch (Exception e) {
-			e.printStackTrace();
 		} finally {
 			try {
 				// 释放资源
@@ -193,7 +189,6 @@ public class HttpUtils {
 					response.close();
 				}
 			} catch (IOException e) {
-				e.printStackTrace();
 			}
 		}
 		return responseContent;
@@ -237,7 +232,6 @@ public class HttpUtils {
 //			}
 
 		} catch (Exception e) {
-			e.printStackTrace();
 		} finally {
 			try {
 				// 释放资源
@@ -245,7 +239,6 @@ public class HttpUtils {
 					response.close();
 				}
 			} catch (IOException e) {
-				e.printStackTrace();
 			}
 		}
 		return responseContent;
@@ -289,7 +282,6 @@ public class HttpUtils {
 //			}
 
 		} catch (Exception e) {
-			e.printStackTrace();
 		} finally {
 			try {
 				// 释放资源
@@ -297,7 +289,6 @@ public class HttpUtils {
 					response.close();
 				}
 			} catch (IOException e) {
-				e.printStackTrace();
 			}
 		}
 		return responseContent;
@@ -345,7 +336,6 @@ public class HttpUtils {
 				httpPut.setEntity(stringEntity);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
 		}
 		return sendHttpPut(httpPut);
 	}
@@ -368,7 +358,6 @@ public class HttpUtils {
 				httpPost.setEntity(stringEntity);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
 		}
 		return sendHttpPost(httpPost);
 	}
@@ -407,7 +396,6 @@ public class HttpUtils {
 				httpPost.setEntity(stringEntity);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
 		}
 		return sendHttpPost(httpPost);
 	}
@@ -435,7 +423,6 @@ public class HttpUtils {
 				httpPost.setHeader("X-Auth-Token", token);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
 		}
 		return sendHttpPost(httpPost);
 	}
@@ -469,7 +456,6 @@ public class HttpUtils {
 				httpPost.setEntity(stringEntity);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
 		}
 		return sendHttpPost(httpPost);
 	}
