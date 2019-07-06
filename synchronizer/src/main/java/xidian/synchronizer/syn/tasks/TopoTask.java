@@ -31,6 +31,7 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.Isome
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.data.plane.link.DataPlaneLinks;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.data.plane.link.DataPlaneLinksBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.isomerism.IsomerismControllers;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.isomerism.IsomerismControllers.ControllerStatus;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.floodlighttopo.rev190515.FloodlighttopoService;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.floodlighttopo.rev190515.GetFloodlightLinksInputBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.floodlighttopo.rev190515.GetFloodlightLinksOutput;
@@ -62,14 +63,14 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import xidian.impl.util.DpidUtils;
-import xidian.impl.util.InstructionUtils;
-import xidian.impl.util.MoveOrder;
-import xidian.impl.util.RedisService;
-import xidian.impl.util.rediskey.CSKey;
-import xidian.impl.util.rediskey.OdlLinksKey;
-import xidian.impl.util.rediskey.RedisController;
-import xidian.impl.util.rediskey.SCKey;
+import xidian.synchronier.rediskey.CSKey;
+import xidian.synchronier.rediskey.OdlLinksKey;
+import xidian.synchronier.rediskey.RedisController;
+import xidian.synchronier.rediskey.SCKey;
+import xidian.synchronier.util.DpidUtils;
+import xidian.synchronier.util.InstructionUtils;
+import xidian.synchronier.util.MoveOrder;
+import xidian.synchronier.util.RedisService;
 import xidian.synchronizer.syn.topoEle.Link;
 import xidian.synchronizer.syn.topoEle.LinksFrame;
 import xidian.synchronizer.syn.topoEle.SwitchWithPortFrame;
@@ -115,6 +116,9 @@ public class TopoTask extends Thread {
 				SwitchWithPortFrame switchWithPortFrame = null;
 
 				for (IsomerismControllers controller : controllers) {
+					if(controller.getControllerStatus().equals(ControllerStatus.Down)) {
+						continue;
+					}
 					TypeName type = controller.getTypeName();
 					switch (type) {
 					case Agile:
@@ -185,21 +189,9 @@ public class TopoTask extends Thread {
 				// edgeSwitches.add(sw.getDpid());
 				// }
 				
-				ReadOnlyTransaction readMiddleIp = dataBroker.newReadOnlyTransaction();
-				InstanceIdentifier<BasicSetting> readMiddleIpPath = InstanceIdentifier.create(BasicSetting.class);
-				
-				Optional<BasicSetting> op = readMiddleIp.read(LogicalDatastoreType.CONFIGURATION, readMiddleIpPath).get();
-				String middleIp = "127.0.0.1";
-				
-				if(op.isPresent()) {
-					middleIp = op.get().getMiddleIp().getValue();
-				}
-				readMiddleIp.close();
-				
 				// 让中间件与所有的边界交换机建立连接来确定这些边界交换机的连接关系
 				for (String dpid : edgeSwitches) {
-					MoveOrder order = new MoveOrder(middleIp, dpid);
-					InstructionUtils.moveSwitch(order);
+					InstructionUtils.moveToMiddle(dpid);
 				}
 				Thread.sleep(1000);
 
@@ -454,7 +446,7 @@ public class TopoTask extends Thread {
 					Iterator<JsonElement> iterator = ele2.getAsJsonObject().get("port").getAsJsonArray().iterator();
 					while (iterator.hasNext()) {
 						JsonElement portInfo = iterator.next();
-						String portString = portInfo.getAsJsonObject().get("port_number").getAsString();
+						String portString = portInfo.getAsJsonObject().get("portNumber").getAsString();
 						if (!portString.equals("local")) {
 							ports.add(Integer.valueOf(portString));
 						}

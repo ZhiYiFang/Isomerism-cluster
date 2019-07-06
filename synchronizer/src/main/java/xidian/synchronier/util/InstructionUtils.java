@@ -5,7 +5,7 @@
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
-package xidian.impl.util;
+package xidian.synchronier.util;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,8 +15,9 @@ import java.io.PrintWriter;
 
 public class InstructionUtils {
 
-	public static String mininetIp;
-	public static String passwd;
+	public static String mininetIp = "192.168.186.136";
+	public static String passwd = "123";
+	public static String middleIp = "192.168.186.142";
 	
 	public static void moveSwitch(String mininetIp, MoveOrder order) {
 		String ip = order.getDestinationIP();
@@ -25,18 +26,28 @@ public class InstructionUtils {
 		int index = Integer.valueOf(switchDpid.replace(":", ""), 16);
 		String switchName = "s"+index;
 //		String cmd = "sshpass "+"-p "+passwd+" ssh root@"+mininetIp+" ovs-vsctl"+" set-controller "+switchName+" tcp:"+ip+":"+port;
-		String cmd = "ssh root@"+mininetIp+" ovs-vsctl"+" set-controller "+switchName+" tcp:"+ip+":"+port;
+//		String cmd = "ssh root@"+mininetIp+" ovs-vsctl"+" set-controller "+switchName+" tcp:"+ip+":"+port;
+		String cmd = "ssh mininet@"+mininetIp+" sudo ovs-vsctl"+" set-controller "+switchName+" tcp:"+ip+":"+port;
+
 		exec(cmd);
 	}
 	
-	public static void moveSwitch( MoveOrder order) {
+	public static void moveSwitch(MoveOrder order) {
 		String ip = order.getDestinationIP();
 		String port = order.getDestinationPort();
 		String switchDpid = order.getSwitchDpid();
 		int index = Integer.valueOf(switchDpid.replace(":", ""), 16);
 		String switchName = "s"+index;
 //		String cmd = "sshpass "+"-p "+passwd+" ssh root@"+mininetIp+" ovs-vsctl"+" set-controller "+switchName+" tcp:"+ip+":"+port;
-		String cmd = "ssh root@"+mininetIp+" ovs-vsctl"+" set-controller "+switchName+" tcp:"+ip+":"+port;
+//		String cmd = "ssh root@"+mininetIp+" ovs-vsctl"+" set-controller "+switchName+" tcp:"+ip+":"+port;
+		String cmd = "ssh mininet@"+mininetIp+" sudo ovs-vsctl"+" set-controller "+switchName+" tcp:"+ip+":"+port;
+		exec(cmd);
+	}
+	
+	public static void moveToMiddle(String dpid) {
+		int index = Integer.valueOf(dpid.replace(":", ""), 16);
+		String switchName = "s"+index;
+		String cmd = "ssh mininet@"+mininetIp+" sudo ovs-vsctl"+" set-controller "+switchName+" tcp:"+middleIp+":6653";
 		exec(cmd);
 	}
 	

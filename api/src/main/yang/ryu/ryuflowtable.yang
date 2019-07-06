@@ -20,29 +20,5 @@ module ryuflowtable {
     		}
     	}
     }
-    rpc ryu-flow-mod{
-    	input{
-    		leaf flow-input{
-    			type string;
-    		}
-    		leaf cmd{
-    			type enumeration{
-    				enum "add"{
-    					value 0;
-    				}
-    				enum "modify"{
-    					value 1;
-    				}
-    				enum "delete"{
-    					value 2;
-    				}
-    			}
-    		}
-    	}
-    	output{
-    		leaf result{
-    			type string;
-    		}
-    	}
-    }
+
 }

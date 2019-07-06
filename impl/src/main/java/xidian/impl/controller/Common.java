@@ -78,11 +78,12 @@ import xidian.impl.controller.ryu.RyuAction;
 import xidian.impl.controller.ryu.RyuFlow;
 import xidian.impl.controller.ryu.RyuMatch;
 import xidian.impl.controller.ryu.RyuUrls;
+import xidian.impl.rediskey.RedisController;
+import xidian.impl.rediskey.SCKey;
 import xidian.impl.util.DpidUtils;
 import xidian.impl.util.HttpUtils;
 import xidian.impl.util.RedisService;
-import xidian.impl.util.rediskey.RedisController;
-import xidian.impl.util.rediskey.SCKey;
+
 
 public class Common implements ControllersService {
 
@@ -226,6 +227,7 @@ public class Common implements ControllersService {
 	@Override
 	public Future<RpcResult<GetSwitchFlowTableOutput>> getSwitchFlowTable(GetSwitchFlowTableInput input) {
 		DatapathId dpid = input.getDpid();
+		
 		RedisController redisController = redisService.get(SCKey.getController, dpid.getValue(), RedisController.class);
 		String flowTable = null;
 		switch (redisController.getType()) {
@@ -312,7 +314,7 @@ public class Common implements ControllersService {
 		map.put("time", bf.format(time));
 		Gson gson = new Gson();
 		// 警告消息发送给用户服务平台
-		String response = HttpUtils.sendHttpPostJson("", gson.toJson(map));
+		String response = HttpUtils	.sendHttpPostJson("", gson.toJson(map));
 		return RpcResultBuilder.success(new SendAlertOutputBuilder().setResult(true).build()).buildFuture();
 	}
 
@@ -428,7 +430,8 @@ public class Common implements ControllersService {
 		case Modify:
 			url = HttpUtils.getBasicURL(redisController.getIp().getValue(), redisController.getPort().getValue(),
 					RyuUrls.MODIFY_ALL_FLOW_ENTRY);
-			ret = HttpUtils.sendHttpPostJson(url, postJson);
+//			ret = HttpUtils.sendHttpPostJson(url, postJson);
+			ret = HttpUtils.sendHttpGet(url);
 			break;
 		default:
 			break;

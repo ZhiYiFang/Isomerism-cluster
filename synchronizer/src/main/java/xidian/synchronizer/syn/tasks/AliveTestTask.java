@@ -40,13 +40,13 @@ import org.opendaylight.yangtools.yang.binding.KeyedInstanceIdentifier;
 import com.google.common.base.Optional;
 import com.google.gson.JsonParser;
 
-import xidian.impl.util.InstructionUtils;
-import xidian.impl.util.MoveOrder;
-import xidian.impl.util.RedisService;
-import xidian.impl.util.rediskey.CSKey;
-import xidian.impl.util.rediskey.OdlLinksKey;
-import xidian.impl.util.rediskey.RedisController;
-import xidian.impl.util.rediskey.SCKey;
+import xidian.synchronier.rediskey.CSKey;
+import xidian.synchronier.rediskey.OdlLinksKey;
+import xidian.synchronier.rediskey.RedisController;
+import xidian.synchronier.rediskey.SCKey;
+import xidian.synchronier.util.InstructionUtils;
+import xidian.synchronier.util.MoveOrder;
+import xidian.synchronier.util.RedisService;
 import xidian.synchronizer.syn.topoEle.Link;
 
 public class AliveTestTask extends TimerTask {

@@ -34,6 +34,7 @@ public class ControllerDownListener implements ControllersListener {
 
 	@Override
 	public void onControllerDown(ControllerDown notification) {
+		// controller down trigger topoTask  
 		new TopoTask(dataBroker, floodlighttopoService, ryutopoService, salRoleService).start();
 	}
 

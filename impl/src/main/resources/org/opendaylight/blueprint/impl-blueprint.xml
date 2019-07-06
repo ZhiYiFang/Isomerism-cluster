@@ -11,10 +11,6 @@
 	<reference id="dataBroker"
 		interface="org.opendaylight.controller.md.sal.binding.api.DataBroker"
 		odl:type="default" />
-	<bean id="provider" class="xidian.impl.GuardProvider"
-		init-method="init" destroy-method="close">
-		<argument ref="dataBroker" />
-	</bean>
 
 	<bean id="authImpl" class="xidian.impl.controller.vcf.AuthImpl"
 		init-method="init">
@@ -58,6 +54,11 @@
 		<argument ref="floodlightFlowTableImpl" />
 		<argument ref="ryuTopoImpl" />
 		<argument ref="ryuFlowTableImpl" />
+	</bean>
+
+	<bean id="basicListener"
+		class="xidian.impl.controller.BasicSettingListener" init-method="init">
+		<argument ref="dataBroker" />
 	</bean>
 
 	<odl:rpc-implementation ref="ryuTopoImpl" />

@@ -5,15 +5,9 @@
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
+package xidian.impl.rediskey;
 
-package xidian.impl.util.rediskey;
-
-public class OdlLinksKey extends BasePrefix{
-
-	private OdlLinksKey(int expireSeconds, String prefix) {
-		super(expireSeconds, prefix);
-		// TODO Auto-generated constructor stub
-	}
-
-	public static OdlLinksKey getOdlLinks = new OdlLinksKey(0, "odlLinks");
+public interface KeyPrefix {
+	public int expireSeconds();
+	public String getPrefix();
 }

@@ -58,6 +58,10 @@
 		<argument ref="salRoleService" />
 	</bean>
 	
+	<bean id="basicSettingListener" class="xidian.synchronizer.syn.BasicSettingListener" init-method="init">
+	    <argument ref="dataBroker"/>
+	</bean>
+	
 	<odl:notification-listener
 		ref="controllerDownListener" />
 </blueprint>

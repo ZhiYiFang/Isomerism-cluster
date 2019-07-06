@@ -5,13 +5,15 @@
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
-package xidian.impl.util.rediskey;
+package xidian.impl.rediskey;
 
-public class SCKey extends BasePrefix{
+public class CSKey extends BasePrefix{
 
-	private SCKey(int expireSeconds, String prefix) {
+	private CSKey(int expireSeconds, String prefix) {
 		super(expireSeconds, prefix);
+		// TODO Auto-generated constructor stub
 	}
-	
-	public static SCKey getController = new SCKey(0,"sc");
+
+	public static CSKey getSwitches = new CSKey(0,"cs");
+	public static CSKey getEdgeSwitches = new CSKey(0, "ces");
 }

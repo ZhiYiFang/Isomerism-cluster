@@ -5,7 +5,7 @@
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
-package xidian.impl.util.rediskey;
+package xidian.synchronier.rediskey;
 
 public abstract class BasePrefix implements KeyPrefix{
 
