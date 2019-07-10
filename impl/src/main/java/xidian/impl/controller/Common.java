@@ -20,12 +20,13 @@ import java.util.concurrent.Future;
 
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
-import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.Ipv4Address;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.PortNumber;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.AlertCommon.Component;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.AlertMessage;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.AlertCommon.MessageLevel;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.AlertCommon.MessageType;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.AlertCommon.SourceType;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.BasicSetting;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.ControllerTypes.TypeName;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.ControllersService;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.FlowBasic.FlowModCmd;
@@ -41,8 +42,7 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.Isome
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.SendAlertInput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.SendAlertOutput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.SendAlertOutputBuilder;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.alert.message.AlertMessages;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.alert.message.AlertMessagesBuilder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.basic.setting.AttackConfirm;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.flow.mod.input.FlowInput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.flow.mod.input.flow.input.Matches;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.get.all.switches.output.Switches;
@@ -87,7 +87,6 @@ import xidian.impl.util.DpidUtils;
 import xidian.impl.util.HttpUtils;
 import xidian.impl.util.RedisService;
 
-
 public class Common implements ControllersService {
 
 	private final DataBroker dataBroker;
@@ -97,7 +96,7 @@ public class Common implements ControllersService {
 	private final RyuflowtableService ryuflowtableService;
 	private RedisService redisService = RedisService.getInstance();
 	private final Logger LOG = LoggerFactory.getLogger(Common.class);
-	
+
 	public Common(DataBroker dataBroker, FloodlighttopoService floodlightTopoService,
 			FloodlightflowtableService floodlightflowtableService, RyutopoService ryutopoService,
 			RyuflowtableService ryuflowtableService) {
@@ -121,7 +120,7 @@ public class Common implements ControllersService {
 			if (optional.isPresent()) {
 				List<IsomerismControllers> controllers = optional.get().getIsomerismControllers();
 				for (IsomerismControllers controller : controllers) {
-					if(controller.getControllerStatus().equals(ControllerStatus.Down)) {
+					if (controller.getControllerStatus().equals(ControllerStatus.Down)) {
 						continue;
 					}
 					TypeName type = controller.getTypeName();
@@ -235,7 +234,7 @@ public class Common implements ControllersService {
 	@Override
 	public Future<RpcResult<GetSwitchFlowTableOutput>> getSwitchFlowTable(GetSwitchFlowTableInput input) {
 		DatapathId dpid = input.getDpid();
-		LOG.info("Get switch:"+dpid.getValue()+"'s flowtable");
+		LOG.info("Get switch:" + dpid.getValue() + "'s flowtable");
 		redisService = RedisService.getInstance();
 		RedisController redisController = redisService.get(SCKey.getController, dpid.getValue(), RedisController.class);
 		String flowTable = null;
@@ -292,38 +291,59 @@ public class Common implements ControllersService {
 	@Override
 	public Future<RpcResult<SendAlertOutput>> sendAlert(SendAlertInput input) {
 		// 接受警告消息
-		String alertMsg = input.getAlertMsg();
-		String alertType = input.getAlertType();
-		Integer code = input.getCode();
-		Component component = input.getComponent();
+		int alertNo = input.getAlertNo();
+		MessageType type = input.getMessageType();
+		MessageLevel level = input.getMessageLevel();
+		String desc = input.getMessageDesc();
+
 		Date time = new Date();
-
-		// 警告消息写入到datastore
-		WriteTransaction write = dataBroker.newWriteOnlyTransaction();
-		InstanceIdentifier<AlertMessages> path = InstanceIdentifier.create(AlertMessage.class)
-				.child(AlertMessages.class);
-		AlertMessagesBuilder alertMessagesBuilder = new AlertMessagesBuilder();
-
-		alertMessagesBuilder.setAlertMsg(alertMsg);
-		alertMessagesBuilder.setAlertType(alertType);
-		alertMessagesBuilder.setCode(code);
-		alertMessagesBuilder.setComponent(component);
 		DateFormat bf = new SimpleDateFormat("yyyy-MM-dd E a HH:mm:ss");
-		alertMessagesBuilder.setTime(bf.format(time));
-
-		write.merge(LogicalDatastoreType.CONFIGURATION, path, alertMessagesBuilder.build());
-		write.submit();
-
+		String timeString = bf.format(time);
+		SourceType sourceType = input.getSourceType();
+		Ipv4Address sourceIp = input.getSourceIp();
 		Map<String, String> map = new HashMap<>();
-		map.put("alertMsg", alertMsg);
-		map.put("alertType", alertType);
-		map.put("code", code.toString());
-		map.put("component", component.getName());
-		map.put("time", bf.format(time));
+		map.put("AlertNo", String.valueOf(alertNo));
+		map.put("MessageType", type.getName());
+		map.put("MessageLevel", level.getName());
+		map.put("MessageDesc", desc);
+		map.put("MessageTime", timeString);
+		map.put("SourceType", sourceType.getName());
+		map.put("SourceIP", sourceIp.getValue());
+		// 警告消息写入到datastore
+//		WriteTransaction write = dataBroker.newWriteOnlyTransaction();
+//		InstanceIdentifier<AlertMessages> path = InstanceIdentifier.create(AlertMessage.class)
+//				.child(AlertMessages.class);
+//		AlertMessagesBuilder alertMessagesBuilder = new AlertMessagesBuilder();
+//
+//		alertMessagesBuilder.setAlertMsg(alertMsg);
+//		alertMessagesBuilder.setAlertType(alertType);
+//		alertMessagesBuilder.setCode(code);
+//		alertMessagesBuilder.setComponent(component);
+//
+//		write.merge(LogicalDatastoreType.CONFIGURATION, path, alertMessagesBuilder.build());
+//		write.submit();
+
+//		map.put("alertMsg", alertMsg);
+//		map.put("alertType", alertType);
+//		map.put("code", code.toString());
+//		map.put("component", component.getName());
+//		map.put("time", bf.format(time));
 		Gson gson = new Gson();
 		// 警告消息发送给用户服务平台
 		String postJson = gson.toJson(map);
-		String response = HttpUtils.sendHttpPostJson(CommonUrls.ALERT_URLS, postJson);
+		ReadOnlyTransaction read = dataBroker.newReadOnlyTransaction();
+		InstanceIdentifier<AttackConfirm> path = InstanceIdentifier.create(BasicSetting.class)
+				.child(AttackConfirm.class);
+		try {
+			Optional<AttackConfirm> op = read.read(LogicalDatastoreType.CONFIGURATION, path).get();
+			if (op.isPresent()) {
+				String url = op.get().getUrl();
+				String response = HttpUtils.sendHttpPostJson(url, postJson);
+			}
+		} catch (InterruptedException | ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		LOG.info("Send alert:" + postJson + " to user service system");
 		return RpcResultBuilder.success(new SendAlertOutputBuilder().setResult(true).build()).buildFuture();
 	}
@@ -331,7 +351,7 @@ public class Common implements ControllersService {
 	@Override
 	public Future<RpcResult<FlowModOutput>> flowMod(FlowModInput input) {
 		DatapathId dpid = input.getDpid();
-		LOG.info("Send flow mod to switch:"+dpid.getValue());
+		LOG.info("Send flow mod to switch:" + dpid.getValue());
 		RedisService redis = RedisService.getInstance();
 		RedisController redisController = redis.get(SCKey.getController, dpid.getValue(), RedisController.class);
 		TypeName type = redisController.getType();
@@ -388,7 +408,7 @@ public class Common implements ControllersService {
 			ret = HttpUtils.sendHttpPostJson(url, postJson);
 			break;
 		case Delete:
-			
+
 			// 暂时先全部删除
 			url = HttpUtils.getBasicURL(redisController.getIp().getValue(), redisController.getPort().getValue(),
 					FloodlightUrls.DELETE_ALL_FLOW.replace("{switch-id}", dpid));
@@ -449,6 +469,5 @@ public class Common implements ControllersService {
 		}
 		return ret;
 	}
-
 
 }

@@ -8,6 +8,7 @@
 
 package xidian.synchronizer.syn.tasks;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -24,7 +25,13 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.PortNumber;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.ControllerDownBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.ControllerTypes.TypeName;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.ControllersService;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.Isomerism;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.SendAlertInputBuilder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.AlertCommon.MessageLevel;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.AlertCommon.MessageType;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.AlertCommon.SourceType;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.BasicSetting;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.controller.down.DownControllerBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.controller.down.NewControllerBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.isomerism.IsomerismControllers;
@@ -53,6 +60,7 @@ import xidian.synchronier.rediskey.SCKey;
 import xidian.synchronier.util.InstructionUtils;
 import xidian.synchronier.util.MoveOrder;
 import xidian.synchronier.util.RedisService;
+import xidian.synchronizer.syn.SynchronizeMessage;
 import xidian.synchronizer.syn.topoEle.Link;
 
 public class AliveTestTask extends TimerTask {
@@ -62,15 +70,19 @@ public class AliveTestTask extends TimerTask {
 	private RyutopoService ryutopoService;
 	private RedisService redisService;
 	private NotificationPublishService notificationPublishService;
+	private ControllersService controllerService;
+
 	private Logger LOG = LoggerFactory.getLogger(AliveTestTask.class);
 
 	public AliveTestTask(DataBroker dataBroker, FloodlighttopoService floodlighttopoService,
-			RyutopoService ryutopoService, NotificationPublishService notificationPublishService) {
+			RyutopoService ryutopoService, NotificationPublishService notificationPublishService,
+			ControllersService controllerService) {
 		this.dataBroker = dataBroker;
 		this.floodlighttopoService = floodlighttopoService;
 		this.ryutopoService = ryutopoService;
 		redisService = RedisService.getInstance();
 		this.notificationPublishService = notificationPublishService;
+		this.controllerService = controllerService;
 	}
 
 	public void run() {
@@ -114,7 +126,22 @@ public class AliveTestTask extends TimerTask {
 							.get().getControllerStatus();
 					// 宕机控制器控制的交换机迁移到临近的控制器上
 					if (!isAlive && status.equals(ControllerStatus.Up)) {
+
 						LOG.info("Controller: [" + ip.getValue() + " " + c.getTypeName() + "] is down!");
+
+						// Send alert to server
+
+						HashMap<String, String> map = new HashMap<String, String>();
+						map.put("Type", "down");
+						map.put("Target", ip.getValue());
+						map.put("Target_type", c.getTypeName().getName());
+						InstanceIdentifier<BasicSetting> isorIpPath = InstanceIdentifier.create(BasicSetting.class);
+						Ipv4Address sourceIp = readStatus.read(LogicalDatastoreType.CONFIGURATION, isorIpPath).get()
+								.get().getMiddleIp();
+
+						sendAlert(new Gson().toJson(map), SynchronizeMessage.alertNo, MessageLevel.High, sourceIp,
+								MessageType.Alert);
+
 						// 控制器状态标记成down
 						WriteTransaction writeStatus = dataBroker.newWriteOnlyTransaction();
 //						IsomerismControllers con = writeStatus.read(LogicalDatastoreType.CONFIGURATION, statusPath).get().get();
@@ -131,9 +158,21 @@ public class AliveTestTask extends TimerTask {
 						// 根据策略选择迁移目的地控制器
 						RedisController adjController = chooseAController(adjControllers);
 
+						// calculate
+						HashMap<String, String> map2 = new HashMap<String, String>();
+						map.put("Type", adjController.getType().getName());
+						map.put("Ip", adjController.getIp().getValue());
+						sendAlert(new Gson().toJson(map2), SynchronizeMessage.alertNo, MessageLevel.Medium, sourceIp,
+								MessageType.Calculate);
+
 						LOG.info("Move the switches to controller " + "[" + adjController.getIp().getValue() + " "
 								+ adjController.getType() + "]");
 						// 找到宕机控制器控制的交换机 并向临近控制器迁移
+
+						// action
+						sendAlert("true", SynchronizeMessage.alertNo, MessageLevel.Medium, sourceIp,
+								MessageType.Action);
+
 						redisService = RedisService.getInstance();
 						List<String> switches = redisService.get(CSKey.getSwitches, c.getIp().getValue(), List.class);
 						for (String sw : switches) {
@@ -141,16 +180,33 @@ public class AliveTestTask extends TimerTask {
 							InstructionUtils.moveSwitch(order);
 						}
 
+						// test
+						sendAlert("true", SynchronizeMessage.alertNo, MessageLevel.Medium, sourceIp, MessageType.Test);
+
 						// 迁移完成以后 发送notification
 						sendNofitication(ip, type, adjController);
 
-						// 然后写
+						// normal
+						sendAlert("true", SynchronizeMessage.alertNo, MessageLevel.Medium, sourceIp,
+								MessageType.Normal);
 					}
 				}
 			}
 		} catch (InterruptedException | ExecutionException e) {
 			e.printStackTrace();
 		}
+	}
+
+	private void sendAlert(String desc, int alertNo, MessageLevel level, Ipv4Address sourceIp, MessageType type) {
+		SendAlertInputBuilder input = new SendAlertInputBuilder();
+		input.setAlertNo(alertNo);
+		input.setMessageLevel(level);
+		input.setMessageType(type);
+
+		input.setMessageDesc(desc);
+		input.setSourceIp(sourceIp);
+		input.setSourceType(SourceType.Isomerism);
+		controllerService.sendAlert(input.build());
 	}
 
 	private void sendNofitication(Ipv4Address ip, TypeName type, RedisController adjController) {

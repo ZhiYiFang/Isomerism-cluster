@@ -52,6 +52,25 @@ module controllers {
     }
 
     container basic-setting {
+        container server {
+            leaf server-ip {
+                type inet:ipv4-address;
+            }
+            leaf server-port {
+                type inet:port-number;
+            }
+        }
+        container attack-confirm {
+        	leaf url{
+        		type string;
+        	}
+            leaf attack-confirm-ip {
+                type inet:ipv4-address;
+            }
+            leaf attack-confirm-port {
+                type inet:port-number;
+            }
+        }
         leaf middle-ip {
             type inet:ipv4-address;
         }
@@ -111,30 +130,30 @@ module controllers {
     }
 
     grouping alert-common {
-        leaf component {
-            description "组件类型";
+        leaf alert-no {
+            type int32;
+        }
+
+        leaf message-type {
             type enumeration {
-                enum "isomerism" {
+                enum "Alert" {
                     value 0;
                 }
-                enum "virtualization" {
+                enum "Calculate" {
                     value 1;
                 }
-                enum "transformer" {
+                enum "Action" {
                     value 2;
+                }
+                enum "Test" {
+                    value 3;
+                }
+                enum "Normal" {
+                    value 4;
                 }
             }
         }
-        leaf alert-type {
-            type string;
-        }
-        leaf code {
-            type int32;
-        }
-        leaf time {
-            type string;
-        }
-        leaf alert-level {
+        leaf message-level {
             description "警报等级";
             type enumeration {
                 enum "low" {
@@ -148,14 +167,29 @@ module controllers {
                 }
             }
         }
-        leaf component-ip {
-            type inet:ipv4-address;
-        }
-        leaf virtual-machine-ip {
-            type inet:ipv4-address;
-        }
-        leaf alert-msg {
+        leaf message-desc {
             type string;
+        }
+
+        leaf message-time {
+            type string;
+        }
+        leaf source-type {
+            description "组件类型";
+            type enumeration {
+                enum "isomerism" {
+                    value 0;
+                }
+                enum "virtualization" {
+                    value 1;
+                }
+                enum "transformer" {
+                    value 2;
+                }
+            }
+        }
+        leaf source-ip {
+            type inet:ipv4-address;
         }
     }
 
@@ -334,5 +368,4 @@ module controllers {
             uses controller-types;
         }
     }
-
 }

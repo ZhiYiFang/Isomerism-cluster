@@ -26,7 +26,9 @@
 
 	<odl:rpc-service id="ryutopoService"
 		interface="org.opendaylight.yang.gen.v1.urn.opendaylight.ryutopo.rev190515.RyutopoService" />
-
+		
+	<odl:rpc-service id="controllerService"
+	    interface="org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.ControllersService"/>
 
 	<bean id="synchronizer"
 		class="xidian.synchronizer.syn.SynchronizeMessage" init-method="init">
@@ -37,6 +39,7 @@
 		<argument ref="floodlighttopoService" />
 		<argument ref="ryutopoService" />
 		<argument ref="notificationPublishService" />
+		<argument ref="controllerService"/>
 	</bean>
 
 	<bean id="topologyChangeListener"

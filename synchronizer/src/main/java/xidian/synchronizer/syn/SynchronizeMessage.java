@@ -12,6 +12,7 @@ import java.util.Timer;
 
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.NotificationPublishService;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.ControllersService;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.devicemanagement.rev181126.DevicemanagementService;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.floodlighttopo.rev190515.FloodlighttopoService;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.linkmanager.rev181126.LinkmanagerService;
@@ -23,23 +24,25 @@ import org.slf4j.LoggerFactory;
 import xidian.synchronizer.syn.tasks.AliveTestTask;
 
 public class SynchronizeMessage {
-
+	public static int alertNo = 0;
 	private Logger LOG = LoggerFactory.getLogger(SynchronizeMessage.class);
 	private DataBroker dataBroker;
 	private Timer timer = new Timer();
 	private FloodlighttopoService floodlighttopoService;
 	private RyutopoService ryutopoService;
 	private NotificationPublishService notificationPublishService;
+	private ControllersService controllerService;
 
 	public SynchronizeMessage(DataBroker dataBroker, DevicemanagementService devicemanagementService,
 			LinkmanagerService linkmanagerService, VcfstatisticsService vcfstatisticsService,
 			FloodlighttopoService floodlighttopoService, RyutopoService ryutopoService,
-			NotificationPublishService notificationPublishService) {
+			NotificationPublishService notificationPublishService, ControllersService controllerService) {
 		super();
 		this.dataBroker = dataBroker;
 		this.floodlighttopoService = floodlighttopoService;
 		this.ryutopoService = ryutopoService;
 		this.notificationPublishService = notificationPublishService;
+		this.controllerService = controllerService;
 	}
 
 	public void init() {
@@ -51,7 +54,8 @@ public class SynchronizeMessage {
 		// timer.schedule(new SynTask(dataBroker, devicemanagementService,
 		// linkmanagerService, vcfstatisticsService), 10000,
 		// 20000);
-		timer.schedule(new AliveTestTask(dataBroker, floodlighttopoService, ryutopoService, notificationPublishService), 5000, 10000);
+		timer.schedule(new AliveTestTask(dataBroker, floodlighttopoService, ryutopoService, notificationPublishService,
+				controllerService), 5000, 10000);
 	}
 
 }
