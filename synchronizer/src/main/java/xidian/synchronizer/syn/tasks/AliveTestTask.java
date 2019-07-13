@@ -234,6 +234,7 @@ public class AliveTestTask extends TimerTask {
 		for (RedisController controller : adjControllers) {
 			List<String> switches = redisService.get(CSKey.getEdgeSwitches, controller.getIp().getValue(), List.class);
 			if (switches.size() < min)
+				min = switches.size();
 				ret = controller;
 		}
 
