@@ -18,4 +18,6 @@ public interface FloodlightUrls {
 	String GET_FLOW_TABLE = "/wm/core/switch/{switch-id}/flow/json";
 	String ADD_MODIFY_FLOW ="/wm/staticflowpusher/json";
 	String DELETE_ALL_FLOW = "/wm/staticflowpusher/clear/{switch-id}/json";
+	String GET_ACL = "/wm/acl/rules/json";
+	String ADD_ACL = "/wm/acl/rules/json";
 }

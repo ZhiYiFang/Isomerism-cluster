@@ -55,7 +55,8 @@
 		<argument ref="ryuTopoImpl" />
 		<argument ref="ryuFlowTableImpl" />
 	</bean>
-
+	<bean id="floodlightACLImpl" class="xidian.impl.controller.floodlight.FloodlightACLImpl">
+	</bean>
 	<bean id="basicListener"
 		class="xidian.impl.controller.BasicSettingListener" init-method="init" destroy-method="close">
 		<argument ref="dataBroker" />
@@ -74,4 +75,5 @@
 		ref="floodlightFlowTableImpl" />
 	<odl:rpc-implementation ref="ryuFlowTableImpl" />
 	<odl:rpc-implementation ref="commonImpl" />
+	<odl:rpc-implementation ref="floodlightACLImpl"/>
 </blueprint>

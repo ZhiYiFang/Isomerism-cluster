@@ -1,0 +1,76 @@
+// Contents of "floodlightacl"
+module floodlightacl {
+    namespace "urn:opendaylight:floodlightacl";
+    prefix "floodlightacl";
+    import ietf-inet-types { prefix "inet"; revision-date 2013-07-15; }
+
+    revision 2019-07-13 {
+        description "Initial revision";
+    }
+    grouping acl{
+        leaf nw-proto {
+            type enumeration {
+                enum TCP {
+                    value 6;
+                }
+                enum UDP {
+                    value 11;
+                }
+                enum ICMP {
+                    value 1;
+                }
+            }
+        }
+        leaf src-ip {
+            type inet:ipv4-prefix;
+        }
+        leaf dst-ip {
+            type inet:ipv4-prefix;
+        }
+        leaf tp-dst {
+            type inet:port-number;
+        }
+        leaf action {
+            type enumeration {
+                enum DENY {
+                    value 0;
+                }
+                enum ALLOW {
+                    value 1;
+                }
+            }
+        }
+    }
+    rpc get-floodlightacl {
+    	input {
+    		leaf controller-ip{
+    			type inet:ipv4-address;
+    		}
+    		leaf controller-port{
+    			type inet:port-number;
+    		}
+    	}
+        output {
+        	
+        	leaf result {
+        		type string;
+        	}
+        }
+    }
+    rpc add-floodlight-acl {
+        input {
+        	leaf controller-ip{
+        		type inet:ipv4-address;
+        	}
+        	leaf controller-port{
+        		type inet:port-number;
+        	}
+        	uses acl;
+        }
+        output {
+            leaf result {
+                type string;
+            }
+        }
+    }
+}

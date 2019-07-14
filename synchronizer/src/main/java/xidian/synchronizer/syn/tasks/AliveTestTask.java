@@ -8,6 +8,7 @@
 
 package xidian.synchronizer.syn.tasks;
 
+import java.time.chrono.IsoEra;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TimerTask;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.NotificationPublishService;
@@ -22,28 +24,36 @@ import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
 import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.Ipv4Address;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.Ipv4Prefix;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.PortNumber;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.AlertCommon.MessageLevel;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.AlertCommon.MessageType;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.AlertCommon.SourceType;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.BasicSetting;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.ControllerDownBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.ControllerTypes.TypeName;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.ControllersService;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.Isomerism;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.SendAlertInputBuilder;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.AlertCommon.MessageLevel;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.AlertCommon.MessageType;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.AlertCommon.SourceType;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.BasicSetting;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.controller.down.DownControllerBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.controller.down.NewControllerBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.isomerism.IsomerismControllers;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.isomerism.IsomerismControllers.ControllerStatus;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.isomerism.IsomerismControllersBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.isomerism.IsomerismControllersKey;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.floodlightacl.rev190713.AddFloodlightAclInputBuilder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.floodlightacl.rev190713.FloodlightaclService;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.floodlightacl.rev190713.GetFloodlightaclInputBuilder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.floodlightacl.rev190713.GetFloodlightaclOutput;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.floodlightacl.rev190713.Acl.Action;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.floodlightacl.rev190713.Acl.NwProto;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.floodlighttopo.rev190515.FloodlighttopoService;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.floodlighttopo.rev190515.GetFloodlightHealthInputBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.ryutopo.rev190515.GetRyuHealthInputBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.ryutopo.rev190515.RyutopoService;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.binding.KeyedInstanceIdentifier;
+import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,8 +61,10 @@ import com.google.common.base.Optional;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import xidian.synchronier.rediskey.ACLKey;
 import xidian.synchronier.rediskey.CSKey;
 import xidian.synchronier.rediskey.OdlLinksKey;
 import xidian.synchronier.rediskey.RedisController;
@@ -71,18 +83,20 @@ public class AliveTestTask extends TimerTask {
 	private RedisService redisService;
 	private NotificationPublishService notificationPublishService;
 	private ControllersService controllerService;
+	private FloodlightaclService floodlightaclService;
 
 	private Logger LOG = LoggerFactory.getLogger(AliveTestTask.class);
 
 	public AliveTestTask(DataBroker dataBroker, FloodlighttopoService floodlighttopoService,
 			RyutopoService ryutopoService, NotificationPublishService notificationPublishService,
-			ControllersService controllerService) {
+			ControllersService controllerService, FloodlightaclService floodlightaclService) {
 		this.dataBroker = dataBroker;
 		this.floodlighttopoService = floodlighttopoService;
 		this.ryutopoService = ryutopoService;
 		redisService = RedisService.getInstance();
 		this.notificationPublishService = notificationPublishService;
 		this.controllerService = controllerService;
+		this.floodlightaclService = floodlightaclService;
 	}
 
 	public void run() {
@@ -124,6 +138,18 @@ public class AliveTestTask extends TimerTask {
 							.create(Isomerism.class).child(IsomerismControllers.class, new IsomerismControllersKey(ip));
 					ControllerStatus status = readStatus.read(LogicalDatastoreType.CONFIGURATION, statusPath).get()
 							.get().getControllerStatus();
+					
+					// syn acl
+					if (isAlive && c.getTypeName().equals(TypeName.Floodlight)) {
+						GetFloodlightaclInputBuilder input = new GetFloodlightaclInputBuilder();
+						input.setControllerIp(c.getIp());
+						input.setControllerPort(c.getPort());
+						Future<RpcResult<GetFloodlightaclOutput>> res = floodlightaclService
+								.getFloodlightacl(input.build());
+						String list = res.get().getResult().getResult();
+						RedisService.getInstance().set(ACLKey.getACL, c.getIp().getValue(), list);
+					}
+				
 					// 宕机控制器控制的交换机迁移到临近的控制器上
 					if (!isAlive && status.equals(ControllerStatus.Up)) {
 
@@ -158,6 +184,15 @@ public class AliveTestTask extends TimerTask {
 						// 根据策略选择迁移目的地控制器
 						RedisController adjController = chooseAController(adjControllers);
 
+						if (adjController.getType().equals(TypeName.Floodlight)
+								&& c.getTypeName().equals(TypeName.Floodlight)) {
+							try {
+								synACL(c, adjController);
+							} catch (Exception e) {
+								// TODO Auto-generated catch block
+								LOG.info("Synchronize ACL rules falied");
+							}
+						}
 						// calculate
 						HashMap<String, String> map2 = new HashMap<String, String>();
 						map.put("Type", adjController.getType().getName());
@@ -196,7 +231,39 @@ public class AliveTestTask extends TimerTask {
 			e.printStackTrace();
 		}
 	}
+	
+	private void synACL(IsomerismControllers c, RedisController adjController) throws Exception{
+		String response = RedisService.getInstance().get(ACLKey.getACL, c.getIp().getValue(),
+				String.class);
 
+		JsonParser parser = new JsonParser();
+		JsonArray array = parser.parse(response).getAsJsonArray();
+		Iterator<JsonElement> it = array.iterator();
+
+		LOG.info("Synchronize ACL rules from" + c.getIp().getValue() + " to "
+				+ adjController.getIp().getValue());
+
+		while (it.hasNext()) {
+			JsonObject ele = it.next().getAsJsonObject();
+			String id = ele.get("id").getAsString();
+			String srcIp = ele.get("nw_src").getAsString();
+			String dstIp = ele.get("nw_dst").getAsString();
+			String proto = ele.get("nw_proto").getAsString();
+			String tp = ele.get("tp_dst").getAsString();
+			String action = ele.get("action").getAsString();
+			
+			AddFloodlightAclInputBuilder input = new AddFloodlightAclInputBuilder();
+			input.setControllerIp(adjController.getIp());
+			input.setControllerPort(adjController.getPort());
+			input.setSrcIp(new Ipv4Prefix(srcIp));
+			input.setDstIp(new Ipv4Prefix(dstIp));
+			input.setNwProto(NwProto.forValue(Integer.valueOf(proto)));
+			input.setTpDst(new PortNumber(Integer.valueOf(tp)));
+			input.setAction(Action.valueOf(action));
+			
+			floodlightaclService.addFloodlightAcl(input.build());
+		}
+	}
 	private void sendAlert(String desc, int alertNo, MessageLevel level, Ipv4Address sourceIp, MessageType type) {
 		SendAlertInputBuilder input = new SendAlertInputBuilder();
 		input.setAlertNo(alertNo);
@@ -235,7 +302,7 @@ public class AliveTestTask extends TimerTask {
 			List<String> switches = redisService.get(CSKey.getEdgeSwitches, controller.getIp().getValue(), List.class);
 			if (switches.size() < min)
 				min = switches.size();
-				ret = controller;
+			ret = controller;
 		}
 
 		return ret;

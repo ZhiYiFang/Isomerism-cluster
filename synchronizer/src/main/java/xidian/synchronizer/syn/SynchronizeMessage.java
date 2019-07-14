@@ -14,6 +14,7 @@ import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.NotificationPublishService;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.ControllersService;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.devicemanagement.rev181126.DevicemanagementService;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.floodlightacl.rev190713.FloodlightaclService;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.floodlighttopo.rev190515.FloodlighttopoService;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.linkmanager.rev181126.LinkmanagerService;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.ryutopo.rev190515.RyutopoService;
@@ -32,17 +33,21 @@ public class SynchronizeMessage {
 	private RyutopoService ryutopoService;
 	private NotificationPublishService notificationPublishService;
 	private ControllersService controllerService;
-
+	private FloodlightaclService floodlightaclService;
+	
 	public SynchronizeMessage(DataBroker dataBroker, DevicemanagementService devicemanagementService,
 			LinkmanagerService linkmanagerService, VcfstatisticsService vcfstatisticsService,
 			FloodlighttopoService floodlighttopoService, RyutopoService ryutopoService,
-			NotificationPublishService notificationPublishService, ControllersService controllerService) {
+			NotificationPublishService notificationPublishService, ControllersService controllerService,
+			FloodlightaclService floodlightaclService) {
 		super();
 		this.dataBroker = dataBroker;
 		this.floodlighttopoService = floodlighttopoService;
 		this.ryutopoService = ryutopoService;
 		this.notificationPublishService = notificationPublishService;
 		this.controllerService = controllerService;
+		this.floodlightaclService = floodlightaclService;
+		
 	}
 
 	public void init() {
@@ -55,7 +60,7 @@ public class SynchronizeMessage {
 		// linkmanagerService, vcfstatisticsService), 10000,
 		// 20000);
 		timer.schedule(new AliveTestTask(dataBroker, floodlighttopoService, ryutopoService, notificationPublishService,
-				controllerService), 5000, 10000);
+				controllerService, floodlightaclService), 5000, 10000);
 	}
 
 }
