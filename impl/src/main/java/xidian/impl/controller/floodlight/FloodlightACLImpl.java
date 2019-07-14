@@ -23,9 +23,9 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.floodlightacl.rev190713.Add
 import org.opendaylight.yang.gen.v1.urn.opendaylight.floodlightacl.rev190713.AddFloodlightAclOutput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.floodlightacl.rev190713.AddFloodlightAclOutputBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.floodlightacl.rev190713.FloodlightaclService;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.floodlightacl.rev190713.GetFloodlightaclInput;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.floodlightacl.rev190713.GetFloodlightaclOutput;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.floodlightacl.rev190713.GetFloodlightaclOutputBuilder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.floodlightacl.rev190713.GetFloodlightAclInput;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.floodlightacl.rev190713.GetFloodlightAclOutput;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.floodlightacl.rev190713.GetFloodlightAclOutputBuilder;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
 
@@ -48,29 +48,35 @@ public class FloodlightACLImpl implements FloodlightaclService {
 		PortNumber port = input.getTpDst();
 		Action action = input.getAction();
 		Map<String, String> map = new HashMap<>();
-		map.put("nw-proto", nwproto == null ? "" : nwproto.getName());
-		map.put("src-ip", srcIp == null ? "" : srcIp.getValue());
-		map.put("dst-ip", dstIp == null ? "" : dstIp.getValue());
-		map.put("tp-dst", port == null ? "" : port.getValue().toString());
-		map.put("action", action == null ? "" : action.getName());
+		if (nwproto != null) {
+			map.put("nw-proto", nwproto.getName());
+		}
+		if (srcIp != null) {
+			map.put("src-ip", srcIp.getValue());
+		}
+		if (dstIp != null) {
+			map.put("dst-ip", dstIp.getValue());
+		}
+		if (port != null) {
+			map.put("tp-dst", port.getValue().toString());
+		}
+		if (action != null) {
+			map.put("action", action.getName());
+		}
 		String response = HttpUtils.sendHttpPostJson(HttpUtils.getBasicURL(input.getControllerIp().getValue(),
 				input.getControllerPort().getValue(), FloodlightUrls.ADD_ACL), gson.toJson(map));
 		return RpcResultBuilder.success(new AddFloodlightAclOutputBuilder().setResult(response)).buildFuture();
 	}
 
 	@Override
-	public Future<RpcResult<GetFloodlightaclOutput>> getFloodlightacl(GetFloodlightaclInput input) {
+	public Future<RpcResult<GetFloodlightAclOutput>> getFloodlightAcl(GetFloodlightAclInput input) {
 		Ipv4Address ip = input.getControllerIp();
 		PortNumber port = input.getControllerPort();
 		String response = HttpUtils
 				.sendHttpGet(HttpUtils.getBasicURL(ip.getValue(), port.getValue(), FloodlightUrls.GET_ACL));
-		return RpcResultBuilder.success(new GetFloodlightaclOutputBuilder().setResult(response)).buildFuture();
-		
-
+		return RpcResultBuilder.success(new GetFloodlightAclOutputBuilder().setResult(response)).buildFuture();
 	}
 
-	private String getValue(String key, JsonObject obj) {
-		JsonElement ele = obj.get(key);
-		return ele == null ? "" : ele.getAsString();
-	}
+
+
 }

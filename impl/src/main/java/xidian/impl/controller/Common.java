@@ -375,26 +375,44 @@ public class Common implements ControllersService {
 
 	private String floodlightFlowMod(RedisController redisController, FlowModInput input) {
 		FlowInput flowInput = input.getFlowInput();
-		String dpid = DpidUtils.getIntStringValueFromDpid(input.getDpid());
+		String dpid = "";
+		if (input.getDpid() != null) {
+			dpid = DpidUtils.getIntStringValueFromDpid(input.getDpid());
+		}
+
 		Map<String, String> flow = new HashMap<String, String>();
 		flow.put("switch", dpid);
-		flow.put("priority", flowInput.getPriority().toString());
-		flow.put("idle_timeout", flowInput.getIdleTimeout().toString());
-		flow.put("hard_timeout", flowInput.getHardTimeout().toString());
-		flow.put("table", flowInput.getTableId().toString());
-		flow.put("eth_type", "0x0800");
+		if (flowInput != null) {
+			if (flowInput.getPriority() != null)
+				flow.put("priority", flowInput.getPriority().toString());
+			if (flowInput.getIdleTimeout() != null)
+				flow.put("idle_timeout", flowInput.getIdleTimeout().toString());
+			if (flowInput.getHardTimeout() != null)
+				flow.put("hard_timeout", flowInput.getHardTimeout().toString());
+			if (flowInput.getTableId() != null)
+				flow.put("table", flowInput.getTableId().toString());
+		}
 
 		Matches matchInput = flowInput.getMatches();
-		flow.put("eth_src", matchInput.getEthSrc().getValue());
-		flow.put("eth_dst", matchInput.getEthDst().getValue());
-		flow.put("ipv4_src", matchInput.getIpv4Src().getValue());
-		flow.put("ipv4_dst", matchInput.getIpv4Dst().getValue());
-		flow.put("tcp_src", matchInput.getSrcPort().getValue().toString());
-		flow.put("tcp_dst", matchInput.getDstPort().getValue().toString());
-
+		if (matchInput != null) {
+			if (matchInput.getEthSrc() != null)
+				flow.put("eth_src", matchInput.getEthSrc().getValue());
+			if (matchInput.getEthDst() != null)
+				flow.put("eth_dst", matchInput.getEthDst().getValue());
+			if (matchInput.getIpv4Src() != null)
+				flow.put("ipv4_src", matchInput.getIpv4Src().getValue());
+			if (matchInput.getIpv4Dst() != null)
+				flow.put("ipv4_dst", matchInput.getIpv4Dst().getValue());
+			if (matchInput.getSrcPort() != null)
+				flow.put("tcp_src", matchInput.getSrcPort().getValue().toString());
+			if (matchInput.getDstPort() != null)
+				flow.put("tcp_dst", matchInput.getDstPort().getValue().toString());
+		}
+		flow.put("eth_type", "0x0800");
 		flow.put("active", "true");
 		flow.put("ip_proto", "0x06");
-		flow.put("actions", "output=" + flowInput.getOutPutPort());
+		if (flowInput.getOutPutPort() != null)
+			flow.put("actions", "output=" + flowInput.getOutPutPort());
 
 		FlowModCmd cmd = flowInput.getFlowModCmd();
 		String postJson = new Gson().toJson(flow);
@@ -421,21 +439,40 @@ public class Common implements ControllersService {
 
 	private String ryuFlowMod(RedisController redisController, FlowModInput input) {
 		FlowInput flowInput = input.getFlowInput();
-		String dpid = DpidUtils.getIntStringValueFromDpid(input.getDpid());
+		String dpid = "";
+		if (input.getDpid() != null) {
+			dpid = DpidUtils.getIntStringValueFromDpid(input.getDpid());
+		}
 		RyuFlow flow = new RyuFlow();
 		flow.setDpid(dpid);
-		flow.setHard_timeout(flowInput.getHardTimeout().toString());
-		flow.setIdle_timeout(flowInput.getIdleTimeout().toString());
-		flow.setPriority(flowInput.getPriority().toString());
-		flow.setTable_id(flowInput.getTableId().toString());
+		if (flowInput != null) {
+			if (flowInput.getHardTimeout() != null)
+				flow.setHard_timeout(flowInput.getHardTimeout().toString());
+			if (flowInput.getIdleTimeout() != null)
+				flow.setIdle_timeout(flowInput.getIdleTimeout().toString());
+			if (flowInput.getPriority() != null)
+				flow.setPriority(flowInput.getPriority().toString());
+			if (flowInput.getTableId() != null)
+				flow.setTable_id(flowInput.getTableId().toString());
+		}
+
 		RyuMatch match = new RyuMatch();
 		Matches matchInput = flowInput.getMatches();
-		match.setDl_dst(matchInput.getEthDst().getValue());
-		match.setDl_src(matchInput.getEthSrc().getValue());
-		match.setNw_dst(matchInput.getIpv4Dst().getValue());
-		match.setNw_src(matchInput.getIpv4Src().getValue());
-		match.setTp_dst(matchInput.getDstPort().getValue().toString());
-		match.setTp_src(matchInput.getSrcPort().getValue().toString());
+		if (matchInput != null) {
+			if (matchInput.getEthDst() != null)
+				match.setDl_dst(matchInput.getEthDst().getValue());
+			if (matchInput.getEthSrc() != null)
+				match.setDl_src(matchInput.getEthSrc().getValue());
+			if (matchInput.getIpv4Dst() != null)
+				match.setNw_dst(matchInput.getIpv4Dst().getValue());
+			if (matchInput.getIpv4Src() != null)
+				match.setNw_src(matchInput.getIpv4Src().getValue());
+			if (matchInput.getDstPort() != null)
+				match.setTp_dst(matchInput.getDstPort().getValue().toString());
+			if (matchInput.getSrcPort() != null)
+				match.setTp_src(matchInput.getSrcPort().getValue().toString());
+		}
+
 		match.setDl_type("2048");
 		match.setNw_type("6");
 		flow.setMatch(match);
@@ -467,6 +504,8 @@ public class Common implements ControllersService {
 		default:
 			break;
 		}
+		if (ret.equals("") || ret == null)
+			ret = "success";
 		return ret;
 	}
 

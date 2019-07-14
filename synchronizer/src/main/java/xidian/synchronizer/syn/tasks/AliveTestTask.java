@@ -8,7 +8,6 @@
 
 package xidian.synchronizer.syn.tasks;
 
-import java.time.chrono.IsoEra;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -41,12 +40,12 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.isome
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.isomerism.IsomerismControllers.ControllerStatus;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.isomerism.IsomerismControllersBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.isomerism.IsomerismControllersKey;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.floodlightacl.rev190713.AddFloodlightAclInputBuilder;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.floodlightacl.rev190713.FloodlightaclService;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.floodlightacl.rev190713.GetFloodlightaclInputBuilder;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.floodlightacl.rev190713.GetFloodlightaclOutput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.floodlightacl.rev190713.Acl.Action;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.floodlightacl.rev190713.Acl.NwProto;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.floodlightacl.rev190713.AddFloodlightAclInputBuilder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.floodlightacl.rev190713.FloodlightaclService;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.floodlightacl.rev190713.GetFloodlightAclInputBuilder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.floodlightacl.rev190713.GetFloodlightAclOutput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.floodlighttopo.rev190515.FloodlighttopoService;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.floodlighttopo.rev190515.GetFloodlightHealthInputBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.ryutopo.rev190515.GetRyuHealthInputBuilder;
@@ -141,11 +140,11 @@ public class AliveTestTask extends TimerTask {
 					
 					// syn acl
 					if (isAlive && c.getTypeName().equals(TypeName.Floodlight)) {
-						GetFloodlightaclInputBuilder input = new GetFloodlightaclInputBuilder();
+						GetFloodlightAclInputBuilder input = new GetFloodlightAclInputBuilder();
 						input.setControllerIp(c.getIp());
 						input.setControllerPort(c.getPort());
-						Future<RpcResult<GetFloodlightaclOutput>> res = floodlightaclService
-								.getFloodlightacl(input.build());
+						Future<RpcResult<GetFloodlightAclOutput>> res = floodlightaclService
+								.getFloodlightAcl(input.build());
 						String list = res.get().getResult().getResult();
 						RedisService.getInstance().set(ACLKey.getACL, c.getIp().getValue(), list);
 					}

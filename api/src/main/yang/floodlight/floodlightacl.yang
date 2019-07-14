@@ -41,7 +41,7 @@ module floodlightacl {
             }
         }
     }
-    rpc get-floodlightacl {
+    rpc get-floodlight-acl {
     	input {
     		leaf controller-ip{
     			type inet:ipv4-address;
