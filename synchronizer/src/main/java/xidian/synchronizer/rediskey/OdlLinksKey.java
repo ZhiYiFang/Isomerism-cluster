@@ -6,7 +6,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
 
-package xidian.synchronier.rediskey;
+package xidian.synchronizer.rediskey;
 
 public class OdlLinksKey extends BasePrefix{
 

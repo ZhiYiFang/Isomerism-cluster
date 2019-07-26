@@ -1,0 +1,22 @@
+// Contents of "migrate"
+module migrate {
+    namespace "urn:opendaylight:migrate";
+    prefix "migrate";
+    import ietf-inet-types { prefix "inet"; revision-date 2013-07-15; }
+    revision 2019-07-26 {
+        description "Initial revision";
+    }
+
+    rpc migrate-abnormal-controller {
+        input {
+            leaf controller-ip {
+                type inet:ipv4-address;
+            }
+        }
+        output {
+            leaf result {
+                type string;
+            }
+        }
+    }
+}

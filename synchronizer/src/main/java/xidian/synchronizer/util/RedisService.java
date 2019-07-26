@@ -6,14 +6,14 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
 
-package xidian.synchronier.util;
+package xidian.synchronizer.util;
 
 import com.google.gson.Gson;
 
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
-import xidian.synchronier.rediskey.KeyPrefix;
+import xidian.synchronizer.rediskey.KeyPrefix;
 
 public class RedisService {
 

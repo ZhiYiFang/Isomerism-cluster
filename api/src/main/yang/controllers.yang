@@ -124,6 +124,10 @@ module controllers {
                         value 1;
                         description "控制器宕机";
                     }
+                    enum "abnormal" {
+                    	value 2;
+                    	description "异常控制器";
+                    }
                 }
             }
         }
@@ -368,4 +372,6 @@ module controllers {
             uses controller-types;
         }
     }
+
+    
 }

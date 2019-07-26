@@ -23,8 +23,8 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.basic
 import org.opendaylight.yangtools.concepts.ListenerRegistration;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 
-import xidian.synchronier.util.InstructionUtils;
-import xidian.synchronier.util.RedisService;
+import xidian.synchronizer.util.InstructionUtils;
+import xidian.synchronizer.util.RedisService;
 
 
 

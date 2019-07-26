@@ -39,6 +39,8 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.GetSw
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.GetSwitchFlowTableOutput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.GetSwitchFlowTableOutputBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.Isomerism;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.MigrateSwitchesOfAbnormalControllerInput;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.MigrateSwitchesOfAbnormalControllerOutput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.SendAlertInput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.SendAlertOutput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.SendAlertOutputBuilder;
@@ -508,5 +510,6 @@ public class Common implements ControllersService {
 			ret = "success";
 		return ret;
 	}
+
 
 }

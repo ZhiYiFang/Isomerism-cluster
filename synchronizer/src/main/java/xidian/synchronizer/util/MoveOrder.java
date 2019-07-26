@@ -6,7 +6,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
 
-package xidian.synchronier.util;
+package xidian.synchronizer.util;
 
 public class MoveOrder {
 

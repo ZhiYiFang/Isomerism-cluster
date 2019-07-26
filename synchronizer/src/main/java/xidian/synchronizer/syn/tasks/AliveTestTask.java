@@ -63,16 +63,16 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import xidian.synchronier.rediskey.ACLKey;
-import xidian.synchronier.rediskey.CSKey;
-import xidian.synchronier.rediskey.OdlLinksKey;
-import xidian.synchronier.rediskey.RedisController;
-import xidian.synchronier.rediskey.SCKey;
-import xidian.synchronier.util.InstructionUtils;
-import xidian.synchronier.util.MoveOrder;
-import xidian.synchronier.util.RedisService;
+import xidian.synchronizer.rediskey.ACLKey;
+import xidian.synchronizer.rediskey.CSKey;
+import xidian.synchronizer.rediskey.OdlLinksKey;
+import xidian.synchronizer.rediskey.RedisController;
+import xidian.synchronizer.rediskey.SCKey;
 import xidian.synchronizer.syn.SynchronizeMessage;
 import xidian.synchronizer.syn.topoEle.Link;
+import xidian.synchronizer.util.InstructionUtils;
+import xidian.synchronizer.util.MoveOrder;
+import xidian.synchronizer.util.RedisService;
 
 public class AliveTestTask extends TimerTask {
 
@@ -192,6 +192,7 @@ public class AliveTestTask extends TimerTask {
 								LOG.info("Synchronize ACL rules falied");
 							}
 						}
+						
 						// calculate
 						HashMap<String, String> map2 = new HashMap<String, String>();
 						map.put("Type", adjController.getType().getName());
