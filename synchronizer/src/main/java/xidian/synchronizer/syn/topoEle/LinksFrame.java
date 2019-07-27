@@ -33,5 +33,10 @@ public class LinksFrame {
 	public void setFrames(List<Link> frames) {
 		this.frames = frames;
 	}
+	@Override
+	public String toString() {
+		return "LinksFrame [controllerId=" + controllerId + ", frames=" + frames + "]";
+	}
+	
 	
 }

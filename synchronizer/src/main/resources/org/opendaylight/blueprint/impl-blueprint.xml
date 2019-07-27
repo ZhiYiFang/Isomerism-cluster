@@ -26,13 +26,13 @@
 
 	<odl:rpc-service id="ryutopoService"
 		interface="org.opendaylight.yang.gen.v1.urn.opendaylight.ryutopo.rev190515.RyutopoService" />
-		
+
 	<odl:rpc-service id="controllerService"
-	    interface="org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.ControllersService"/>
-	
+		interface="org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.ControllersService" />
+
 	<odl:rpc-service id="floodlightaclService"
-	    interface="org.opendaylight.yang.gen.v1.urn.opendaylight.floodlightacl.rev190713.FloodlightaclService"/>
-	    
+		interface="org.opendaylight.yang.gen.v1.urn.opendaylight.floodlightacl.rev190713.FloodlightaclService" />
+
 	<bean id="synchronizer"
 		class="xidian.synchronizer.syn.SynchronizeMessage" init-method="init">
 		<argument ref="dataBroker" />
@@ -42,8 +42,8 @@
 		<argument ref="floodlighttopoService" />
 		<argument ref="ryutopoService" />
 		<argument ref="notificationPublishService" />
-		<argument ref="controllerService"/>
-		<argument ref="floodlightaclService"/>
+		<argument ref="controllerService" />
+		<argument ref="floodlightaclService" />
 	</bean>
 
 	<bean id="topologyChangeListener"
@@ -73,9 +73,16 @@
 		<argument ref="floodlighttopoService" />
 		<argument ref="ryutopoService" />
 	</bean>
-
+	<bean id="migrateImpl"
+		class="xidian.synchronizer.impl.MigrateImpl">
+		<argument ref="dataBroker" />
+		<argument ref="floodlighttopoService" />
+		<argument ref="ryutopoService" />
+	</bean>
+	
 	<odl:rpc-implementation ref="updateTopoImpl" />
-
+	<odl:rpc-implementation ref="migrateImpl"/>
+	
 	<odl:notification-listener
 		ref="controllerDownListener" />
 </blueprint>

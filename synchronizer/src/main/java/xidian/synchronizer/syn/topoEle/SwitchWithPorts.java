@@ -37,6 +37,9 @@ public class SwitchWithPorts {
 	public void setPorts(List<Integer> ports) {
 		this.ports = ports;
 	}
-	
+	@Override
+	public String toString() {
+		return "SwitchWithPorts [dpid=" + dpid + ", ports=" + ports + "]";
+	}
 	
 }

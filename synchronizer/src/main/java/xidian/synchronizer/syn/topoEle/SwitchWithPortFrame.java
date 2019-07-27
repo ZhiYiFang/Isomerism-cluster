@@ -36,4 +36,9 @@ public class SwitchWithPortFrame {
 		this.controllerId = controllerId;
 		this.frames = frames;
 	}
+	@Override
+	public String toString() {
+		return "SwitchWithPortFrame [controllerId=" + controllerId + ", frames=" + frames + "]";
+	}
+	
 }

@@ -64,12 +64,6 @@ module controllers {
         	leaf url{
         		type string;
         	}
-            leaf attack-confirm-ip {
-                type inet:ipv4-address;
-            }
-            leaf attack-confirm-port {
-                type inet:port-number;
-            }
         }
         leaf middle-ip {
             type inet:ipv4-address;
@@ -86,8 +80,8 @@ module controllers {
         }
         container mininet-setting {
 
-            leaf ip {
-                type inet:ipv4-address;
+            leaf user-ip {
+                type string;
             }
 
             leaf password {

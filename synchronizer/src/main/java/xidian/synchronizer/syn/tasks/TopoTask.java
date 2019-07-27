@@ -118,7 +118,8 @@ public class TopoTask extends Thread {
 				SwitchWithPortFrame switchWithPortFrame = null;
 
 				for (IsomerismControllers controller : controllers) {
-					if(controller.getControllerStatus().equals(ControllerStatus.Down)) {
+					if (controller.getControllerStatus().equals(ControllerStatus.Down)
+							|| controller.getControllerStatus().equals(ControllerStatus.Abnormal)) {
 						continue;
 					}
 					TypeName type = controller.getTypeName();
@@ -187,15 +188,15 @@ public class TopoTask extends Thread {
 				}
 
 				// 暂时先全部加到odl上
-				// for(SwitchWithPorts sw : allSwitchPorts) {
-				// edgeSwitches.add(sw.getDpid());
+				// for (SwitchWithPorts sw : allSwitchPorts) {
+				//    edgeSwitches.add(sw.getDpid());
 				// }
-				
+
 				// 让中间件与所有的边界交换机建立连接来确定这些边界交换机的连接关系
 				for (String dpid : edgeSwitches) {
 					InstructionUtils.moveToMiddle(dpid);
 				}
-				Thread.sleep(1000);
+				Thread.sleep(3000);
 
 				// 连接建立完成后获取异构中间件的链路情况 确定各边界交换机之间的连接关系
 				List<org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.topology.Link> links = getOdlLinks(
@@ -223,8 +224,9 @@ public class TopoTask extends Thread {
 
 				writeToRedis(switchWithPortFrames, switchToController, edgeSwitches, odlinks, controllerIpToRedis);
 				// 把ODL检测到的边界交换机的连接关系加入进去
-				for(Link l : odlinks) {
-					if(allLinks.contains(l.reverseLink())) continue;
+				for (Link l : odlinks) {
+					if (allLinks.contains(l.reverseLink()))
+						continue;
 					allLinks.add(l);
 				}
 				// allLinks写入到dataStore中
@@ -242,10 +244,10 @@ public class TopoTask extends Thread {
 	private void writeToRedis(Map<String, SwitchWithPortFrame> switchWithPortFrames,
 			Map<String, String> switchToController, Set<String> edgeSwitches, HashSet<Link> odllinks,
 			Map<String, RedisController> controllerIpToRedis) {
-		
+
 		// flush all expired values
 		redisService.flushAll();
-		
+
 		// odllinks写入到redis
 		redisService.set(OdlLinksKey.getOdlLinks, "", odllinks);
 
@@ -306,8 +308,6 @@ public class TopoTask extends Thread {
 			InstructionUtils.moveSwitch(order);
 		}
 	}
-
-
 
 	private List<Node> getAllNodes(DataBroker dataBroker) {
 		InstanceIdentifier.InstanceIdentifierBuilder<Nodes> nodesInsIdBuilder = InstanceIdentifier

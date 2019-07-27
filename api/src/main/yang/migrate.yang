@@ -3,6 +3,7 @@ module migrate {
     namespace "urn:opendaylight:migrate";
     prefix "migrate";
     import ietf-inet-types { prefix "inet"; revision-date 2013-07-15; }
+    import controllers { prefix controllers; revision-date 2018-11-25; }
     revision 2019-07-26 {
         description "Initial revision";
     }
@@ -14,9 +15,10 @@ module migrate {
             }
         }
         output {
-            leaf result {
+            leaf target-ip {
                 type string;
             }
+            uses controllers:controller-types;
         }
     }
 }

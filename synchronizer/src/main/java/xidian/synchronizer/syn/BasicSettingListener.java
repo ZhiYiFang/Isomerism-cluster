@@ -60,7 +60,7 @@ public class BasicSettingListener implements DataTreeChangeListener<BasicSetting
 				
 				MininetSetting mininetSetting = data.getMininetSetting();
 				InstructionUtils.middleIp = middleIp;
-				InstructionUtils.mininetIp = mininetSetting.getIp().getValue();
+				InstructionUtils.mininetIp = mininetSetting.getUserIp();
 				InstructionUtils.passwd = mininetSetting.getPassword();
 				
 				RedisSetting redisSettings = data.getRedisSetting();

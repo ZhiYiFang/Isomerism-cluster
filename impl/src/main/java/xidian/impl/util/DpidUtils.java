@@ -33,7 +33,7 @@ public class DpidUtils {
 	
 	public static String getDpidFromOdlSw(String odlSw) {
 		String[] sourceStrs = odlSw.split(":");
-		char[] chars = String.format("%016X", Integer.valueOf(sourceStrs[1])).toCharArray();
+		char[] chars = String.format("%016x", Integer.valueOf(sourceStrs[1])).toCharArray();
 		StringBuffer sb = new StringBuffer();
 		for (int i = 0; i < chars.length; i++) {
 			sb.append(chars[i]);
@@ -45,7 +45,7 @@ public class DpidUtils {
 	}
 	
 	public static String getDpidFromInt(int dpid) {
-		char[] chars = String.format("%016X", Integer.valueOf(dpid)).toCharArray();
+		char[] chars = String.format("%016x", Integer.valueOf(dpid)).toCharArray();
 		StringBuffer sb = new StringBuffer();
 		for (int i = 0; i < chars.length; i++) {
 			sb.append(chars[i]);
