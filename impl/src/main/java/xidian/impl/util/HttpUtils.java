@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -34,6 +35,8 @@ import org.apache.http.impl.client.DefaultHttpRequestRetryHandler;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.util.EntityUtils;
+
+import com.google.gson.Gson;
 
 public class HttpUtils {
 
@@ -490,8 +493,9 @@ public class HttpUtils {
 	}
 	public static void main(String[] args) {
 		System.out.println(123);
-		HttpUtils.sendHttpGet("http://127.0.0.1:9090/posttest");
-		String response = HttpUtils.sendHttpPostJson("http://127.0.0.1:9090/posttest", "123");
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("key1", "123");
+		String response = HttpUtils.sendHttpPostJson("http://172.31.10.29:8080/midwarelog", new Gson().toJson(map));
 		System.out.println(response);
 	}
 

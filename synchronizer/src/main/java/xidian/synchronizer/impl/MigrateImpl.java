@@ -71,16 +71,11 @@ public class MigrateImpl implements MigrateService {
 		KeyedInstanceIdentifier<IsomerismControllers, IsomerismControllersKey> statusPath = InstanceIdentifier
 				.create(Isomerism.class).child(IsomerismControllers.class, new IsomerismControllersKey(controllerIp));
 
-		// 改变控制器的状态
-		IsomerismControllersBuilder builder = new IsomerismControllersBuilder();
-		builder.setIp(controllerIp);
-		builder.setKey(new IsomerismControllersKey(controllerIp));
-		builder.setControllerStatus(ControllerStatus.Abnormal);
-		writeControllerStatus.merge(LogicalDatastoreType.CONFIGURATION, statusPath, builder.build());
-		writeControllerStatus.submit();
-
 		// 迁移控制器的
 		Set<RedisController> adjControllers = getAdjacentController(controllerIp.getValue());
+		if(adjControllers.size() == 0) {
+			return RpcResultBuilder.success(new MigrateAbnormalControllerOutputBuilder().setTargetIp("no normal controller").build()).buildFuture();
+		}
 		RedisController ret = chooseAController(adjControllers); // destination Controller
 
 		redisService = RedisService.getInstance();
@@ -94,7 +89,13 @@ public class MigrateImpl implements MigrateService {
 		outputBuilder.setTargetIp(ret.getIp().getValue());
 		outputBuilder.setTypeName(ret.getType());
 
-		new TopoTask(dataBroker, floodlighttopoService, ryutopoService).start();
+		// 改变控制器的状态
+		IsomerismControllersBuilder builder = new IsomerismControllersBuilder();
+		builder.setIp(controllerIp);
+		builder.setKey(new IsomerismControllersKey(controllerIp));
+		builder.setControllerStatus(ControllerStatus.Abnormal);
+		writeControllerStatus.merge(LogicalDatastoreType.CONFIGURATION, statusPath, builder.build());
+		writeControllerStatus.submit();
 
 		return RpcResultBuilder.success(outputBuilder.build()).buildFuture();
 	}

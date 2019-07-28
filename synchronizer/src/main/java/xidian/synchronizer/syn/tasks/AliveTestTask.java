@@ -111,6 +111,8 @@ public class AliveTestTask extends TimerTask {
 				result = optional.get();
 				List<IsomerismControllers> controllers = result.getIsomerismControllers();
 				for (IsomerismControllers c : controllers) {
+					if(c.getControllerStatus().equals(ControllerStatus.Abnormal)) continue;
+					
 					Ipv4Address ip = c.getIp();
 					PortNumber port = c.getPort();
 					TypeName type = c.getTypeName();
@@ -137,7 +139,7 @@ public class AliveTestTask extends TimerTask {
 							.create(Isomerism.class).child(IsomerismControllers.class, new IsomerismControllersKey(ip));
 					ControllerStatus status = readStatus.read(LogicalDatastoreType.CONFIGURATION, statusPath).get()
 							.get().getControllerStatus();
-					
+
 					// syn acl
 					if (isAlive && c.getTypeName().equals(TypeName.Floodlight)) {
 						GetFloodlightAclInputBuilder input = new GetFloodlightAclInputBuilder();
@@ -148,7 +150,7 @@ public class AliveTestTask extends TimerTask {
 						String list = res.get().getResult().getResult();
 						RedisService.getInstance().set(ACLKey.getACL, c.getIp().getValue(), list);
 					}
-				
+
 					// 宕机控制器控制的交换机迁移到临近的控制器上
 					if (!isAlive && status.equals(ControllerStatus.Up)) {
 
@@ -167,15 +169,6 @@ public class AliveTestTask extends TimerTask {
 						sendAlert(new Gson().toJson(map), SynchronizeMessage.alertNo, MessageLevel.High, sourceIp,
 								MessageType.Alert);
 
-						// 控制器状态标记成down
-						WriteTransaction writeStatus = dataBroker.newWriteOnlyTransaction();
-//						IsomerismControllers con = writeStatus.read(LogicalDatastoreType.CONFIGURATION, statusPath).get().get();
-						IsomerismControllersBuilder builder = new IsomerismControllersBuilder();
-						builder.setIp(ip);
-						builder.setKey(new IsomerismControllersKey(ip));
-						builder.setControllerStatus(ControllerStatus.Down);
-						writeStatus.merge(LogicalDatastoreType.CONFIGURATION, statusPath, builder.build());
-						writeStatus.submit();
 // don't exec if is down already
 						// 获取所有临近的控制器
 						Set<RedisController> adjControllers = getAdjacentController(c);
@@ -192,11 +185,11 @@ public class AliveTestTask extends TimerTask {
 								LOG.info("Synchronize ACL rules falied");
 							}
 						}
-						
+
 						// calculate
 						HashMap<String, String> map2 = new HashMap<String, String>();
-						map.put("Type", adjController.getType().getName());
-						map.put("Ip", adjController.getIp().getValue());
+						map2.put("Type", adjController.getType().getName());
+						map2.put("Ip", adjController.getIp().getValue());
 						sendAlert(new Gson().toJson(map2), SynchronizeMessage.alertNo, MessageLevel.Medium, sourceIp,
 								MessageType.Calculate);
 
@@ -222,8 +215,28 @@ public class AliveTestTask extends TimerTask {
 						sendNofitication(ip, type, adjController);
 
 						// normal
-						sendAlert("true", SynchronizeMessage.alertNo, MessageLevel.Medium, sourceIp,
-								MessageType.Normal);
+						sendAlert("true", SynchronizeMessage.alertNo, MessageLevel.Low, sourceIp, MessageType.Normal);
+						SynchronizeMessage.alertNo++;
+						
+						// 控制器状态标记成down
+						WriteTransaction writeStatus = dataBroker.newWriteOnlyTransaction();
+//						IsomerismControllers con = writeStatus.read(LogicalDatastoreType.CONFIGURATION, statusPath).get().get();
+						IsomerismControllersBuilder builder = new IsomerismControllersBuilder();
+						builder.setIp(ip);
+						builder.setKey(new IsomerismControllersKey(ip));
+						builder.setControllerStatus(ControllerStatus.Down);
+						writeStatus.merge(LogicalDatastoreType.CONFIGURATION, statusPath, builder.build());
+						writeStatus.submit();
+
+					}
+					else if(isAlive && c.getControllerStatus().equals(ControllerStatus.Down)) {
+						WriteTransaction writeStatus = dataBroker.newWriteOnlyTransaction();
+						IsomerismControllersBuilder builder = new IsomerismControllersBuilder();
+						builder.setIp(ip);
+						builder.setKey(new IsomerismControllersKey(ip));
+						builder.setControllerStatus(ControllerStatus.Up);
+						writeStatus.merge(LogicalDatastoreType.CONFIGURATION, statusPath, builder.build());
+						writeStatus.submit();
 					}
 				}
 			}
@@ -231,17 +244,15 @@ public class AliveTestTask extends TimerTask {
 			e.printStackTrace();
 		}
 	}
-	
-	private void synACL(IsomerismControllers c, RedisController adjController) throws Exception{
-		String response = RedisService.getInstance().get(ACLKey.getACL, c.getIp().getValue(),
-				String.class);
+
+	private void synACL(IsomerismControllers c, RedisController adjController) throws Exception {
+		String response = RedisService.getInstance().get(ACLKey.getACL, c.getIp().getValue(), String.class);
 
 		JsonParser parser = new JsonParser();
 		JsonArray array = parser.parse(response).getAsJsonArray();
 		Iterator<JsonElement> it = array.iterator();
 
-		LOG.info("Synchronize ACL rules from" + c.getIp().getValue() + " to "
-				+ adjController.getIp().getValue());
+		LOG.info("Synchronize ACL rules from" + c.getIp().getValue() + " to " + adjController.getIp().getValue());
 
 		while (it.hasNext()) {
 			JsonObject ele = it.next().getAsJsonObject();
@@ -251,7 +262,7 @@ public class AliveTestTask extends TimerTask {
 			String proto = ele.get("nw_proto").getAsString();
 			String tp = ele.get("tp_dst").getAsString();
 			String action = ele.get("action").getAsString();
-			
+
 			AddFloodlightAclInputBuilder input = new AddFloodlightAclInputBuilder();
 			input.setControllerIp(adjController.getIp());
 			input.setControllerPort(adjController.getPort());
@@ -260,10 +271,11 @@ public class AliveTestTask extends TimerTask {
 			input.setNwProto(NwProto.forValue(Integer.valueOf(proto)));
 			input.setTpDst(new PortNumber(Integer.valueOf(tp)));
 			input.setAction(Action.valueOf(action));
-			
+
 			floodlightaclService.addFloodlightAcl(input.build());
 		}
 	}
+
 	private void sendAlert(String desc, int alertNo, MessageLevel level, Ipv4Address sourceIp, MessageType type) {
 		SendAlertInputBuilder input = new SendAlertInputBuilder();
 		input.setAlertNo(alertNo);

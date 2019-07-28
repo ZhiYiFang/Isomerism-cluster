@@ -300,6 +300,8 @@ public class TopoTask extends Thread {
 	}
 
 	private void restoreSwitchConnection(Set<String> edgeSwitches, Map<String, String> switchToController) {
+		if(edgeSwitches == null || edgeSwitches.size() == 0 || switchToController == null || switchToController.size() == 0)
+			return;
 //		setAllSlave();
 		RemoveFlowInputBuilder input = new RemoveFlowInputBuilder();
 		for (String sw : edgeSwitches) {
