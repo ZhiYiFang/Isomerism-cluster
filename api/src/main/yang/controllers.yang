@@ -52,24 +52,20 @@ module controllers {
     }
 
     container basic-setting {
-        container server {
-            leaf server-ip {
-                type inet:ipv4-address;
-            }
-            leaf server-port {
-                type inet:port-number;
+        container server-url {
+            leaf server-setting-url {
+                type string;
             }
         }
-        container attack-confirm {
-        	leaf url{
-        		type string;
-        	}
+        container attack-confirm-url {
+            leaf attack-confirm-setting-url {
+                type string;
+            }
         }
         leaf middle-ip {
             type inet:ipv4-address;
         }
         container redis-setting {
-
             leaf ip {
                 type inet:ipv4-address;
             }
@@ -79,12 +75,7 @@ module controllers {
             }
         }
         container mininet-setting {
-
             leaf user-ip {
-                type string;
-            }
-
-            leaf password {
                 type string;
             }
         }
@@ -119,8 +110,8 @@ module controllers {
                         description "控制器宕机";
                     }
                     enum "abnormal" {
-                    	value 2;
-                    	description "异常控制器";
+                        value 2;
+                        description "异常控制器";
                     }
                 }
             }
@@ -254,6 +245,9 @@ module controllers {
     rpc send-alert {
         input {
             uses alert-common;
+            leaf abnormal-controller-ip{
+            	type string;
+            }
         }
         output {
             leaf result {
@@ -263,6 +257,10 @@ module controllers {
     }
     grouping flow-basic {
 
+    	leaf flow-name{
+    		type string;
+    	}
+    	
         leaf table-id {
             type int32;
         }
@@ -366,6 +364,4 @@ module controllers {
             uses controller-types;
         }
     }
-
-    
 }

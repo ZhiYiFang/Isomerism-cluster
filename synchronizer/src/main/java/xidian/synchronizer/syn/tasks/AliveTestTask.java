@@ -166,7 +166,7 @@ public class AliveTestTask extends TimerTask {
 						Ipv4Address sourceIp = readStatus.read(LogicalDatastoreType.CONFIGURATION, isorIpPath).get()
 								.get().getMiddleIp();
 
-						sendAlert(new Gson().toJson(map), SynchronizeMessage.alertNo, MessageLevel.High, sourceIp,
+						sendAlert(ip.getValue(), new Gson().toJson(map), SynchronizeMessage.alertNo, MessageLevel.High, sourceIp,
 								MessageType.Alert);
 
 // don't exec if is down already
@@ -190,7 +190,7 @@ public class AliveTestTask extends TimerTask {
 						HashMap<String, String> map2 = new HashMap<String, String>();
 						map2.put("Type", adjController.getType().getName());
 						map2.put("Ip", adjController.getIp().getValue());
-						sendAlert(new Gson().toJson(map2), SynchronizeMessage.alertNo, MessageLevel.Medium, sourceIp,
+						sendAlert(ip.getValue(), new Gson().toJson(map2), SynchronizeMessage.alertNo, MessageLevel.Medium, sourceIp,
 								MessageType.Calculate);
 
 						LOG.info("Move the switches to controller " + "[" + adjController.getIp().getValue() + " "
@@ -198,7 +198,7 @@ public class AliveTestTask extends TimerTask {
 						// 找到宕机控制器控制的交换机 并向临近控制器迁移
 
 						// action
-						sendAlert("true", SynchronizeMessage.alertNo, MessageLevel.Medium, sourceIp,
+						sendAlert(ip.getValue(), "switches are migrating", SynchronizeMessage.alertNo, MessageLevel.Medium, sourceIp,
 								MessageType.Action);
 
 						redisService = RedisService.getInstance();
@@ -209,13 +209,13 @@ public class AliveTestTask extends TimerTask {
 						}
 
 						// test
-						sendAlert("true", SynchronizeMessage.alertNo, MessageLevel.Medium, sourceIp, MessageType.Test);
+						sendAlert(ip.getValue(), "testing", SynchronizeMessage.alertNo, MessageLevel.Medium, sourceIp, MessageType.Test);
 
 						// 迁移完成以后 发送notification
 						sendNofitication(ip, type, adjController);
 
 						// normal
-						sendAlert("true", SynchronizeMessage.alertNo, MessageLevel.Low, sourceIp, MessageType.Normal);
+						sendAlert(ip.getValue(), "the migration is successful", SynchronizeMessage.alertNo, MessageLevel.Low, sourceIp, MessageType.Normal);
 						SynchronizeMessage.alertNo++;
 						
 						// 控制器状态标记成down
@@ -276,12 +276,13 @@ public class AliveTestTask extends TimerTask {
 		}
 	}
 
-	private void sendAlert(String desc, int alertNo, MessageLevel level, Ipv4Address sourceIp, MessageType type) {
+	private void sendAlert(String abConIP, String desc, int alertNo, MessageLevel level, Ipv4Address sourceIp, MessageType type) {
 		SendAlertInputBuilder input = new SendAlertInputBuilder();
 		input.setAlertNo(alertNo);
 		input.setMessageLevel(level);
 		input.setMessageType(type);
-
+		input.setAbnormalControllerIp(abConIP);
+		
 		input.setMessageDesc(desc);
 		input.setSourceIp(sourceIp);
 		input.setSourceType(SourceType.Isomerism);

@@ -15,9 +15,8 @@ import java.io.PrintWriter;
 
 public class InstructionUtils {
 
-	public static String mininetIp = "root@192.168.186.136";
-	public static String passwd = "123";
-	public static String middleIp = "192.168.186.142";
+	public static String mininetIp = "root@172.250.252.13";
+	public static String middleIp = "172.250.252.29";
 	
 	
 	public static void moveSwitch(MoveOrder order) {

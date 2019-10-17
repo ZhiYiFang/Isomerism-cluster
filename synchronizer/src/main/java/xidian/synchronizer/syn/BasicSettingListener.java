@@ -16,7 +16,6 @@ import org.opendaylight.controller.md.sal.binding.api.DataTreeChangeListener;
 import org.opendaylight.controller.md.sal.binding.api.DataTreeIdentifier;
 import org.opendaylight.controller.md.sal.binding.api.DataTreeModification;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
-import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.Ipv4Address;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.BasicSetting;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.basic.setting.MininetSetting;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.basic.setting.RedisSetting;
@@ -25,8 +24,6 @@ import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 
 import xidian.synchronizer.util.InstructionUtils;
 import xidian.synchronizer.util.RedisService;
-
-
 
 
 public class BasicSettingListener implements DataTreeChangeListener<BasicSetting> {
@@ -61,7 +58,6 @@ public class BasicSettingListener implements DataTreeChangeListener<BasicSetting
 				MininetSetting mininetSetting = data.getMininetSetting();
 				InstructionUtils.middleIp = middleIp;
 				InstructionUtils.mininetIp = mininetSetting.getUserIp();
-				InstructionUtils.passwd = mininetSetting.getPassword();
 				
 				RedisSetting redisSettings = data.getRedisSetting();
 				RedisService.host = redisSettings.getIp().getValue();

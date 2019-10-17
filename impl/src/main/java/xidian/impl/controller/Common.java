@@ -21,6 +21,7 @@ import java.util.concurrent.Future;
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
+import org.opendaylight.controller.md.sal.common.api.data.ReadFailedException;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.Ipv4Address;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.PortNumber;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.AlertCommon.MessageLevel;
@@ -30,6 +31,8 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.Basic
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.ControllerTypes.TypeName;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.ControllersService;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.FlowBasic.FlowModCmd;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.basic.setting.AttackConfirmUrl;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.basic.setting.ServerUrl;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.FlowModInput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.FlowModOutput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.FlowModOutputBuilder;
@@ -42,7 +45,6 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.Isome
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.SendAlertInput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.SendAlertOutput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.SendAlertOutputBuilder;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.basic.setting.AttackConfirm;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.flow.mod.input.FlowInput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.flow.mod.input.flow.input.Matches;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.get.all.switches.output.Switches;
@@ -71,6 +73,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Optional;
+import com.google.common.util.concurrent.CheckedFuture;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -96,6 +99,8 @@ public class Common implements ControllersService {
 	private final RyuflowtableService ryuflowtableService;
 	private RedisService redisService = RedisService.getInstance();
 	private final Logger LOG = LoggerFactory.getLogger(Common.class);
+	private static int flowNum = 0;
+	private static String defaultFlowName = "static_flow" + flowNum;
 
 	public Common(DataBroker dataBroker, FloodlighttopoService floodlightTopoService,
 			FloodlightflowtableService floodlightflowtableService, RyutopoService ryutopoService,
@@ -295,56 +300,55 @@ public class Common implements ControllersService {
 		MessageType type = input.getMessageType();
 		MessageLevel level = input.getMessageLevel();
 		String desc = input.getMessageDesc();
+		String abConIp = input.getAbnormalControllerIp();
 
 		Date time = new Date();
 		DateFormat bf = new SimpleDateFormat("yyyy-MM-dd E a HH:mm:ss");
 		String timeString = bf.format(time);
 		SourceType sourceType = input.getSourceType();
 		Ipv4Address sourceIp = input.getSourceIp();
-		Map<String, String> map = new HashMap<>();
-		map.put("AlertNo", String.valueOf(alertNo));
-		map.put("MessageType", type.getName());
-		map.put("MessageLevel", level.getName());
-		map.put("MessageDesc", desc);
-		map.put("MessageTime", timeString);
-		map.put("SourceType", sourceType.getName());
-		map.put("SourceIP", sourceIp.getValue());
-		// 警告消息写入到datastore
-//		WriteTransaction write = dataBroker.newWriteOnlyTransaction();
-//		InstanceIdentifier<AlertMessages> path = InstanceIdentifier.create(AlertMessage.class)
-//				.child(AlertMessages.class);
-//		AlertMessagesBuilder alertMessagesBuilder = new AlertMessagesBuilder();
-//
-//		alertMessagesBuilder.setAlertMsg(alertMsg);
-//		alertMessagesBuilder.setAlertType(alertType);
-//		alertMessagesBuilder.setCode(code);
-//		alertMessagesBuilder.setComponent(component);
-//
-//		write.merge(LogicalDatastoreType.CONFIGURATION, path, alertMessagesBuilder.build());
-//		write.submit();
-
-//		map.put("alertMsg", alertMsg);
-//		map.put("alertType", alertType);
-//		map.put("code", code.toString());
-//		map.put("component", component.getName());
-//		map.put("time", bf.format(time));
-		Gson gson = new Gson();
-		// 警告消息发送给用户服务平台
-		String postJson = gson.toJson(map);
 		ReadOnlyTransaction read = dataBroker.newReadOnlyTransaction();
-		InstanceIdentifier<AttackConfirm> path = InstanceIdentifier.create(BasicSetting.class)
-				.child(AttackConfirm.class);
+
+		InstanceIdentifier<BasicSetting> pathBasic = InstanceIdentifier.create(BasicSetting.class);
+		InstanceIdentifier<AttackConfirmUrl> pathAttack = InstanceIdentifier.create(BasicSetting.class)
+				.child(AttackConfirmUrl.class);
+		InstanceIdentifier<ServerUrl> pathServer = InstanceIdentifier.create(BasicSetting.class).child(ServerUrl.class);
+
 		try {
-			Optional<AttackConfirm> op = read.read(LogicalDatastoreType.CONFIGURATION, path).get();
-			if (op.isPresent()) {
-				String url = op.get().getUrl();
+			Optional<BasicSetting> opBasic = read.read(LogicalDatastoreType.CONFIGURATION, pathBasic).get();
+			Optional<AttackConfirmUrl> opAttack = read.read(LogicalDatastoreType.CONFIGURATION, pathAttack).get();
+			Optional<ServerUrl> opServer = read.read(LogicalDatastoreType.CONFIGURATION, pathServer).get();
+
+			Map<String, String> map = new HashMap<>();
+
+			// map.put("MiddleIp", opBasic.get().getMiddleIp().getValue());
+			map.put("AlertNo", String.valueOf(alertNo));
+			map.put("MessageType", type.getName());
+			map.put("MessageLevel", level.getName());
+			map.put("MessageDesc", desc);
+			map.put("MessageTime", timeString);
+			map.put("SourceType", sourceType.getName());
+			map.put("SourceIP", sourceIp.getValue());
+			map.put("AbConIP", abConIp);
+
+			Gson gson = new Gson();
+			// 警告消息发送给用户服务平台
+			String postJson = gson.toJson(map);
+
+			if (opAttack.isPresent()) {
+				String url = opAttack.get().getAttackConfirmSettingUrl();
 				String response = HttpUtils.sendHttpPostJson(url, postJson);
+				LOG.info("Send alert:" + postJson + " to attack confirm system");
+			}
+			if (opServer.isPresent()) {
+				String url2 = opServer.get().getServerSettingUrl();
+				String response2 = HttpUtils.sendHttpPostJson(url2, postJson);
+				LOG.info("Send alert:" + postJson + " to user service system");
 			}
 		} catch (InterruptedException | ExecutionException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		LOG.info("Send alert:" + postJson + " to user service system");
 		return RpcResultBuilder.success(new SendAlertOutputBuilder().setResult(true).build()).buildFuture();
 	}
 
@@ -375,13 +379,12 @@ public class Common implements ControllersService {
 
 	private String floodlightFlowMod(RedisController redisController, FlowModInput input) {
 		FlowInput flowInput = input.getFlowInput();
-		String dpid = "";
-		if (input.getDpid() != null) {
-			dpid = DpidUtils.getIntStringValueFromDpid(input.getDpid());
+		if (input.getDpid() == null) {
+			return "fail";
 		}
 
 		Map<String, String> flow = new HashMap<String, String>();
-		flow.put("switch", dpid);
+		flow.put("switch", input.getDpid().getValue());
 		if (flowInput != null) {
 			if (flowInput.getPriority() != null)
 				flow.put("priority", flowInput.getPriority().toString());
@@ -391,6 +394,12 @@ public class Common implements ControllersService {
 				flow.put("hard_timeout", flowInput.getHardTimeout().toString());
 			if (flowInput.getTableId() != null)
 				flow.put("table", flowInput.getTableId().toString());
+			if (flowInput.getFlowName() != null) {
+				flow.put("name", flowInput.getFlowName());
+			} else {
+				flow.put("name", "flow_id"+flowNum);
+				flowNum++;
+			}
 		}
 
 		Matches matchInput = flowInput.getMatches();
@@ -411,8 +420,9 @@ public class Common implements ControllersService {
 		flow.put("eth_type", "0x0800");
 		flow.put("active", "true");
 		flow.put("ip_proto", "0x06");
+		String outputAction = "output="+flowInput.getOutPutPort();
 		if (flowInput.getOutPutPort() != null)
-			flow.put("actions", "output=" + flowInput.getOutPutPort());
+			flow.put("actions", outputAction);
 
 		FlowModCmd cmd = flowInput.getFlowModCmd();
 		String postJson = new Gson().toJson(flow);
@@ -429,7 +439,7 @@ public class Common implements ControllersService {
 
 			// 暂时先全部删除
 			url = HttpUtils.getBasicURL(redisController.getIp().getValue(), redisController.getPort().getValue(),
-					FloodlightUrls.DELETE_ALL_FLOW.replace("{switch-id}", dpid));
+					FloodlightUrls.DELETE_ALL_FLOW.replace("{switch-id}", input.getDpid().getValue()));
 //			ret = HttpUtils.sendHttpPostJson(url, postJson);
 			ret = HttpUtils.sendHttpGet(url);
 			break;
@@ -508,6 +518,5 @@ public class Common implements ControllersService {
 			ret = "success";
 		return ret;
 	}
-
 
 }
