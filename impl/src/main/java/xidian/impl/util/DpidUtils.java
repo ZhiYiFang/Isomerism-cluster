@@ -43,6 +43,12 @@ public class DpidUtils {
 		}
 		return sb.toString();
 	}
+
+	public static String getOdlSwFromDpid(String Dpid) {
+		String hexToDex = Integer.toString(Integer.parseInt(Dpid.replaceAll(":","").replaceAll("^(0+)",""),16));
+		String datapathid = "openflow:"+hexToDex;
+		return datapathid;
+	}
 	
 	public static String getDpidFromInt(int dpid) {
 		char[] chars = String.format("%016x", Integer.valueOf(dpid)).toCharArray();
@@ -66,5 +72,11 @@ public class DpidUtils {
 			}
 		}
 		return sb.toString();
+	}
+
+	public static void main(String[] args) {
+		//String sw = getOdlSwFromDpid("00:00:00:00:00:00:00:0a");
+		String src = getDpidFromOdlSw("openflow:10:2");
+		System.out.println(src);
 	}
 }

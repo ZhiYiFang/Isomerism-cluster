@@ -30,6 +30,13 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.data.
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.data.plane.link.DataPlaneLinksBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.isomerism.IsomerismControllers;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.isomerism.IsomerismControllers.ControllerStatus;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.opendaylighttopo.rev200301.OpendaylighttopoService;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.opendaylighttopo.rev200301.GetOpendaylightSwitchesInputBuilder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.opendaylighttopo.rev200301.GetOpendaylightSwitchesOutput;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.opendaylighttopo.rev200301.GetOpendaylightSwitchPortInputBuilder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.opendaylighttopo.rev200301.GetOpendaylightSwitchPortOutput;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.opendaylighttopo.rev200301.GetOpendaylightLinksInputBuilder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.opendaylighttopo.rev200301.GetOpendaylightLinksOutput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.floodlighttopo.rev190515.FloodlighttopoService;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.floodlighttopo.rev190515.GetFloodlightLinksInputBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.floodlighttopo.rev190515.GetFloodlightLinksOutput;
@@ -76,16 +83,18 @@ public class TopoTask extends Thread {
 	private DataBroker dataBroker;
 	private FloodlighttopoService floodlighttopoService;
 	private RyutopoService ryutopoService;
+	private OpendaylighttopoService opendaylighttopoService;
 	private JsonParser jsonParser;
 	private RedisService redisService;
 	private Set<String> edgeSwitches;
 	Map<String, String> switchToController;
 	private Logger LOG = LoggerFactory.getLogger(TopoTask.class);
 
-	public TopoTask(DataBroker dataBroker, FloodlighttopoService floodlighttopoService, RyutopoService ryutopoService) {
+	public TopoTask(DataBroker dataBroker, FloodlighttopoService floodlighttopoService, RyutopoService ryutopoService,OpendaylighttopoService opendaylighttopoService) {
 		this.dataBroker = dataBroker;
 		this.floodlighttopoService = floodlighttopoService;
 		this.ryutopoService = ryutopoService;
+		this.opendaylighttopoService = opendaylighttopoService;
 		this.jsonParser = new JsonParser();
 		this.redisService = RedisService.getInstance();
 	}
@@ -116,22 +125,26 @@ public class TopoTask extends Thread {
 					}
 					TypeName type = controller.getTypeName();
 					switch (type) {
-					case Agile:
+						case Agile:
+							break;
+						case Apic:
+							break;
+						case Floodlight:
+							linkFrame = getFloodlightLinksFrame(controller);
+							switchWithPortFrame = getFloodlightPortsFrame(controller);
 						break;
-					case Apic:
-						break;
-					case Floodlight:
-						linkFrame = getFloodlightLinksFrame(controller);
-						switchWithPortFrame = getFloodlightPortsFrame(controller);
-						break;
-					case Ryu:
-						linkFrame = getRyuLinksFrame(controller);
-						switchWithPortFrame = getRyuPortsFrame(controller);
-						break;
-					case Vcf:
-						break;
-					default:
-						break;
+						case Ryu:
+							linkFrame = getRyuLinksFrame(controller);
+							switchWithPortFrame = getRyuPortsFrame(controller);
+							break;
+						case Opendaylight:
+							linkFrame = getOpendaylightLinksFrame(controller);
+							switchWithPortFrame = getOpendaylightPortsFrame(controller);
+							break;
+						case Vcf:
+							break;
+						default:
+							break;
 					}
 					linkFrames.put(controller.getIp().getValue(), linkFrame);
 					controllerIpToRedis.put(controller.getIp().getValue(),
@@ -448,6 +461,94 @@ public class TopoTask extends Thread {
 		return frame;
 	}
 
+	private SwitchWithPortFrame getOpendaylightPortsFrame(IsomerismControllers controller) {
+
+		SwitchWithPortFrame frame = new SwitchWithPortFrame(controller.getIp().getValue());
+		List<SwitchWithPorts> switchWithPorts = new ArrayList<>();
+		GetOpendaylightSwitchesInputBuilder input = new GetOpendaylightSwitchesInputBuilder();
+		input.setIp(controller.getIp());
+		input.setPort(controller.getPort());
+		GetOpendaylightSwitchesOutput result = null;
+		try {
+			result = opendaylighttopoService.getOpendaylightSwitches(input.build()).get().getResult();
+			String jsonString = result.getResult();
+			JsonArray jsonArray = jsonParser.parse(jsonString).getAsJsonArray();
+			Iterator<JsonElement> it = jsonArray.iterator();
+			int size = jsonArray.size();
+
+			// 遍历每一个交换机
+			for (int i = 0; i < size; i++) {
+				JsonElement ele = jsonArray.get(i);
+				String switchDpid = DpidUtils.getDpidFromOdlSw(ele.getAsJsonObject().get("id").getAsString());
+				GetOpendaylightSwitchPortInputBuilder inputBuilder = new GetOpendaylightSwitchPortInputBuilder();
+				inputBuilder.setIp(controller.getIp());
+				inputBuilder.setPort(controller.getPort());
+				inputBuilder.setDpid(new DatapathId(switchDpid));
+
+				SwitchWithPorts switchPorts = new SwitchWithPorts(switchDpid);
+
+				// 获取这个交换机的端口
+				String portsJson = opendaylighttopoService.getOpendaylightSwitchPort(inputBuilder.build()).get().getResult()
+						.getResult();
+				JsonArray portsArray = jsonParser.parse(portsJson).getAsJsonArray();
+				Iterator<JsonElement> it2 = portsArray.iterator();
+				List<Integer> ports = new ArrayList<>();
+				// 遍历这个交换机的每一个端口
+				while (it2.hasNext()) {
+					JsonElement ele2 = it2.next();
+					String portString = ele2.getAsJsonObject().get("id").getAsString();
+					portString =  portString.split(":")[2];
+						if (!portString.equals("LOCAL")) {
+							ports.add(Integer.valueOf(portString));
+						}
+					}
+				switchPorts.setPorts(ports);
+				switchWithPorts.add(switchPorts);
+			}
+
+			frame.setFrames(switchWithPorts);
+
+		} catch (InterruptedException | ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return frame;
+	}
+	private LinksFrame getOpendaylightLinksFrame(IsomerismControllers controller) {
+		LinksFrame frame = new LinksFrame(controller.getIp().getValue());
+		List<Link> links = new ArrayList<>();
+		GetOpendaylightLinksInputBuilder builder = new GetOpendaylightLinksInputBuilder();
+		builder.setIp(controller.getIp());
+		builder.setPort(controller.getPort());
+		Future<RpcResult<GetOpendaylightLinksOutput>> future = opendaylighttopoService.getOpendaylightLinks(builder.build());
+		try {
+			String linkJson = future.get().getResult().getResult();
+			JsonParser Parser = new JsonParser();
+			JsonArray array = Parser.parse(linkJson).getAsJsonObject().getAsJsonObject("network-topology").getAsJsonArray("topology");
+			array = array.get(0).getAsJsonObject().getAsJsonArray("link");
+			Iterator<JsonElement> it = array.iterator();
+			while (it.hasNext()) {
+				JsonElement ele = it.next();
+				String src = ele.getAsJsonObject().getAsJsonObject("source").get("source-tp").getAsString();
+				String des = ele.getAsJsonObject().getAsJsonObject("destination").get("dest-tp").getAsString();
+				int srcPort = Integer.valueOf(src.split(":")[2]);
+				int dstPort = Integer.valueOf(des.split(":")[2]);
+				String srcSwitch = DpidUtils.getDpidFromOdlSw(src);
+				String dstSwitch = DpidUtils.getDpidFromOdlSw(des);
+				Link reverse = new Link(true, dstSwitch, dstPort, srcSwitch, srcPort);
+				if (links.contains(reverse)) {
+
+				} else {
+					links.add(new Link(true, srcSwitch, srcPort, dstSwitch, dstPort));
+				}
+			}
+			frame.setFrames(links);
+		} catch (InterruptedException | ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return frame;
+	}
 	private LinksFrame getFloodlightLinksFrame(IsomerismControllers controller) {
 		LinksFrame frame = new LinksFrame(controller.getIp().getValue());
 		List<Link> links = new ArrayList<>();

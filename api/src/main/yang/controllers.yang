@@ -47,6 +47,10 @@ module controllers {
                     value 4;
                     description "ryu controller";
                 }
+                enum "opendaylight" {
+                    value 5;
+                    description "opendaylight controller";
+                }
             }
         }
     }

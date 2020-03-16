@@ -39,14 +39,24 @@
 	</bean>
 
 	<bean id="ryuTopoImpl"
-		class="xidian.impl.controller.ryu.RyuTopoImpl"></bean>
+		class="xidian.impl.controller.ryu.RyuTopoImpl">
+	</bean>
 	<bean id="floodlightTopoImpl"
-		class="xidian.impl.controller.floodlight.FloodlightTopoImpl"></bean>
+		class="xidian.impl.controller.floodlight.FloodlightTopoImpl">
+	</bean>
+	<bean id="opendaylightTopoImpl"
+		  class="xidian.impl.controller.opendaylight.OpendaylightTopolmpl">
+	</bean>
 
 	<bean id="floodlightFlowTableImpl"
-		class="xidian.impl.controller.floodlight.FloodlightFlowtableImpl"></bean>
+		class="xidian.impl.controller.floodlight.FloodlightFlowtableImpl">
+	</bean>
 	<bean id="ryuFlowTableImpl"
-		class="xidian.impl.controller.ryu.RyuFlowtableImpl"></bean>
+		class="xidian.impl.controller.ryu.RyuFlowtableImpl">
+	</bean>
+	<bean id="opendaylightFlowTableImpl"
+		  class="xidian.impl.controller.opendaylight.OpendaylightFlowtablelmpl">
+	</bean>
 
 	<bean id="commonImpl" class="xidian.impl.controller.Common">
 		<argument ref="dataBroker" />
@@ -54,6 +64,8 @@
 		<argument ref="floodlightFlowTableImpl" />
 		<argument ref="ryuTopoImpl" />
 		<argument ref="ryuFlowTableImpl" />
+		<argument ref="opendaylightTopoImpl" />
+		<argument ref="opendaylightFlowTableImpl" />
 	</bean>
 	<bean id="floodlightACLImpl" class="xidian.impl.controller.floodlight.FloodlightACLImpl">
 	</bean>
@@ -64,6 +76,7 @@
 
 	<odl:rpc-implementation ref="ryuTopoImpl" />
 	<odl:rpc-implementation ref="floodlightTopoImpl" />
+	<odl:rpc-implementation ref="opendaylightTopoImpl" />
 	<odl:rpc-implementation ref="authImpl" />
 	<odl:rpc-implementation
 		ref="connectivityTestImpl" />
@@ -74,6 +87,7 @@
 	<odl:rpc-implementation
 		ref="floodlightFlowTableImpl" />
 	<odl:rpc-implementation ref="ryuFlowTableImpl" />
+	<odl:rpc-implementation ref="opendaylightFlowTableImpl" />
 	<odl:rpc-implementation ref="commonImpl" />
 	<odl:rpc-implementation ref="floodlightACLImpl"/>
 </blueprint>

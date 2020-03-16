@@ -11,11 +11,17 @@ import java.io.IOException;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.List;
 
+
+import com.google.gson.*;
+import org.apache.http.Header;
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpHeaders;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpDelete;
@@ -29,6 +35,7 @@ import org.apache.http.conn.socket.PlainConnectionSocketFactory;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.conn.ssl.SSLContextBuilder;
 import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
+import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.DefaultHttpRequestRetryHandler;
@@ -36,7 +43,7 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.util.EntityUtils;
 
-import com.google.gson.Gson;
+import com.google.gson.JsonParser;
 
 public class HttpUtils {
 
@@ -223,10 +230,10 @@ public class HttpUtils {
 			// System.out.println(ContentType.getOrDefault(response.getEntity()).getMimeType());
 
 			// 判断响应状态
-//			if (response.getStatusLine().getStatusCode() >= 300) {
-//				throw new Exception(
-//						"HTTP Request is not success, Response code is " + response.getStatusLine().getStatusCode());
-//			}
+			//if (response.getStatusLine().getStatusCode() >= 300) {
+			//	throw new Exception(
+			//			"HTTP Request is not success, Response code is " + response.getStatusLine().getStatusCode());
+			//}
 
 			responseContent = EntityUtils.toString(entity, CHARSET_UTF_8);
 			EntityUtils.consume(entity);
@@ -261,7 +268,7 @@ public class HttpUtils {
 			response = httpClient.execute(httpDelete);
 			// 得到响应实例
 			HttpEntity entity = response.getEntity();
-
+			
 			// 可以获得响应头
 			// Header[] headers = response.getHeaders(HttpHeaders.CONTENT_TYPE);
 			// for (Header header : headers) {
@@ -492,11 +499,72 @@ public class HttpUtils {
 		return parameterBuffer.toString();
 	}
 	public static void main(String[] args) {
-		System.out.println(123);
-		Map<String, String> map = new HashMap<String, String>();
-		map.put("key1", "123");
-		String response = HttpUtils.sendHttpPostJson("http://172.31.10.29:8080/midwarelog", new Gson().toJson(map));
-		System.out.println(response);
+		//System.out.println(123);
+		String url = "http://192.168.159.132:8181/restconf/operational/network-topology:network-topology";
+		String response = HttpUtils.sendHttpGet(url);
+
+		List<Map> list =new ArrayList<>();
+		Map<String, Object> result = new HashMap<String, Object>();
+		Map<String, Object> flow = new HashMap<String, Object>();
+		//Map<String, Object> match = new HashMap<String, Object>();
+		Map<String, Object> eth = new HashMap<String, Object>();
+		Map<String, Object> ethmatch = new HashMap<String, Object>();
+		Map<String, String> eth_dst = new HashMap<String, String>();
+		Map<String, String> eth_src = new HashMap<String, String>();
+		Map<String, String> type = new HashMap<String, String>();
+		eth_dst.put("address","00:01");
+		eth_src.put("address","00:02");
+		type.put("type","0x0800");
+		eth.put("ethernet-source",eth_src);
+		eth.put("ethernet-destination",eth_dst);
+		eth.put("ethernet-type",type);
+		ethmatch.put("ethernet-match",eth);
+		ethmatch.put("ipv4-source","10.0");
+		ethmatch.put("ipv4-destination","10.0");
+		ethmatch.put("tcp-source-port","1");
+		ethmatch.put("tcp-destination-port","2");
+
+		//flow.put("match",ethmatch);
+		//flow.put("id","1");
+		//flow.put("priority","0");
+		//flow.put("idle-timeout","0");
+		//flow.put("hard-timeout","0");
+		//flow.put("table_id","0");
+
+
+
+		List<Map> list1 =new ArrayList<>();
+		List<Map> list2 =new ArrayList<>();
+		Map<String, String> out_action = new HashMap<String, String>();
+		Map<String, Object> action = new HashMap<String, Object>();
+		Map<String, Object> apply_actions = new HashMap<String, Object>();
+		Map<String, Object> instr = new HashMap<String, Object>();
+		Map<String, Object> instrs = new HashMap<String, Object>();
+		out_action.put("output-node-connector","1");
+		out_action.put("max-length","65535");
+		action.put("output-action",out_action);
+		action.put("order","0");
+		list1.add(action);
+		apply_actions.put("action",list1);
+		instr.put("order","0");
+		instr.put("apply-actions",apply_actions);
+		list2.add(instr);
+		instrs.put("instruction",list2);
+
+		flow.put("instructions",instrs);
+		list.add(flow);
+		result.put("flow",list);
+
+		//JsonParser Parser = new JsonParser();
+		//JsonArray array = Parser.parse(response).getAsJsonObject().getAsJsonObject("network-topology").getAsJsonArray("topology");
+		//array = array.get(0).getAsJsonObject().getAsJsonArray("link");
+
+		//Map<String, String> map = new HashMap<String, String>();
+		//map.put("key1", "123");
+		//String response = HttpUtils.sendHttpPostJson("http://172.31.10.29:8080/midwarelog", new Gson().toJson(map));
+
+		String matchJson = new Gson().toJson(result);
+		System.out.println(matchJson);
 	}
 
 }

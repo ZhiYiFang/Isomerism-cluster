@@ -27,6 +27,9 @@
 	<odl:rpc-service id="ryutopoService"
 		interface="org.opendaylight.yang.gen.v1.urn.opendaylight.ryutopo.rev190515.RyutopoService" />
 
+	<odl:rpc-service id="opendaylighttopoService"
+					 interface="org.opendaylight.yang.gen.v1.urn.opendaylight.opendaylighttopo.rev200301.OpendaylighttopoService" />
+
 	<odl:rpc-service id="controllerService"
 		interface="org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.ControllersService" />
 
@@ -52,6 +55,7 @@
 		<argument ref="dataBroker" />
 		<argument ref="floodlighttopoService" />
 		<argument ref="ryutopoService" />
+		<argument ref="opendaylighttopoService" />
 	</bean>
 
 	<bean id="controllerDownListener"

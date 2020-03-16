@@ -19,6 +19,7 @@ import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.Isomerism;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.floodlighttopo.rev190515.FloodlighttopoService;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.ryutopo.rev190515.RyutopoService;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.opendaylighttopo.rev200301.OpendaylighttopoService;
 import org.opendaylight.yangtools.concepts.ListenerRegistration;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 
@@ -29,13 +30,15 @@ public class TopologyChangeListener implements DataTreeChangeListener<Isomerism>
 	private final DataBroker dataBroker;
 	private final FloodlighttopoService floodlighttopoService;
 	private final RyutopoService ryutopoService;
+	private final OpendaylighttopoService opendaylighttopoService;
 	ListenerRegistration<TopologyChangeListener> listenerReg;
 
 	public TopologyChangeListener(DataBroker dataBroker, FloodlighttopoService floodlighttopoService,
-			RyutopoService ryutopoService) {
+			RyutopoService ryutopoService,OpendaylighttopoService opendaylighttopoService) {
 		this.dataBroker = dataBroker;
 		this.floodlighttopoService = floodlighttopoService;
 		this.ryutopoService = ryutopoService;
+		this.opendaylighttopoService = opendaylighttopoService;
 	}
 
 	public void init() {
@@ -54,11 +57,11 @@ public class TopologyChangeListener implements DataTreeChangeListener<Isomerism>
 			final DataObjectModification<Isomerism> rootNode = change.getRootNode();
 			switch (rootNode.getModificationType()) {
 			case SUBTREE_MODIFIED:
-				new TopoTask(dataBroker, floodlighttopoService, ryutopoService).start();;
+				new TopoTask(dataBroker, floodlighttopoService, ryutopoService, opendaylighttopoService).start();;
 				break;
 			case WRITE:
 				// 刚创建的时候需要汇聚一下拓扑
-				TopoTask topoTask = new TopoTask(dataBroker, floodlighttopoService, ryutopoService);
+				TopoTask topoTask = new TopoTask(dataBroker, floodlighttopoService, ryutopoService, opendaylighttopoService);
 				topoTask.start();
 				break;
 			case DELETE:

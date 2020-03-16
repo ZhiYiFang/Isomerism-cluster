@@ -58,6 +58,10 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.floodlighttopo.rev190515.Ge
 import org.opendaylight.yang.gen.v1.urn.opendaylight.floodlighttopo.rev190515.GetFloodlightSwitchesOutput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.floodlighttopo.rev190515.GetFloodligtSwitchPortDescInputBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.floodlighttopo.rev190515.GetFloodligtSwitchPortInputBuilder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.opendaylighttopo.rev200301.*;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.opendaylightflowtable.rev200301.*;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.opendaylighttopo.rev200301.OpendaylighttopoService;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.opendaylighttopo.rev200301.GetOpendaylightSwitchesInputBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.guard.rev150105.DatapathId;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.ryuflowtable.rev190602.GetRyuSwitchFlowtableInputBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.ryuflowtable.rev190602.RyuflowtableService;
@@ -75,6 +79,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Optional;
 import com.google.common.util.concurrent.CheckedFuture;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
@@ -97,6 +102,8 @@ public class Common implements ControllersService {
 	private final FloodlightflowtableService floodlightflowtableService;
 	private final RyutopoService ryutopoService;
 	private final RyuflowtableService ryuflowtableService;
+	private final OpendaylighttopoService opendaylighttopoService;
+	private final OpendaylightflowtableService opendaylightflowtableService;
 	private RedisService redisService = RedisService.getInstance();
 	private final Logger LOG = LoggerFactory.getLogger(Common.class);
 	private static int flowNum = 0;
@@ -104,13 +111,16 @@ public class Common implements ControllersService {
 
 	public Common(DataBroker dataBroker, FloodlighttopoService floodlightTopoService,
 			FloodlightflowtableService floodlightflowtableService, RyutopoService ryutopoService,
-			RyuflowtableService ryuflowtableService) {
+			RyuflowtableService ryuflowtableService, OpendaylighttopoService opendaylighttopoService,
+				  OpendaylightflowtableService opendaylightflowtableService) {
 		super();
 		this.dataBroker = dataBroker;
 		this.floodlightTopoService = floodlightTopoService;
 		this.floodlightflowtableService = floodlightflowtableService;
 		this.ryutopoService = ryutopoService;
 		this.ryuflowtableService = ryuflowtableService;
+		this.opendaylighttopoService = opendaylighttopoService;
+		this.opendaylightflowtableService = opendaylightflowtableService;
 	}
 
 	@Override
@@ -132,20 +142,23 @@ public class Common implements ControllersService {
 					Ipv4Address ip = controller.getIp();
 					PortNumber port = controller.getPort();
 					switch (type) {
-					case Agile:
-						break;
-					case Apic:
-						break;
-					case Floodlight:
-						ret.addAll(getFloodlightSwitches(ip, port));
-						break;
-					case Ryu:
-						ret.addAll(getRyuSwitches(ip, port));
-						break;
-					case Vcf:
-						break;
-					default:
-						break;
+						case Agile:
+							break;
+						case Apic:
+							break;
+						case Floodlight:
+							ret.addAll(getFloodlightSwitches(ip, port));
+							break;
+						case Ryu:
+							ret.addAll(getRyuSwitches(ip, port));
+							break;
+						case Opendaylight:
+							ret.addAll(getOpendaylightSwitches(ip, port));
+							break;
+						case Vcf:
+							break;
+						default:
+							break;
 					}
 				}
 			}
@@ -225,6 +238,46 @@ public class Common implements ControllersService {
 				input2.setIp(ip);
 				input2.setPort(port);
 				String portDescJson = floodlightTopoService.getFloodligtSwitchPortDesc(input2.build()).get().getResult()
+						.getResult();
+				switchesBuilder.setPortDesc(portDescJson);
+				ret.add(switchesBuilder.build());
+			}
+		} catch (InterruptedException | ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return ret;
+	}
+
+	private List<Switches> getOpendaylightSwitches(Ipv4Address ip, PortNumber port) {
+		GetOpendaylightSwitchesInputBuilder builder = new GetOpendaylightSwitchesInputBuilder();
+		builder.setIp(ip);
+		builder.setPort(port);
+		GetOpendaylightSwitchesOutput result = null;
+		List<Switches> ret = new ArrayList<>();
+		try {
+			result = opendaylighttopoService.getOpendaylightSwitches(builder.build()).get().getResult();
+			String json = result.getResult();
+			JsonParser parser = new JsonParser();
+			JsonArray jsonArray = parser.parse(json).getAsJsonArray();
+			Iterator<JsonElement> it = jsonArray.iterator();
+			while (it.hasNext()) {
+				JsonElement ele = it.next();
+				SwitchesBuilder switchesBuilder = new SwitchesBuilder();
+				DatapathId dpid = new DatapathId(DpidUtils.getDpidFromOdlSw(ele.getAsJsonObject().get("id").getAsString()));
+				switchesBuilder.setDpid(dpid);
+				GetOpendaylightSwitchPortInputBuilder input = new GetOpendaylightSwitchPortInputBuilder();
+				input.setDpid(dpid);
+				input.setIp(ip);
+				input.setPort(port);
+				String portJson = opendaylighttopoService.getOpendaylightSwitchPort(input.build()).get().getResult()
+						.getResult();
+				switchesBuilder.setPort(portJson);
+				GetOpendaylightSwitchPortDescInputBuilder input2 = new GetOpendaylightSwitchPortDescInputBuilder();
+				input2.setDpid(dpid);
+				input2.setIp(ip);
+				input2.setPort(port);
+				String portDescJson = opendaylighttopoService.getOpendaylightSwitchPortDesc(input2.build()).get().getResult()
 						.getResult();
 				switchesBuilder.setPortDesc(portDescJson);
 				ret.add(switchesBuilder.build());
@@ -375,6 +428,44 @@ public class Common implements ControllersService {
 			break;
 		}
 		return RpcResultBuilder.success(new FlowModOutputBuilder().setResult(ret).build()).buildFuture();
+	}
+	private String opendaylightFlowMod(RedisController redisController, FlowModInput input) {
+		String ret = "";
+		FlowInput flowInput = input.getFlowInput();
+		if (input.getDpid() == null) {
+			return "fail";
+		}
+
+		Map<String, String> flow = new HashMap<String, String>();
+		if (flowInput != null) {
+			if (flowInput.getPriority() != null)
+				flow.put("priority", flowInput.getPriority().toString());
+			if (flowInput.getIdleTimeout() != null)
+				flow.put("idle_timeout", flowInput.getIdleTimeout().toString());
+			if (flowInput.getHardTimeout() != null)
+				flow.put("hard_timeout", flowInput.getHardTimeout().toString());
+			if (flowInput.getTableId() != null)
+				flow.put("table_id", flowInput.getTableId().toString());
+			flow.put("id","1");
+		}
+
+		Matches matchInput = flowInput.getMatches();
+		Map<String, String> match = new HashMap<String, String>();
+		if (matchInput != null) {
+			if (matchInput.getEthSrc() != null)
+				match.put("eth_src", matchInput.getEthSrc().getValue());
+			if (matchInput.getEthDst() != null)
+				match.put("eth_dst", matchInput.getEthDst().getValue());
+			if (matchInput.getIpv4Src() != null)
+				match.put("ipv4_src", matchInput.getIpv4Src().getValue());
+			if (matchInput.getIpv4Dst() != null)
+				flow.put("ipv4_dst", matchInput.getIpv4Dst().getValue());
+			if (matchInput.getSrcPort() != null)
+				flow.put("tcp_src", matchInput.getSrcPort().getValue().toString());
+			if (matchInput.getDstPort() != null)
+				flow.put("tcp_dst", matchInput.getDstPort().getValue().toString());
+		}
+		return ret;
 	}
 
 	private String floodlightFlowMod(RedisController redisController, FlowModInput input) {
