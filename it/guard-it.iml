@@ -1,0 +1,2983 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+<module version="4" relativePaths="false" type="JAVA_MODULE"> 
+  <component name="NewModuleRootManager"> 
+    <exclude-output/>  
+    <orderEntry type="inheritedJdk"/>  
+    <!-- output url="file://$$MODULE_DIR$$/${maven.build.dest}"/ -->  
+    <!-- output-test url="file://$$MODULE_DIR$$/${maven.test.dest}"/ -->  
+    <content url="file://$MODULE_DIR$"> 
+      <!-- sourceFolder url="file://$$MODULE_DIR$$/${pom.build.sourceDirectory}" isTestSource="false"/ -->  
+      <!-- sourceFolder url="file://$$MODULE_DIR$$/${pom.build.testSourceDirectory}" isTestSource="true"/ -->  
+      <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true"/>
+      <excludeFolder url="file://$MODULE_DIR$/target"/>
+    </content>  
+    <orderEntry type="sourceFolder" forTests="false"/>  
+    <!-- Next include each dependency:
+      <orderEntry type="module" module-name="${dep.artifactId}"/>
+      <orderEntry type="module-library">
+        <library name="${dep.artifactId}">
+          <CLASSES>
+            <root url="jar://${lib.path}!/"/>
+          </CLASSES>
+          <JAVADOC/>
+          <SOURCES/>
+        </library>
+      </orderEntry>
+     -->  
+    <output url="file://$MODULE_DIR$/target/classes"/>
+    <output-test url="file://$MODULE_DIR$/target/test-classes"/>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/yangtools/yang-common/1.1.0-Carbon/yang-common-1.1.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/com/google/guava/guava/18.0/guava-18.0.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/yangtools/concepts/1.1.0-Carbon/concepts-1.1.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/yangtools/object-cache-api/1.1.0-Carbon/object-cache-api-1.1.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/ops4j/pax/exam/pax-exam/4.10.0/pax-exam-4.10.0.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/ops4j/base/ops4j-base-lang/1.5.0/ops4j-base-lang-1.5.0.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/ops4j/base/ops4j-base-store/1.5.0/ops4j-base-store-1.5.0.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/slf4j/slf4j-api/1.7.21/slf4j-api-1.7.21.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/ops4j/base/ops4j-base-io/1.5.0/ops4j-base-io-1.5.0.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/ops4j/base/ops4j-base-monitors/1.5.0/ops4j-base-monitors-1.5.0.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/ops4j/base/ops4j-base-util-property/1.5.0/ops4j-base-util-property-1.5.0.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/ops4j/pax/url/pax-url-aether/2.5.1/pax-url-aether-2.5.1.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/ops4j/pax/url/pax-url-aether-support/2.5.1/pax-url-aether-support-2.5.1.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/eclipse/aether/aether-impl/1.0.2.v20150114/aether-impl-1.0.2.v20150114.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/eclipse/aether/aether-api/1.0.2.v20150114/aether-api-1.0.2.v20150114.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/eclipse/aether/aether-spi/1.0.2.v20150114/aether-spi-1.0.2.v20150114.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/eclipse/aether/aether-util/1.0.2.v20150114/aether-util-1.0.2.v20150114.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/slf4j/jcl-over-slf4j/1.7.21/jcl-over-slf4j-1.7.21.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/javax/inject/javax.inject/1/javax.inject-1.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/ops4j/pax/exam/pax-exam-container-karaf/4.10.0/pax-exam-container-karaf-4.10.0.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/ops4j/pax/exam/pax-exam-container-remote/4.10.0/pax-exam-container-remote-4.10.0.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/ops4j/pax/exam/pax-exam-container-rbc-client/4.10.0/pax-exam-container-rbc-client-4.10.0.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/ops4j/pax/exam/pax-exam-container-rbc/4.10.0/pax-exam-container-rbc-4.10.0.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/ops4j/pax/exam/pax-exam-spi/4.10.0/pax-exam-spi-4.10.0.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/ops4j/base/ops4j-base-spi/1.5.0/ops4j-base-spi-1.5.0.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/ops4j/pax/tinybundles/tinybundles/2.1.1/tinybundles-2.1.1.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/biz/aQute/bnd/bndlib/2.4.0/bndlib-2.4.0.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/ops4j/pax/swissbox/pax-swissbox-core/1.8.2/pax-swissbox-core-1.8.2.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/ops4j/pax/swissbox/pax-swissbox-lifecycle/1.8.2/pax-swissbox-lifecycle-1.8.2.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/ops4j/base/ops4j-base-net/1.5.0/ops4j-base-net-1.5.0.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/apache/commons/commons-compress/1.4.1/commons-compress-1.4.1.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/tukaani/xz/1.0/xz-1.0.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/ops4j/pax/swissbox/pax-swissbox-framework/1.8.2/pax-swissbox-framework-1.8.2.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/ops4j/pax/swissbox/pax-swissbox-tracker/1.8.2/pax-swissbox-tracker-1.8.2.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/ops4j/base/ops4j-base-exec/1.5.0/ops4j-base-exec-1.5.0.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/commons-io/commons-io/2.5/commons-io-2.5.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/apache/felix/org.apache.felix.configadmin/1.8.4/org.apache.felix.configadmin-1.8.4.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/slf4j/slf4j-simple/1.7.21/slf4j-simple-1.7.21.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/osgi/org.osgi.core/5.0.0/org.osgi.core-5.0.0.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/com/google/code/findbugs/annotations/3.0.0/annotations-3.0.0.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/eclipse/jdt/org.eclipse.jdt.annotation/2.0.0/org.eclipse.jdt.annotation-2.0.0.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/apache/karaf/features/org.apache.karaf.features.core/3.0.8/org.apache.karaf.features.core-3.0.8.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/junit/junit/4.11/junit-4.11.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/mockito/mockito-core/1.10.19/mockito-core-1.10.19.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/objenesis/objenesis/2.1/objenesis-2.1.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/controller/sal-binding-config/1.5.0-Carbon/sal-binding-config-1.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/controller/config-api/0.6.0-Carbon/config-api-0.6.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/mdsal/yang-binding/0.10.0-Carbon/yang-binding-0.10.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/yangtools/util/1.1.0-Carbon/util-1.1.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/com/github/romix/java-concurrent-hash-trie-map/0.2.23-ODL/java-concurrent-hash-trie-map-0.2.23-ODL.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/controller/sal-binding-api/1.5.0-Carbon/sal-binding-api-1.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/controller/sal-common-api/1.5.0-Carbon/sal-common-api-1.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/yangtools/yang-data-api/1.1.0-Carbon/yang-data-api-1.1.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/yangtools/yang-model-api/1.1.0-Carbon/yang-model-api-1.1.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/controller/sal-dom-config/1.5.0-Carbon/sal-dom-config-1.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/controller/sal-core-api/1.5.0-Carbon/sal-core-api-1.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/mdsal/mdsal-dom-api/2.2.0-Carbon/mdsal-dom-api-2.2.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/mdsal/mdsal-common-api/2.2.0-Carbon/mdsal-common-api-2.2.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/controller/sal-core-spi/1.5.0-Carbon/sal-core-spi-1.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/mdsal/mdsal-singleton-dom-impl/2.2.0-Carbon/mdsal-singleton-dom-impl-2.2.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/mdsal/mdsal-eos-dom-api/2.2.0-Carbon/mdsal-eos-dom-api-2.2.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/mdsal/mdsal-eos-common-api/2.2.0-Carbon/mdsal-eos-common-api-2.2.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/mdsal/mdsal-singleton-common-api/2.2.0-Carbon/mdsal-singleton-common-api-2.2.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/controller/sal-binding-broker-impl/1.5.0-Carbon/sal-binding-broker-impl-1.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/javassist/javassist/3.20.0-GA/javassist-3.20.0-GA.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/controller/sal-binding-util/1.5.0-Carbon/sal-binding-util-1.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/controller/sal-broker-impl/1.5.0-Carbon/sal-broker-impl-1.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/com/lmax/disruptor/3.3.6/disruptor-3.3.6.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/mdsal/mdsal-dom-broker/2.2.0-Carbon/mdsal-dom-broker-2.2.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/mdsal/mdsal-dom-spi/2.2.0-Carbon/mdsal-dom-spi-2.2.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/mdsal/mdsal-dom-inmemory-datastore/2.2.0-Carbon/mdsal-dom-inmemory-datastore-2.2.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/yangtools/yang-data-impl/1.1.0-Carbon/yang-data-impl-1.1.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/yangtools/yang-data-util/1.1.0-Carbon/yang-data-util-1.1.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/yangtools/yang-model-util/1.1.0-Carbon/yang-model-util-1.1.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/antlr/antlr4-runtime/4.5.3/antlr4-runtime-4.5.3.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/yangtools/yang-parser-impl/1.1.0-Carbon/yang-parser-impl-1.1.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/yangtools/yang-parser-api/1.1.0-Carbon/yang-parser-api-1.1.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/controller/sal-common-impl/1.5.0-Carbon/sal-common-impl-1.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/controller/sal-common-util/1.5.0-Carbon/sal-common-util-1.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/controller/sal-inmemory-datastore/1.5.0-Carbon/sal-inmemory-datastore-1.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/mdsal/mdsal-binding-generator-impl/0.10.0-Carbon/mdsal-binding-generator-impl-0.10.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/mdsal/mdsal-binding-generator-api/0.10.0-Carbon/mdsal-binding-generator-api-0.10.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/mdsal/mdsal-binding-generator-util/0.10.0-Carbon/mdsal-binding-generator-util-0.10.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/apache/commons/commons-lang3/3.5/commons-lang3-3.5.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/mdsal/mdsal-binding-dom-codec/0.10.0-Carbon/mdsal-binding-dom-codec-0.10.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/mdsal/model/ietf-yang-types-20130715/2013.07.15.10-Carbon/ietf-yang-types-20130715-2013.07.15.10-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/mdsal/model/ietf-type-util/1.1.0-Carbon/ietf-type-util-1.1.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/com/google/code/findbugs/jsr305/3.0.0/jsr305-3.0.0.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module" module-name="guard-features"/>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/io/netty/netty-buffer/4.1.8.Final/netty-buffer-4.1.8.Final.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/io/netty/netty-common/4.1.8.Final/netty-common-4.1.8.Final.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/io/netty/netty-transport/4.1.8.Final/netty-transport-4.1.8.Final.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/io/netty/netty-resolver/4.1.8.Final/netty-resolver-4.1.8.Final.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/io/netty/netty-codec/4.1.8.Final/netty-codec-4.1.8.Final.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/io/netty/netty-codec-http/4.1.8.Final/netty-codec-http-4.1.8.Final.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/io/netty/netty-handler/4.1.8.Final/netty-handler-4.1.8.Final.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/io/netty/netty-transport-native-epoll/4.1.8.Final/netty-transport-native-epoll-4.1.8.Final-linux-x86_64.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/yangtools/yang-data-codec-gson/1.1.0-Carbon/yang-data-codec-gson-1.1.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/com/google/code/gson/gson/2.7/gson-2.7.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/yangtools/yang-data-codec-xml/1.1.0-Carbon/yang-data-codec-xml-1.1.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/yangtools/object-cache-guava/1.1.0-Carbon/object-cache-guava-1.1.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/yangtools/object-cache-noop/1.1.0-Carbon/object-cache-noop-1.1.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/yangtools/triemap/0.9.0-Carbon/triemap-0.9.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/mdsal/mdsal-eos-common-spi/2.2.0-Carbon/mdsal-eos-common-spi-2.2.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/mdsal/mdsal-eos-binding-api/2.2.0-Carbon/mdsal-eos-binding-api-2.2.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/mdsal/model/general-entity/0.10.0-Carbon/general-entity-0.10.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/mdsal/mdsal-eos-binding-adapter/2.2.0-Carbon/mdsal-eos-binding-adapter-2.2.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/mdsal/mdsal-binding-dom-adapter/2.2.0-Carbon/mdsal-binding-dom-adapter-2.2.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/mdsal/mdsal-binding-api/2.2.0-Carbon/mdsal-binding-api-2.2.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/mdsal/mdsal-binding-util/2.2.0-Carbon/mdsal-binding-util-2.2.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/mdsal/model/yang-ext/2013.09.07.10-Carbon/yang-ext-2013.09.07.10-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/mdsal/mdsal-binding2-generator-api/0.10.0-Carbon/mdsal-binding2-generator-api-0.10.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/mdsal/mdsal-binding2-spec/0.10.0-Carbon/mdsal-binding2-spec-0.10.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/mdsal/mdsal-binding2-generator-impl/0.10.0-Carbon/mdsal-binding2-generator-impl-0.10.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/mdsal/mdsal-binding2-generator-util/0.10.0-Carbon/mdsal-binding2-generator-util-0.10.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/mdsal/mdsal-binding2-util/0.10.0-Carbon/mdsal-binding2-util-0.10.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/com/typesafe/play/twirl-api_2.11/1.3.0/twirl-api_2.11-1.3.0.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/scala-lang/scala-library/2.11.8/scala-library-2.11.8.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/scala-lang/modules/scala-xml_2.11/1.0.6/scala-xml_2.11-1.0.6.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/mdsal/model/iana-afn-safi/2013.07.04.10-Carbon/iana-afn-safi-2013.07.04.10-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/mdsal/model/iana-if-type-2014-05-08/2014.05.08.10-Carbon/iana-if-type-2014-05-08-2014.05.08.10-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/mdsal/model/ietf-interfaces/2014.05.08.10-Carbon/ietf-interfaces-2014.05.08.10-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/mdsal/model/ietf-inet-types/2010.09.24.10-Carbon/ietf-inet-types-2010.09.24.10-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/mdsal/model/ietf-restconf/2013.10.19.10-Carbon/ietf-restconf-2013.10.19.10-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/mdsal/model/ietf-yang-types/2010.09.24.10-Carbon/ietf-yang-types-2010.09.24.10-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/mdsal/model/opendaylight-l2-types/2013.08.27.10-Carbon/opendaylight-l2-types-2013.08.27.10-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/mdsal/model/ietf-ted/2013.10.21.10-Carbon/ietf-ted-2013.10.21.10-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/mdsal/model/ietf-inet-types-2013-07-15/1.2.0-Carbon/ietf-inet-types-2013-07-15-1.2.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/mdsal/model/ietf-topology/2013.10.21.10-Carbon/ietf-topology-2013.10.21.10-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/mdsal/model/ietf-topology-isis/2013.10.21.10-Carbon/ietf-topology-isis-2013.10.21.10-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/mdsal/model/ietf-topology-l3-unicast-igp/2013.10.21.10-Carbon/ietf-topology-l3-unicast-igp-2013.10.21.10-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/mdsal/model/ietf-topology-ospf/2013.10.21.10-Carbon/ietf-topology-ospf-2013.10.21.10-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/mdsal/model/ietf-network-2015-06-08/1.2.0-Carbon/ietf-network-2015-06-08-1.2.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/mdsal/model/ietf-packet-fields/0.8.0-Carbon/ietf-packet-fields-0.8.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/mdsal/model/ietf-access-control-list/0.8.0-Carbon/ietf-access-control-list-0.8.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/net/java/dev/stax-utils/stax-utils/20070216/stax-utils-20070216.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/com/bea/xml/jsr173-ri/1.0/jsr173-ri-1.0.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/controller/blueprint/0.6.0-Carbon/blueprint-0.6.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/controller/config-manager-facade-xml/0.6.0-Carbon/config-manager-facade-xml-0.6.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/controller/config-util/0.6.0-Carbon/config-util-0.6.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/controller/yang-jmx-generator/0.6.0-Carbon/yang-jmx-generator-0.6.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/osgi/org.osgi.service.event/1.3.1/org.osgi.service.event-1.3.1.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/scala-lang/scala-reflect/2.11.8/scala-reflect-2.11.8.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/scala-lang/modules/scala-java8-compat_2.11/0.8.0/scala-java8-compat_2.11-0.8.0.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/com/typesafe/config/1.3.0/config-1.3.0.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/com/typesafe/akka/akka-actor_2.11/2.4.17/akka-actor_2.11-2.4.17.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/com/typesafe/akka/akka-slf4j_2.11/2.4.17/akka-slf4j_2.11-2.4.17.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/com/typesafe/akka/akka-osgi_2.11/2.4.17/akka-osgi_2.11-2.4.17.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/osgi/org.osgi.compendium/5.0.0/org.osgi.compendium-5.0.0.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/uncommons/maths/uncommons-maths/1.2.2a/uncommons-maths-1.2.2a.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/com/typesafe/akka/akka-protobuf_2.11/2.4.17/akka-protobuf_2.11-2.4.17.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/io/netty/netty/3.10.6.Final/netty-3.10.6.Final.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/com/typesafe/akka/akka-remote_2.11/2.4.17/akka-remote_2.11-2.4.17.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/com/typesafe/akka/akka-stream_2.11/2.4.17/akka-stream_2.11-2.4.17.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/reactivestreams/reactive-streams/1.0.0/reactive-streams-1.0.0.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/com/typesafe/ssl-config-core_2.11/0.2.1/ssl-config-core_2.11-0.2.1.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/scala-lang/modules/scala-parser-combinators_2.11/1.0.4/scala-parser-combinators_2.11-1.0.4.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/io/aeron/aeron-driver/1.1.0/aeron-driver-1.1.0.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/io/aeron/aeron-client/1.1.0/aeron-client-1.1.0.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/agrona/agrona/0.9.2/agrona-0.9.2.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/com/typesafe/akka/akka-cluster_2.11/2.4.17/akka-cluster_2.11-2.4.17.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/iq80/leveldb/leveldb/0.7/leveldb-0.7.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/iq80/leveldb/leveldb-api/0.7/leveldb-api-0.7.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/fusesource/leveldbjni/leveldbjni-all/1.8-odl/leveldbjni-all-1.8-odl.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/com/typesafe/akka/akka-persistence_2.11/2.4.17/akka-persistence_2.11-2.4.17.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/controller/netty-config-api/0.6.0-Carbon/netty-config-api-0.6.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/controller/shutdown-api/0.6.0-Carbon/shutdown-api-0.6.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/controller/shutdown-impl/0.6.0-Carbon/shutdown-impl-0.6.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/controller/config-manager/0.6.0-Carbon/config-manager-0.6.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/controller/config-persister-api/0.6.0-Carbon/config-persister-api-0.6.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/controller/config-persister-file-xml-adapter/0.6.0-Carbon/config-persister-file-xml-adapter-0.6.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/javax/validation/validation-api/1.1.0.Final/validation-api-1.1.0.Final.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/eclipse/persistence/org.eclipse.persistence.core/2.6.2/org.eclipse.persistence.core-2.6.2.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/eclipse/persistence/org.eclipse.persistence.asm/2.6.2/org.eclipse.persistence.asm-2.6.2.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/glassfish/javax.json/1.0.4/javax.json-1.0.4.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/eclipse/persistence/org.eclipse.persistence.moxy/2.6.2/org.eclipse.persistence.moxy-2.6.2.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/controller/config-persister-impl/0.6.0-Carbon/config-persister-impl-0.6.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/controller/config-persister-feature-adapter/0.6.0-Carbon/config-persister-feature-adapter-0.6.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/controller/config-persister-directory-xml-adapter/0.6.0-Carbon/config-persister-directory-xml-adapter-0.6.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/controller/netty-event-executor-config/0.6.0-Carbon/netty-event-executor-config-0.6.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/controller/netty-threadgroup-config/0.6.0-Carbon/netty-threadgroup-config-0.6.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/controller/netty-timer-config/0.6.0-Carbon/netty-timer-config-0.6.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/controller/threadpool-config-api/0.6.0-Carbon/threadpool-config-api-0.6.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/controller/threadpool-config-impl/0.6.0-Carbon/threadpool-config-impl-0.6.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/controller/sal-akka-raft/1.5.0-Carbon/sal-akka-raft-1.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/controller/sal-clustering-commons/1.5.0-Carbon/sal-clustering-commons-1.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/commons-lang/commons-lang/2.6/commons-lang-2.6.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/io/dropwizard/metrics/metrics-core/3.1.2/metrics-core-3.1.2.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/io/dropwizard/metrics/metrics-graphite/3.1.2/metrics-graphite-3.1.2.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/com/google/protobuf/protobuf-java/2.5.0/protobuf-java-2.5.0.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/controller/sal-karaf-xsql/1.5.0-Carbon/sal-karaf-xsql-1.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/apache/karaf/shell/org.apache.karaf.shell.console/3.0.8/org.apache.karaf.shell.console-3.0.8.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/jline/jline/2.13/jline-2.13.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/fusesource/jansi/jansi/1.11/jansi-1.11.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/apache/karaf/jaas/org.apache.karaf.jaas.modules/3.0.8/org.apache.karaf.jaas.modules-3.0.8.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/apache/karaf/jaas/org.apache.karaf.jaas.config/3.0.8/org.apache.karaf.jaas.config-3.0.8.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/apache/felix/org.apache.felix.fileinstall/3.5.4/org.apache.felix.fileinstall-3.5.4.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/apache/sshd/sshd-core/0.14.0/sshd-core-0.14.0.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/controller/sal-dom-xsql/1.5.0-Carbon/sal-dom-xsql-1.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/controller/sal-connector-api/1.5.0-Carbon/sal-connector-api-1.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/controller/sal-cluster-admin-api/1.5.0-Carbon/sal-cluster-admin-api-1.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/controller/sal-cluster-admin-impl/1.5.0-Carbon/sal-cluster-admin-impl-1.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/controller/sal-distributed-datastore/1.5.0-Carbon/sal-distributed-datastore-1.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/controller/cds-access-api/1.1.0-Carbon/cds-access-api-1.1.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/controller/cds-access-client/1.1.0-Carbon/cds-access-client-1.1.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/controller/cds-dom-api/1.1.0-Carbon/cds-dom-api-1.1.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/controller/sal-dom-broker-config/1.5.0-Carbon/sal-dom-broker-config-1.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/controller/sal-schema-service/1.5.0-Carbon/sal-schema-service-1.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/controller/messagebus-api/1.5.0-Carbon/messagebus-api-1.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/controller/model/model-inventory/1.5.0-Carbon/model-inventory-1.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/controller/messagebus-impl/1.5.0-Carbon/messagebus-impl-1.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/controller/messagebus-util/1.5.0-Carbon/messagebus-util-1.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/controller/messagebus-spi/1.5.0-Carbon/messagebus-spi-1.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/controller/sal-remoterpc-connector/1.5.0-Carbon/sal-remoterpc-connector-1.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/controller/samples/clustering-it-model/1.5.0-Carbon/clustering-it-model-1.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/controller/samples/clustering-it-provider/1.5.0-Carbon/clustering-it-provider-1.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/controller/samples/sample-toaster/1.5.0-Carbon/sample-toaster-1.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/controller/samples/sample-toaster-consumer/1.5.0-Carbon/sample-toaster-consumer-1.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/controller/samples/sample-toaster-provider/1.5.0-Carbon/sample-toaster-provider-1.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/aaa/aaa-shiro-api/0.5.0-Carbon/aaa-shiro-api-0.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/aaa/aaa-authn-api/0.5.0-Carbon/aaa-authn-api-0.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/javax/servlet/javax.servlet-api/3.0.1/javax.servlet-api-3.0.1.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/com/sun/jersey/jersey-servlet/1.17/jersey-servlet-1.17.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/com/sun/jersey/jersey-server/1.17/jersey-server-1.17.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/asm/asm/3.1/asm-3.1.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/com/sun/jersey/jersey-core/1.17/jersey-core-1.17.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/com/sun/jersey/jersey-json/1.17/jersey-json-1.17.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/codehaus/jettison/jettison/1.3.7/jettison-1.3.7.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/com/sun/xml/bind/jaxb-impl/2.2.3-1/jaxb-impl-2.2.3-1.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/javax/xml/bind/jaxb-api/2.2.2/jaxb-api-2.2.2.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/javax/xml/stream/stax-api/1.0-2/stax-api-1.0-2.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/javax/activation/activation/1.1/activation-1.1.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/codehaus/jackson/jackson-core-asl/1.9.2/jackson-core-asl-1.9.2.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/codehaus/jackson/jackson-mapper-asl/1.9.2/jackson-mapper-asl-1.9.2.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/codehaus/jackson/jackson-jaxrs/1.9.2/jackson-jaxrs-1.9.2.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/codehaus/jackson/jackson-xc/1.9.2/jackson-xc-1.9.2.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/com/sun/jersey/jersey-client/1.17/jersey-client-1.17.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/apache/felix/org.apache.felix.dependencymanager/4.3.0/org.apache.felix.dependencymanager-4.3.0.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/apache/felix/org.apache.felix.metatype/1.1.2/org.apache.felix.metatype-1.1.2.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/net/sf/kxml/kxml2/2.2.2/kxml2-2.2.2.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/net/sf/ehcache/ehcache/2.8.3/ehcache-2.8.3.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/apache/oltu/oauth2/org.apache.oltu.oauth2.common/1.0.0/org.apache.oltu.oauth2.common-1.0.0.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/json/json/20131018/json-20131018.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/commons-codec/commons-codec/1.10/commons-codec-1.10.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/apache/oltu/oauth2/org.apache.oltu.oauth2.authzserver/1.0.0/org.apache.oltu.oauth2.authzserver-1.0.0.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/apache/oltu/oauth2/org.apache.oltu.oauth2.resourceserver/1.0.0/org.apache.oltu.oauth2.resourceserver-1.0.0.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.3.2/jackson-core-2.3.2.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.3.2/jackson-annotations-2.3.2.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.3.2/jackson-databind-2.3.2.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/com/fasterxml/jackson/datatype/jackson-datatype-json-org/2.3.2/jackson-datatype-json-org-2.3.2.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/com/fasterxml/jackson/jaxrs/jackson-jaxrs-base/2.3.2/jackson-jaxrs-base-2.3.2.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/com/fasterxml/jackson/jaxrs/jackson-jaxrs-json-provider/2.3.2/jackson-jaxrs-json-provider-2.3.2.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/com/fasterxml/jackson/module/jackson-module-jaxb-annotations/2.3.2/jackson-module-jaxb-annotations-2.3.2.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/com/h2database/h2/1.4.191/h2-1.4.191.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/aaa/aaa-credential-store-api/0.5.0-Carbon/aaa-credential-store-api-0.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/aaa/aaa-authn/0.5.0-Carbon/aaa-authn-0.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/aaa/aaa-shiro/0.5.0-Carbon/aaa-shiro-0.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/aaa/aaa-cert/0.5.0-Carbon/aaa-cert-0.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/aaa/aaa-encrypt-service/0.5.0-Carbon/aaa-encrypt-service-0.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/bouncycastle/bcprov-jdk15on/1.56/bcprov-jdk15on-1.56.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/aaa/aaa-authn-sts/0.5.0-Carbon/aaa-authn-sts-0.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/aaa/aaa-authn-basic/0.5.0-Carbon/aaa-authn-basic-0.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/apache/shiro/shiro-core/1.3.2/shiro-core-1.3.2.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/commons-beanutils/commons-beanutils/1.8.3/commons-beanutils-1.8.3.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/apache/shiro/shiro-web/1.3.2/shiro-web-1.3.2.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/commons-logging/commons-logging/1.2/commons-logging-1.2.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/commons-collections/commons-collections/3.2.2/commons-collections-3.2.2.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/aaa/aaa-shiro-act/0.5.0-Carbon/aaa-shiro-act-0.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/aaa/aaa-idmlight/0.5.0-Carbon/aaa-idmlight-0.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/aaa/aaa-filterchain/0.5.0-Carbon/aaa-filterchain-0.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/aaa/aaa-h2-store/0.5.0-Carbon/aaa-h2-store-0.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/osgi/org.osgi.enterprise/4.2.0/org.osgi.enterprise-4.2.0.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/aaa/aaa-authn-mdsal-store-impl/0.5.0-Carbon/aaa-authn-mdsal-store-impl-0.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/aaa/aaa-authn-mdsal-api/0.5.0-Carbon/aaa-authn-mdsal-api-0.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/aaa/aaa-cli/0.5.0-Carbon/aaa-cli-0.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/apache/servicemix/bundles/org.apache.servicemix.bundles.commons-beanutils/1.8.3_2/org.apache.servicemix.bundles.commons-beanutils-1.8.3_2.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/javax/ws/rs/javax.ws.rs-api/2.0.1/javax.ws.rs-api-2.0.1.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/netconf/sal-rest-connector/1.5.0-Carbon/sal-rest-connector-1.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/yangtools/yang-model-export/1.1.0-Carbon/yang-model-export-1.1.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/netconf/ietf-yang-library/1.5.0-Carbon/ietf-yang-library-1.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/netconf/ietf-restconf-monitoring/1.5.0-Carbon/ietf-restconf-monitoring-1.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/netconf/ietf-restconf/1.5.0-Carbon/ietf-restconf-1.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/netconf/sal-rest-docgen/1.5.0-Carbon/sal-rest-docgen-1.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/com/github/mifmif/generex/1.0.0/generex-1.0.0.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/dk/brics/automaton/automaton/1.11-8/automaton-1.11-8.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/jboss/resteasy/jaxrs-api/3.0.12.Final/jaxrs-api-3.0.12.Final.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/odlparent/features-test/1.8.0-Carbon/features-test-1.8.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/ops4j/pax/exam/pax-exam-junit4/4.10.0/pax-exam-junit4-4.10.0.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/apache/maven/wagon/wagon-http/2.10/wagon-http-2.10.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/apache/maven/wagon/wagon-http-shared/2.10/wagon-http-shared-2.10.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/jsoup/jsoup/1.7.2/jsoup-1.7.2.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/apache/maven/wagon/wagon-provider-api/2.10/wagon-provider-api-2.10.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/codehaus/plexus/plexus-utils/3.0.15/plexus-utils-3.0.15.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/apache/httpcomponents/httpclient/4.5.2/httpclient-4.5.2.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/apache/httpcomponents/httpcore/4.4.6/httpcore-4.4.6.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/apache/karaf/deployer/org.apache.karaf.deployer.blueprint/3.0.8/org.apache.karaf.deployer.blueprint-3.0.8.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/apache/karaf/deployer/org.apache.karaf.deployer.features/3.0.8/org.apache.karaf.deployer.features-3.0.8.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/apache/karaf/deployer/org.apache.karaf.deployer.spring/3.0.8/org.apache.karaf.deployer.spring-3.0.8.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/ops4j/pax/url/pax-url-wrap/2.5.1/pax-url-wrap-2.5.1.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/ops4j/pax/swissbox/pax-swissbox-bnd/1.8.2/pax-swissbox-bnd-1.8.2.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/ops4j/pax/url/pax-url-commons/2.5.1/pax-url-commons-2.5.1.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/ops4j/pax/swissbox/pax-swissbox-property/1.8.2/pax-swissbox-property-1.8.2.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/odlparent/bundles-test/1.8.0-Carbon/bundles-test-1.8.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/apache/karaf/bundle/org.apache.karaf.bundle.core/3.0.8/org.apache.karaf.bundle.core-3.0.8.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/hamcrest/hamcrest-library/1.3/hamcrest-library-1.3.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/awaitility/awaitility/2.0.0/awaitility-2.0.0.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/cglib/cglib-nodep/3.1/cglib-nodep-3.1.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/apache/karaf/org.apache.karaf.main/3.0.8/org.apache.karaf.main-3.0.8.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/apache/karaf/org.apache.karaf.util/3.0.8/org.apache.karaf.util-3.0.8.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/apache/felix/org.apache.felix.utils/1.8.2/org.apache.felix.utils-1.8.2.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/apache/karaf/org.apache.karaf.exception/3.0.8/org.apache.karaf.exception-3.0.8.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/apache/karaf/org.apache.karaf.client/3.0.8/org.apache.karaf.client-3.0.8.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/apache/karaf/jaas/org.apache.karaf.jaas.boot/3.0.8/org.apache.karaf.jaas.boot-3.0.8.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/eclipse/org.eclipse.osgi/3.8.2.v20130124-134944/org.eclipse.osgi-3.8.2.v20130124-134944.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/apache/felix/org.apache.felix.framework/4.2.1/org.apache.felix.framework-4.2.1.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/jledit/core/0.2.1/core-0.2.1.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/ops4j/pax/logging/pax-logging-api/1.8.4/pax-logging-api-1.8.4.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/ops4j/pax/logging/pax-logging-service/1.8.4/pax-logging-service-1.8.4.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/ops4j/pax/url/pax-url-wrap/2.4.7/pax-url-wrap-2.4.7-uber.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/apache/karaf/features/org.apache.karaf.features.command/3.0.8/org.apache.karaf.features.command-3.0.8.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/apache/karaf/bundle/org.apache.karaf.bundle.command/3.0.8/org.apache.karaf.bundle.command-3.0.8.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/apache/karaf/shell/org.apache.karaf.shell.table/3.0.8/org.apache.karaf.shell.table-3.0.8.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/apache/karaf/shell/org.apache.karaf.shell.help/3.0.8/org.apache.karaf.shell.help-3.0.8.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/apache/karaf/system/org.apache.karaf.system.core/3.0.8/org.apache.karaf.system.core-3.0.8.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/apache/karaf/system/org.apache.karaf.system.command/3.0.8/org.apache.karaf.system.command-3.0.8.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/apache/karaf/shell/org.apache.karaf.shell.commands/3.0.8/org.apache.karaf.shell.commands-3.0.8.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/ow2/asm/asm-all/5.1/asm-all-5.1.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/apache/aries/blueprint/org.apache.aries.blueprint.api/1.0.1/org.apache.aries.blueprint.api-1.0.1.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/apache/aries/blueprint/org.apache.aries.blueprint.cm/1.0.8/org.apache.aries.blueprint.cm-1.0.8.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/apache/aries/blueprint/org.apache.aries.blueprint.core/1.4.2/org.apache.aries.blueprint.core-1.4.2.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/apache/aries/org.apache.aries.util/1.1.1/org.apache.aries.util-1.1.1.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/apache/aries/quiesce/org.apache.aries.quiesce.api/1.0.0/org.apache.aries.quiesce.api-1.0.0.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/apache/aries/proxy/org.apache.aries.proxy.api/1.0.1/org.apache.aries.proxy.api-1.0.1.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/apache/aries/blueprint/org.apache.aries.blueprint.core.compatibility/1.0.0/org.apache.aries.blueprint.core.compatibility-1.0.0.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/apache/karaf/region/org.apache.karaf.region.core/3.0.8/org.apache.karaf.region.core-3.0.8.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/apache/karaf/region/org.apache.karaf.region.persist/3.0.8/org.apache.karaf.region.persist-3.0.8.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/eclipse/equinox/region/1.0.0.v20110506/region-1.0.0.v20110506.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/odlparent/karaf.branding/1.8.0-Carbon/karaf.branding-1.8.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/odlparent/opendaylight-karaf-resources/1.8.0-Carbon/opendaylight-karaf-resources-1.8.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/apache/aries/proxy/org.apache.aries.proxy.impl/1.0.5/org.apache.aries.proxy.impl-1.0.5.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/dlux/loader/0.5.0-Carbon/loader-0.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/dlux/loader.implementation/0.5.0-Carbon/loader.implementation-0.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/dlux/dlux-web/0.5.0-Carbon/dlux-web-0.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/dlux/dlux.common.navigation.resources/0.5.0-Carbon/dlux.common.navigation.resources-0.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/dlux/dlux.common.layout.resources/0.5.0-Carbon/dlux.common.layout.resources-0.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/dlux/dlux.common.authentication.resources/0.5.0-Carbon/dlux.common.authentication.resources-0.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/dlux/dlux.common.login.resources/0.5.0-Carbon/dlux.common.login.resources-0.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/dlux/dlux.common.general.resources/0.5.0-Carbon/dlux.common.general.resources-0.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/dlux/dlux.loader.resources/0.5.0-Carbon/dlux.loader.resources-0.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/dlux/dlux.core.resources/0.5.0-Carbon/dlux.core.resources-0.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/dlux/dlux.common.topbar.resources/0.5.0-Carbon/dlux.common.topbar.resources-0.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/dlux/dlux.core/0.5.0-Carbon/dlux.core-0.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/apache/felix/org.osgi.compendium/1.4.0/org.osgi.compendium-1.4.0.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/apache/felix/org.osgi.core/1.4.0/org.osgi.core-1.4.0.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/apache/felix/javax.servlet/1.0.0/javax.servlet-1.0.0.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/apache/felix/org.osgi.foundation/1.2.0/org.osgi.foundation-1.2.0.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/dlux/dlux.common.layout/0.5.0-Carbon/dlux.common.layout-0.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/dlux/dlux.common.login/0.5.0-Carbon/dlux.common.login-0.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/dlux/dlux.common.authentication/0.5.0-Carbon/dlux.common.authentication-0.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/dlux/dlux.common.navigation/0.5.0-Carbon/dlux.common.navigation-0.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/dlux/dlux.common.topbar/0.5.0-Carbon/dlux.common.topbar-0.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/dlux/dlux.common.general/0.5.0-Carbon/dlux.common.general-0.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/dluxapps/nodes-bundle/0.5.0-Carbon/nodes-bundle-0.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/dluxapps/sigmatopology-bundle/0.5.0-Carbon/sigmatopology-bundle-0.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/dluxapps/topology-bundle/0.5.0-Carbon/topology-bundle-0.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/dluxapps/yangman-bundle/0.5.0-Carbon/yangman-bundle-0.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/dluxapps/yangvisualizer-bundle/0.5.0-Carbon/yangvisualizer-bundle-0.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/dluxapps/yangui-bundle/0.5.0-Carbon/yangui-bundle-0.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/dluxapps/yangutils-bundle/0.5.0-Carbon/yangutils-bundle-0.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module" module-name="guard-impl"/>
+    <orderEntry type="module" module-name="guard-api"/>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/openflowplugin/openflowplugin-api/0.4.0-Carbon/openflowplugin-api-0.4.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/openflowplugin/model/model-flow-service/0.4.0-Carbon/model-flow-service-0.4.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/openflowplugin/model/model-flow-base/0.4.0-Carbon/model-flow-base-0.4.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/openflowjava/openflow-protocol-api/0.9.0-Carbon/openflow-protocol-api-0.9.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/openflowplugin/model/model-flow-statistics/0.4.0-Carbon/model-flow-statistics-0.4.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/openflowjava/openflow-protocol-spi/0.9.0-Carbon/openflow-protocol-spi-0.9.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/l2switch/hosttracker/hosttracker-model/0.5.0-Carbon/hosttracker-model-0.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/l2switch/addresstracker/addresstracker-model/0.5.0-Carbon/addresstracker-model-0.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/l2switch/packethandler/packethandler-model/0.5.0-Carbon/packethandler-model-0.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/controller/model/model-topology/1.5.0-Carbon/model-topology-1.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/redis/clients/jedis/2.9.0/jedis-2.9.0.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/apache/commons/commons-pool2/2.4.2/commons-pool2-2.4.2.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module" module-name="guard-synchronizer"/>
+    <orderEntry type="module" module-name="guard-cli"/>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/openflowjava/openflow-protocol-impl/0.9.0-Carbon/openflow-protocol-impl-0.9.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/openflowjava/openflowjava-util/0.9.0-Carbon/openflowjava-util-0.9.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/openflowplugin/applications/forwardingrules-manager/0.4.0-Carbon/forwardingrules-manager-0.4.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/openflowplugin/openflowplugin-common/0.4.0-Carbon/openflowplugin-common-0.4.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/openflowplugin/applications/forwardingrules-sync/0.4.0-Carbon/forwardingrules-sync-0.4.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/openflowplugin/applications/inventory-manager/0.4.0-Carbon/inventory-manager-0.4.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/openflowplugin/applications/lldp-speaker/0.4.0-Carbon/lldp-speaker-0.4.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/controller/liblldp/0.12.0-Carbon/liblldp-0.12.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/openflowplugin/applications/topology-lldp-discovery/0.4.0-Carbon/topology-lldp-discovery-0.4.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/openflowplugin/applications/statistics-manager/0.4.0-Carbon/statistics-manager-0.4.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/openflowplugin/openflowplugin-blueprint-config/0.4.0-Carbon/openflowplugin-blueprint-config-0.4.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/openflowjava/openflowjava-blueprint-config/0.9.0-Carbon/openflowjava-blueprint-config-0.9.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/openflowplugin/openflowplugin-extension-api/0.4.0-Carbon/openflowplugin-extension-api-0.4.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/openflowplugin/openflowplugin/0.4.0-Carbon/openflowplugin-0.4.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/openflowplugin/openflowplugin-impl/0.4.0-Carbon/openflowplugin-impl-0.4.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/openflowplugin/applications/table-miss-enforcer/0.4.0-Carbon/table-miss-enforcer-0.4.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/openflowplugin/applications/topology-manager/0.4.0-Carbon/topology-manager-0.4.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/openflowplugin/applications/of-switch-config-pusher/0.4.0-Carbon/of-switch-config-pusher-0.4.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/openflowplugin/drop-test-karaf/0.4.0-Carbon/drop-test-karaf-0.4.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/openflowplugin/test-common/0.4.0-Carbon/test-common-0.4.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/openflowplugin/applications/bulk-o-matic/0.4.0-Carbon/bulk-o-matic-0.4.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/openflowplugin/applications/notification-supplier/0.4.0-Carbon/notification-supplier-0.4.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/l2switch/packethandler/packethandler-impl/0.5.0-Carbon/packethandler-impl-0.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/l2switch/addresstracker/addresstracker-impl/0.5.0-Carbon/addresstracker-impl-0.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/l2switch/loopremover/loopremover-model/0.5.0-Carbon/loopremover-model-0.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/l2switch/loopremover/loopremover-impl/0.5.0-Carbon/loopremover-impl-0.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/controller/thirdparty/net.sf.jung2/2.0.1/net.sf.jung2-2.0.1.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/net/sf/jung/jung-api/2.0.1/jung-api-2.0.1.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/net/sf/jung/jung-graph-impl/2.0.1/jung-graph-impl-2.0.1.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/net/sourceforge/collections/collections-generic/4.01/collections-generic-4.01.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/l2switch/hosttracker/hosttracker-impl/0.5.0-Carbon/hosttracker-impl-0.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/l2switch/main/main-impl/0.5.0-Carbon/main-impl-0.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/l2switch/arphandler/arphandler-impl/0.5.0-Carbon/arphandler-impl-0.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/controller/mdsal-it-base/1.5.0-Carbon/mdsal-it-base-1.5.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/middle/.m2/repository/org/opendaylight/controller/config-it-base/0.6.0-Carbon/config-it-base-0.6.0-Carbon.jar!/"/>
+        </CLASSES>
+      </library>
+    </orderEntry>
+  </component>  
+  <component name="ModuleRootManager"/>  
+  <!-- If it's a war project:
+  <component name="WebModuleProperties">
+    <containerElement type="module" name="${dep.artifactId}">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/classes" />
+    </containerElement>
+    <containerElement type="library" level="module" name="${dep.artifactId}">
+      <attribute name="method" value="1" />
+      <attribute name="URI" value="/WEB-INF/lib/${dep.systemPath.name}" />
+    </containerElement>
+    <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/${pom.build.warSourceDirectory}/WEB-INF/web.xml" version="" />
+    <webroots>
+      <root url="file://$MODULE_DIR$/${pom.build.warSourceDirectory}" relative="/" />
+    </webroots>
+  </component>
+  --> 
+</module>

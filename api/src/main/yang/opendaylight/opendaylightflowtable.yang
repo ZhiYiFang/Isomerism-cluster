@@ -1,0 +1,24 @@
+// Contents of "opendaylightflowtable"
+module opendaylightflowtable {
+    namespace "urn:opendaylight:opendaylightflowtable";
+    prefix "opendaylightflowtable";
+    import guard { prefix guard; revision-date 2015-01-05; }
+
+    revision 2020-03-01 {
+        description "Initial revision";
+    }
+
+    rpc get-opendaylight-switch-flowtable{
+    	input{
+    		uses guard:ip-port;
+    		leaf dpid{
+    			type guard:datapath-id;
+    		}
+    	}
+    	output{
+    		leaf result{
+    			type string;
+    		}
+    	}
+    }
+}
