@@ -23,6 +23,7 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.isome
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.isomerism.IsomerismControllersBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.isomerism.IsomerismControllersKey;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.floodlighttopo.rev190515.FloodlighttopoService;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.opendaylighttopo.rev200301.OpendaylighttopoService;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.migrate.rev190726.MigrateAbnormalControllerInput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.migrate.rev190726.MigrateAbnormalControllerOutput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.migrate.rev190726.MigrateAbnormalControllerOutputBuilder;
@@ -52,14 +53,16 @@ public class MigrateImpl implements MigrateService {
 	private final DataBroker dataBroker;
 	private final FloodlighttopoService floodlighttopoService;
 	private final RyutopoService ryutopoService;
+	private final OpendaylighttopoService opendaylighttopoService;
 
 	private RedisService redisService;
 
 	public MigrateImpl(DataBroker dataBroker, FloodlighttopoService floodlighttopoService,
-			RyutopoService ryutopoService) {
+			RyutopoService ryutopoService, OpendaylighttopoService opendaylighttopoService) {
 		this.dataBroker = dataBroker;
 		this.floodlighttopoService = floodlighttopoService;
 		this.ryutopoService = ryutopoService;
+		this.opendaylighttopoService = opendaylighttopoService;
 	}
 
 	@Override

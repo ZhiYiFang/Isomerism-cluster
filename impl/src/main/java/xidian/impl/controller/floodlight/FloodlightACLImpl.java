@@ -62,6 +62,26 @@ public class FloodlightACLImpl implements FloodlightaclService {
 		return RpcResultBuilder.success(new AddFloodlightAclOutputBuilder().setResult(response)).buildFuture();
 	}
 
+	public static void main(String[] args) {
+		Gson gson = new Gson();
+		Map<String, String> map = new HashMap<>();
+		map.put("nw-proto", "tcp");
+		map.put("action", "deny");
+		for (long srcIp = 0; srcIp <= Long.MAX_VALUE; srcIp++) {
+			String src = IPUtil.longToIP(srcIp) + "/32";
+			for (long dstIp = 0; dstIp <= Long.MAX_VALUE; dstIp++) {
+				String dst = IPUtil.longToIP(dstIp) + "/32";
+					map.put("src-ip", src);
+					map.put("dst-ip", dst);
+					map.put("tp-dst", "123");
+					System.out.println(gson.toJson(map));
+					String response = HttpUtils.sendHttpPostJson(
+							HttpUtils.getBasicURL("172.250.252.16", 8080, FloodlightUrls.ADD_ACL), gson.toJson(map));
+					System.out.println(response);
+			}
+		}
+	}
+
 	@Override
 	public Future<RpcResult<GetFloodlightAclOutput>> getFloodlightAcl(GetFloodlightAclInput input) {
 		Ipv4Address ip = input.getControllerIp();
@@ -70,7 +90,5 @@ public class FloodlightACLImpl implements FloodlightaclService {
 				.sendHttpGet(HttpUtils.getBasicURL(ip.getValue(), port.getValue(), FloodlightUrls.GET_ACL));
 		return RpcResultBuilder.success(new GetFloodlightAclOutputBuilder().setResult(response)).buildFuture();
 	}
-
-
 
 }

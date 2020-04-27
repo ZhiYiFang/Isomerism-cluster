@@ -41,7 +41,7 @@ public class SynchronizeMessage {
 			LinkmanagerService linkmanagerService, VcfstatisticsService vcfstatisticsService,
 			FloodlighttopoService floodlighttopoService, RyutopoService ryutopoService,
 			NotificationPublishService notificationPublishService, ControllersService controllerService,
-			FloodlightaclService floodlightaclService) {
+			FloodlightaclService floodlightaclService, OpendaylighttopoService opendaylighttopoService) {
 		super();
 		this.dataBroker = dataBroker;
 		this.floodlighttopoService = floodlighttopoService;
@@ -49,7 +49,7 @@ public class SynchronizeMessage {
 		this.notificationPublishService = notificationPublishService;
 		this.controllerService = controllerService;
 		this.floodlightaclService = floodlightaclService;
-		
+		this.opendaylighttopoService = opendaylighttopoService;
 	}
 
 	public void init() {
