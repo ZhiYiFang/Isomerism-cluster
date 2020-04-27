@@ -28,6 +28,8 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.DataP
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.Isomerism;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.data.plane.link.DataPlaneLinks;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.data.plane.link.DataPlaneLinksBuilder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.data.plane.link.SwToController;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.data.plane.link.SwToControllerBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.isomerism.IsomerismControllers;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.isomerism.IsomerismControllers.ControllerStatus;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.opendaylighttopo.rev200301.OpendaylighttopoService;
@@ -234,8 +236,8 @@ public class TopoTask extends Thread {
 						continue;
 					allLinks.add(l);
 				}
-				// allLinks写入到dataStore中
-				storeLink(dataBroker, allLinks);
+				// allLinks写入到dataStore中  //change
+				storeLink(dataBroker, allLinks, switchToController);
 
 			}
 
@@ -284,8 +286,8 @@ public class TopoTask extends Thread {
 			redisService.set(CSKey.getEdgeSwitches, controller, sws);
 		}
 	}
-
-	private void storeLink(DataBroker dataBroker, Set<Link> allLinks) {
+	// change
+	private void storeLink(DataBroker dataBroker, Set<Link> allLinks , Map<String, String> switchToController) {
 		InstanceIdentifier<DataPlaneLink> path = InstanceIdentifier.create(DataPlaneLink.class);
 		DataPlaneLinkBuilder builder = new DataPlaneLinkBuilder();
 		List<DataPlaneLinks> list = new ArrayList<>();
@@ -299,6 +301,16 @@ public class TopoTask extends Thread {
 			list.add(builder2.build());
 		}
 		builder.setDataPlaneLinks(list);
+		// change
+		List<SwToController> list2 = new ArrayList<>();
+		for (String swid : switchToController.keySet()){
+			SwToControllerBuilder builder3 = new SwToControllerBuilder();
+			builder3.setSwId(swid);
+			builder3.setControllerIp(switchToController.get(swid));
+			list2.add(builder3.build());
+		}
+		builder.setSwToController(list2);
+		//
 		WriteTransaction write = dataBroker.newWriteOnlyTransaction();
 		write.put(LogicalDatastoreType.CONFIGURATION, path, builder.build(), true);
 		write.submit();

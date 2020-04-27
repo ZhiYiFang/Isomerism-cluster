@@ -19,6 +19,7 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.DataP
 import org.opendaylight.yang.gen.v1.urn.opendaylight.controllers.rev181125.data.plane.link.DataPlaneLinks;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.floodlighttopo.rev190515.FloodlighttopoService;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.ryutopo.rev190515.RyutopoService;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.opendaylighttopo.rev200301.OpendaylighttopoService;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.updatetopo.rev190705.UpdateGetLinksOutput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.updatetopo.rev190705.UpdateGetLinksOutputBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.updatetopo.rev190705.UpdatetopoService;
@@ -37,20 +38,22 @@ public class UpdateTopoImpl implements UpdatetopoService{
 	private final DataBroker dataBroker;
 	private final FloodlighttopoService floodlighttopoService;
 	private final RyutopoService ryutopoService;
+	private final OpendaylighttopoService opendaylighttopoService;
 	private final Logger LOG = LoggerFactory.getLogger(UpdateTopoImpl.class);
 	
 	public UpdateTopoImpl(DataBroker dataBroker, FloodlighttopoService floodlighttopoService,
-			RyutopoService ryutopoService) {
+			RyutopoService ryutopoService, OpendaylighttopoService opendaylighttopoService) {
 		this.dataBroker = dataBroker;
 		this.floodlighttopoService = floodlighttopoService;
 		this.ryutopoService = ryutopoService;
+		this.opendaylighttopoService = opendaylighttopoService;
 	}
 	
 	@Override
 	public Future<RpcResult<UpdateGetLinksOutput>> updateGetLinks() {
 		LOG.info("Update topology information");
 		// update now
-		new TopoTask(dataBroker, floodlighttopoService, ryutopoService).start();
+		new TopoTask(dataBroker, floodlighttopoService, ryutopoService, opendaylighttopoService).start();
 		
 		// read from dataBroker
 		

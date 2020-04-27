@@ -44,6 +44,7 @@
 		<argument ref="vcfstatisticsService" />
 		<argument ref="floodlighttopoService" />
 		<argument ref="ryutopoService" />
+		<argument ref="opendaylighttopoService" />
 		<argument ref="notificationPublishService" />
 		<argument ref="controllerService" />
 		<argument ref="floodlightaclService" />
@@ -63,6 +64,7 @@
 		<argument ref="dataBroker" />
 		<argument ref="floodlighttopoService" />
 		<argument ref="ryutopoService" />
+		<argument ref="opendaylighttopoService" />
 	</bean>
 
 	<bean id="basicSettingListener"
@@ -76,12 +78,14 @@
 		<argument ref="dataBroker" />
 		<argument ref="floodlighttopoService" />
 		<argument ref="ryutopoService" />
+		<argument ref="opendaylighttopoService" />
 	</bean>
 	<bean id="migrateImpl"
 		class="xidian.synchronizer.impl.MigrateImpl">
 		<argument ref="dataBroker" />
 		<argument ref="floodlighttopoService" />
 		<argument ref="ryutopoService" />
+		<argument ref="opendaylighttopoService" />
 	</bean>
 	
 	<odl:rpc-implementation ref="updateTopoImpl" />

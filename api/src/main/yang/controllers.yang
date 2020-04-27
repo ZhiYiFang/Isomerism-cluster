@@ -212,6 +212,15 @@ module controllers {
                 type boolean;
             }
         }
+
+        list sw-to-controller{
+            leaf sw-id {
+                type string;
+            }
+            leaf controller-ip {
+                type string;
+            }
+        }
     }
 
     rpc get-all-switches {

@@ -19,6 +19,7 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.floodlighttopo.rev190515.Fl
 import org.opendaylight.yang.gen.v1.urn.opendaylight.linkmanager.rev181126.LinkmanagerService;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.ryutopo.rev190515.RyutopoService;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.vcfstatistics.rev181126.VcfstatisticsService;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.opendaylighttopo.rev200301.OpendaylighttopoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,6 +35,7 @@ public class SynchronizeMessage {
 	private NotificationPublishService notificationPublishService;
 	private ControllersService controllerService;
 	private FloodlightaclService floodlightaclService;
+	private OpendaylighttopoService opendaylighttopoService;
 	
 	public SynchronizeMessage(DataBroker dataBroker, DevicemanagementService devicemanagementService,
 			LinkmanagerService linkmanagerService, VcfstatisticsService vcfstatisticsService,
